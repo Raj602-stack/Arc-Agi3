@@ -799,14 +799,6 @@
                         spellcheck="false"
                         autocomplete="off"
                     />
-                    <label>SEED</label>
-                    <input
-                        type="number"
-                        id="in-seed"
-                        value="0"
-                        min="0"
-                        max="99999"
-                    />
                     <div class="btn-row">
                         <button class="btn-secondary" id="btn-config-back">
                             BACK
@@ -957,7 +949,6 @@
                         </button>
                     </div>
                     <div class="sb-footer">
-                        <span id="sb-seed">SEED: 0</span> ·
                         <span id="sb-session">—</span>
                     </div>
                 </div>
@@ -1027,7 +1018,6 @@
                 const sbGameId = $("sb-game-id");
                 const sbState = $("sb-state");
                 const sbActions = $("sb-actions");
-                const sbSeed = $("sb-seed");
                 const sbSession = $("sb-session");
                 const progressBar = $("progress-bar");
                 const availList = $("avail-list");
@@ -1432,7 +1422,6 @@
 
                     sbActions.textContent =
                         "ACTIONS: " + (state.total_actions || 0);
-                    sbSeed.textContent = "SEED: " + (state.seed || 0);
                     sbSession.textContent = state.session_id || "—";
 
                     // Available actions
@@ -1561,7 +1550,7 @@
                 function startGame() {
                     if (!selectedGameId) return;
                     const name = $("in-player").value.trim() || "PLAYER 1";
-                    const seed = parseInt($("in-seed").value) || 0;
+                    const seed = 0;
 
                     connectSocket();
 
@@ -1688,9 +1677,6 @@
                 });
 
                 // Enter key on config form
-                $("in-seed").addEventListener("keydown", (e) => {
-                    if (e.key === "Enter") startGame();
-                });
                 $("in-player").addEventListener("keydown", (e) => {
                     if (e.key === "Enter") startGame();
                 });
