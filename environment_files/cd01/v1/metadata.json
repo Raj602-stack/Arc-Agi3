@@ -1,0 +1,9 @@
+{
+  "game_id": "cd01-v1",
+  "default_fps": 5,
+  "tags": [
+    "puzzle",
+    "logic"
+  ],
+  "local_dir": "environment_files/cd01/v1"
+}
