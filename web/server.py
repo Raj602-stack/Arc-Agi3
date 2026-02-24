@@ -337,9 +337,12 @@ def get_session_state(session: dict) -> dict:
 
     frame_b64 = ""
     grid = []
+    frame_h = 0
+    frame_w = 0
     if fd is not None and fd.frame is not None and len(fd.frame) > 0:
         frame_b64 = frame_to_png_base64(fd.frame[0])
         grid = frame_to_grid_json(fd.frame[0])
+        frame_h, frame_w = fd.frame[0].shape
 
     return {
         "session_id": session["id"],
@@ -352,6 +355,8 @@ def get_session_state(session: dict) -> dict:
         "available_actions": session["available_actions"],
         "frame": frame_b64,
         "grid": grid,
+        "frame_width": frame_w,
+        "frame_height": frame_h,
         "player_name": session.get("player_name"),
     }
 

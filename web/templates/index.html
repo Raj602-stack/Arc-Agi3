@@ -931,6 +931,8 @@
                             <div class="ctrl-item">
                                 <kbd>D</kbd><kbd>→</kbd> RT
                             </div>
+                            <div class="ctrl-item"><kbd>Space</kbd> ACT</div>
+                            <div class="ctrl-item"><kbd>Click</kbd> CLICK</div>
                             <div class="ctrl-item"><kbd>⌘Z</kbd> UNDO</div>
                             <div class="ctrl-item"><kbd>R</kbd> RESET</div>
                             <div class="ctrl-item"><kbd>⌘R</kbd> RESTART</div>
@@ -982,6 +984,7 @@
                 <button class="dpad-btn down" data-action="down">▼</button>
             </div>
             <div class="mobile-btns">
+                <button class="dpad-btn" data-action="action5">ACT</button>
                 <button class="dpad-btn" data-action="undo">UNDO</button>
             </div>
         </div>
@@ -1252,6 +1255,54 @@
                     lobby.classList.add("hidden");
                     gameView.classList.add("show");
                     $("btn-lobby").style.display = "";
+                    setupCanvasClick();
+                }
+
+                // ── Canvas click → ACTION6 with display coordinates ──
+                let canvasClickBound = false;
+                function setupCanvasClick() {
+                    if (canvasClickBound) return;
+                    canvasClickBound = true;
+
+                    function handleCanvasClick(e) {
+                        if (!gameState || gameState.state === "WON") return;
+                        // Only send click if ACTION6 is available
+                        var avail = gameState.available_actions || [];
+                        if (avail.indexOf(6) === -1) return;
+
+                        var rect = canvas.getBoundingClientRect();
+                        var clickX = e.clientX - rect.left;
+                        var clickY = e.clientY - rect.top;
+
+                        // Map canvas pixel → game display coordinates
+                        var fw = gameState.frame_width || 64;
+                        var fh = gameState.frame_height || 64;
+                        var displayX = Math.floor((clickX / rect.width) * fw);
+                        var displayY = Math.floor((clickY / rect.height) * fh);
+
+                        sendAction("action6", {
+                            x: displayX,
+                            y: displayY,
+                        });
+                    }
+
+                    canvas.addEventListener("click", handleCanvasClick);
+                    canvas.addEventListener(
+                        "touchend",
+                        function (e) {
+                            if (
+                                e.changedTouches &&
+                                e.changedTouches.length > 0
+                            ) {
+                                var touch = e.changedTouches[0];
+                                handleCanvasClick({
+                                    clientX: touch.clientX,
+                                    clientY: touch.clientY,
+                                });
+                            }
+                        },
+                        { passive: true },
+                    );
                 }
 
                 // ── Fetch games ──
@@ -1360,18 +1411,23 @@
                         ctx.imageSmoothingEnabled = false;
                         ctx.drawImage(frameImg, 0, 0, size, size);
 
-                        // Subtle grid overlay
-                        const cellSize = size / 8;
+                        // Subtle grid overlay — adapt to frame dimensions
+                        var fw = (gameState && gameState.frame_width) || 8;
+                        var fh = (gameState && gameState.frame_height) || 8;
+                        var cellW = size / fw;
+                        var cellH = size / fh;
                         ctx.strokeStyle = "rgba(255,255,255,0.06)";
                         ctx.lineWidth = 1;
-                        for (let i = 1; i < 8; i++) {
+                        for (let i = 1; i < fw; i++) {
                             ctx.beginPath();
-                            ctx.moveTo(i * cellSize, 0);
-                            ctx.lineTo(i * cellSize, size);
+                            ctx.moveTo(i * cellW, 0);
+                            ctx.lineTo(i * cellW, size);
                             ctx.stroke();
+                        }
+                        for (let i = 1; i < fh; i++) {
                             ctx.beginPath();
-                            ctx.moveTo(0, i * cellSize);
-                            ctx.lineTo(size, i * cellSize);
+                            ctx.moveTo(0, i * cellH);
+                            ctx.lineTo(size, i * cellH);
                             ctx.stroke();
                         }
                     };
@@ -1384,8 +1440,8 @@
                     2: "↓ DOWN",
                     3: "← LEFT",
                     4: "→ RIGHT",
-                    5: "⚡ ACT5",
-                    6: "⚡ ACT6",
+                    5: "⏎ ACTIVATE",
+                    6: "🖱 CLICK",
                     7: "↶ UNDO",
                     0: "⟳ RESET",
                 };
@@ -1530,13 +1586,17 @@
                 }
 
                 // ── Actions ──
-                function sendAction(action) {
+                function sendAction(action, actionData) {
                     if (!socket || !sessionId) return;
                     if (gameState && gameState.state === "WON") return;
-                    socket.emit("action", {
+                    var payload = {
                         session_id: sessionId,
                         action: action,
-                    });
+                    };
+                    if (actionData !== undefined) {
+                        payload.data = actionData;
+                    }
+                    socket.emit("action", payload);
                 }
                 function sendRestart() {
                     if (!socket || !sessionId) return;
@@ -1616,6 +1676,16 @@
                         case "ArrowRight":
                             e.preventDefault();
                             sendAction("right");
+                            break;
+                        case " ":
+                        case "Enter":
+                            e.preventDefault();
+                            sendAction("action5");
+                            break;
+                        case "e":
+                        case "E":
+                            e.preventDefault();
+                            sendAction("action6");
                             break;
                         case "r":
                         case "R":
