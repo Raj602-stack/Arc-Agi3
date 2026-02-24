@@ -325,6 +325,109 @@
                 color: var(--red);
             }
 
+            /* ── Admin panel ── */
+            #admin-panel {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                padding: 30px;
+                max-width: 600px;
+                width: 100%;
+            }
+            #admin-panel.show {
+                display: flex;
+            }
+            #admin-panel h2 {
+                font-family: var(--pixel);
+                font-size: 12px;
+                color: var(--orange);
+            }
+            .admin-login {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                max-width: 320px;
+            }
+            .admin-login label {
+                font-size: 11px;
+                color: var(--text-dim);
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+            .admin-login input {
+                font-family: var(--mono);
+                font-size: 13px;
+                padding: 8px 12px;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                color: var(--text);
+                outline: none;
+            }
+            .admin-login input:focus {
+                border-color: var(--orange);
+            }
+            #admin-status {
+                font-size: 12px;
+                min-height: 18px;
+            }
+            #admin-status.ok {
+                color: var(--green);
+            }
+            #admin-status.err {
+                color: var(--red);
+            }
+            .admin-games {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                margin-top: 10px;
+            }
+            .admin-game-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 14px;
+                border: 1px solid var(--border);
+                background: var(--bg);
+            }
+            .admin-game-row .agr-id {
+                font-family: var(--pixel);
+                font-size: 10px;
+                color: var(--cyan);
+            }
+            .admin-game-row .agr-tags {
+                font-size: 11px;
+                color: var(--text-dim);
+                margin-top: 2px;
+            }
+            .admin-game-row .agr-delete {
+                font-family: var(--mono);
+                font-size: 11px;
+                padding: 5px 12px;
+                background: transparent;
+                border: 1px solid var(--red);
+                color: var(--red);
+                cursor: pointer;
+                transition: all 0.15s;
+                letter-spacing: 1px;
+                flex-shrink: 0;
+            }
+            .admin-game-row .agr-delete:hover {
+                background: var(--red);
+                color: #fff;
+            }
+            .admin-game-row .agr-delete:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+            .admin-game-row .agr-delete:disabled:hover {
+                background: transparent;
+                color: var(--red);
+            }
+
             /* ── Game view ── */
             #game-view {
                 flex: 1;
@@ -658,6 +761,13 @@
             <button class="top-btn" id="btn-lobby" style="display: none">
                 ← GAMES
             </button>
+            <button
+                class="top-btn"
+                id="btn-admin"
+                style="color: var(--orange); border-color: var(--orange)"
+            >
+                🔒 ADMIN
+            </button>
             <button class="top-btn" id="btn-upload">UPLOAD GAME</button>
         </div>
 
@@ -702,6 +812,59 @@
                         <button class="btn-primary" id="btn-start">
                             ▶ START
                         </button>
+                    </div>
+                </div>
+
+                <!-- Admin panel -->
+                <div id="admin-panel">
+                    <h2>🔒 ADMIN PANEL</h2>
+                    <div class="admin-login" id="admin-login-form">
+                        <label>USERNAME</label>
+                        <input
+                            type="text"
+                            id="admin-user"
+                            value=""
+                            placeholder="admin"
+                            spellcheck="false"
+                            autocomplete="off"
+                        />
+                        <label>PASSWORD</label>
+                        <input
+                            type="password"
+                            id="admin-pass"
+                            value=""
+                            placeholder="••••••"
+                        />
+                        <div class="btn-row">
+                            <button class="btn-secondary" id="btn-admin-back">
+                                BACK
+                            </button>
+                            <button class="btn-primary" id="btn-admin-login">
+                                LOGIN
+                            </button>
+                        </div>
+                        <div id="admin-status"></div>
+                    </div>
+                    <div
+                        class="admin-games"
+                        id="admin-games"
+                        style="display: none"
+                    >
+                        <div
+                            style="
+                                font-size: 12px;
+                                color: var(--text-dim);
+                                margin-bottom: 6px;
+                            "
+                        >
+                            Select a game to delete:
+                        </div>
+                        <div id="admin-games-list"></div>
+                        <div class="btn-row" style="margin-top: 12px">
+                            <button class="btn-secondary" id="btn-admin-logout">
+                                LOGOUT
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -876,6 +1039,8 @@
                 let frameImg = new Image();
                 let toastTimer = null;
                 let uploadedFiles = { py: null, json: null };
+                let adminCreds = { username: null, password: null };
+                let adminLoggedIn = false;
 
                 // ── Helpers ──
                 function showToast(msg, ms) {
@@ -901,6 +1066,7 @@
                     $("btn-lobby").style.display = "none";
                     configPanel.classList.remove("show");
                     uploadPanel.classList.remove("show");
+                    $("admin-panel").classList.remove("show");
                     gameListEl.style.display = "";
                     fetchGames();
                 }
@@ -910,6 +1076,7 @@
                     configGameId.textContent = gameId;
                     gameListEl.style.display = "none";
                     uploadPanel.classList.remove("show");
+                    $("admin-panel").classList.remove("show");
                     configPanel.classList.add("show");
                     $("in-player").focus();
                 }
@@ -917,12 +1084,176 @@
                 function showUpload() {
                     gameListEl.style.display = "none";
                     configPanel.classList.remove("show");
+                    $("admin-panel").classList.remove("show");
                     uploadPanel.classList.add("show");
                     uploadedFiles = { py: null, json: null };
                     fileListEl.innerHTML = "";
                     uploadStatus.textContent = "";
                     uploadStatus.className = "";
                     $("btn-do-upload").disabled = true;
+                }
+
+                function showAdmin() {
+                    gameListEl.style.display = "none";
+                    configPanel.classList.remove("show");
+                    uploadPanel.classList.remove("show");
+                    $("admin-panel").classList.add("show");
+                    if (adminLoggedIn) {
+                        $("admin-login-form").style.display = "none";
+                        $("admin-games").style.display = "";
+                        fetchAdminGames();
+                    } else {
+                        $("admin-login-form").style.display = "";
+                        $("admin-games").style.display = "none";
+                        $("admin-status").textContent = "";
+                        $("admin-status").className = "";
+                        $("admin-user").value = "";
+                        $("admin-pass").value = "";
+                        $("admin-user").focus();
+                    }
+                }
+
+                function adminLogin() {
+                    const user = $("admin-user").value.trim();
+                    const pass = $("admin-pass").value;
+                    if (!user || !pass) {
+                        $("admin-status").textContent =
+                            "✗ Enter username and password";
+                        $("admin-status").className = "err";
+                        return;
+                    }
+                    $("admin-status").textContent = "Authenticating…";
+                    $("admin-status").className = "";
+
+                    fetch("/api/admin/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            username: user,
+                            password: pass,
+                        }),
+                    })
+                        .then((r) =>
+                            r.json().then((d) => ({ ok: r.ok, data: d })),
+                        )
+                        .then(({ ok, data }) => {
+                            if (ok) {
+                                adminCreds = { username: user, password: pass };
+                                adminLoggedIn = true;
+                                $("admin-login-form").style.display = "none";
+                                $("admin-games").style.display = "";
+                                fetchAdminGames();
+                                showToast("Admin authenticated", 2000);
+                            } else {
+                                $("admin-status").textContent =
+                                    "✗ " + (data.error || "Login failed");
+                                $("admin-status").className = "err";
+                            }
+                        })
+                        .catch((e) => {
+                            $("admin-status").textContent = "✗ " + e.message;
+                            $("admin-status").className = "err";
+                        });
+                }
+
+                function adminLogout() {
+                    adminCreds = { username: null, password: null };
+                    adminLoggedIn = false;
+                    showLobby();
+                    showToast("Logged out", 1500);
+                }
+
+                function fetchAdminGames() {
+                    const qs =
+                        "username=" +
+                        encodeURIComponent(adminCreds.username) +
+                        "&password=" +
+                        encodeURIComponent(adminCreds.password);
+                    fetch("/api/admin/games?" + qs)
+                        .then((r) => r.json())
+                        .then((data) => renderAdminGames(data.games || []))
+                        .catch(() => {
+                            $("admin-games-list").innerHTML =
+                                '<div style="color:var(--red);font-size:12px;">Failed to load games</div>';
+                        });
+                }
+
+                function renderAdminGames(games) {
+                    const list = $("admin-games-list");
+                    if (games.length === 0) {
+                        list.innerHTML =
+                            '<div style="color:var(--text-dim);font-size:12px;">No games found.</div>';
+                        return;
+                    }
+                    list.innerHTML = "";
+                    games.forEach((g) => {
+                        const row = document.createElement("div");
+                        row.className = "admin-game-row";
+                        row.innerHTML =
+                            '<div><div class="agr-id">' +
+                            g.game_id +
+                            "</div>" +
+                            '<div class="agr-tags">' +
+                            (g.tags || []).join(", ") +
+                            "</div></div>" +
+                            '<button class="agr-delete">DELETE</button>';
+                        row.querySelector(".agr-delete").addEventListener(
+                            "click",
+                            function () {
+                                if (
+                                    !confirm(
+                                        'Delete game "' +
+                                            g.game_id +
+                                            '"? This cannot be undone.',
+                                    )
+                                )
+                                    return;
+                                this.disabled = true;
+                                this.textContent = "DELETING…";
+                                deleteGame(g.game_id, row);
+                            },
+                        );
+                        list.appendChild(row);
+                    });
+                }
+
+                function deleteGame(gameId, rowEl) {
+                    fetch("/api/admin/games/" + encodeURIComponent(gameId), {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            username: adminCreds.username,
+                            password: adminCreds.password,
+                        }),
+                    })
+                        .then((r) =>
+                            r.json().then((d) => ({ ok: r.ok, data: d })),
+                        )
+                        .then(({ ok, data }) => {
+                            if (ok) {
+                                rowEl.remove();
+                                showToast("Deleted " + gameId, 2500);
+                                fetchAdminGames();
+                            } else {
+                                showToast(
+                                    "Error: " + (data.error || "Delete failed"),
+                                    3000,
+                                );
+                                const btn = rowEl.querySelector(".agr-delete");
+                                if (btn) {
+                                    btn.disabled = false;
+                                    btn.textContent = "DELETE";
+                                }
+                            }
+                        })
+                        .catch((e) => {
+                            showToast("Error: " + e.message, 3000);
+                            const btn = rowEl.querySelector(".agr-delete");
+                            if (btn) {
+                                btn.disabled = false;
+                                btn.textContent = "DELETE";
+                            }
+                        });
                 }
 
                 function showGame() {
@@ -1324,6 +1655,16 @@
                     showLobby();
                 });
                 $("btn-upload").addEventListener("click", showUpload);
+                $("btn-admin").addEventListener("click", showAdmin);
+                $("btn-admin-login").addEventListener("click", adminLogin);
+                $("btn-admin-back").addEventListener("click", showLobby);
+                $("btn-admin-logout").addEventListener("click", adminLogout);
+                $("admin-pass").addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") adminLogin();
+                });
+                $("admin-user").addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") $("admin-pass").focus();
+                });
                 $("btn-config-back").addEventListener("click", showLobby);
                 $("btn-upload-back").addEventListener("click", showLobby);
                 $("btn-start").addEventListener("click", startGame);

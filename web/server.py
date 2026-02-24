@@ -1,6 +1,10 @@
 """
 web/server.py — Ethara AI × ARC-3 Web Runner.
 
+Admin credentials (override via environment variables):
+    ADMIN_USERNAME  (default: admin)
+    ADMIN_PASSWORD  (default: 12345)
+
 Drop any ARC-AGI game (game.py + metadata.json) into environment_files/<game>/<version>/
 and this server auto-discovers it, spins up sessions, and serves a browser-based player.
 
@@ -32,10 +36,12 @@ import io
 import json
 import logging
 import os
+import shutil
 import sys
 import time
 import uuid
 from pathlib import Path
+from functools import wraps
 
 import numpy as np
 from flask import Flask, render_template, request, jsonify, send_from_directory
@@ -71,6 +77,37 @@ app = Flask(
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "ethara-arc-dev-key")
 
 CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
+
+# ---------------------------------------------------------------------------
+# Admin credentials (override via env vars for production)
+# ---------------------------------------------------------------------------
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "12345")
+
+
+def require_admin(f):
+    """Decorator that checks admin credentials from JSON body or query params."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        # Try JSON body first, then query params
+        username = None
+        password = None
+        if request.is_json:
+            data = request.get_json(silent=True) or {}
+            username = data.get("username")
+            password = data.get("password")
+        if not username:
+            username = request.args.get("username")
+            password = request.args.get("password")
+        if not username:
+            # Also check form data
+            username = request.form.get("username")
+            password = request.form.get("password")
+
+        if username != ADMIN_USERNAME or password != ADMIN_PASSWORD:
+            return jsonify({"error": "Invalid admin credentials"}), 401
+        return f(*args, **kwargs)
+    return decorated
 
 # Determine async mode: prefer eventlet (required for gunicorn production),
 # fall back to threading for local dev.
@@ -702,6 +739,89 @@ def upload_game():
 
     except Exception as e:
         logger.error(f"Upload error: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  ADMIN ENDPOINTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.route("/api/admin/login", methods=["POST"])
+def admin_login():
+    """Verify admin credentials. Returns 200 on success, 401 on failure."""
+    data = request.get_json(silent=True) or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        return jsonify({"status": "ok", "message": "Authenticated"}), 200
+    return jsonify({"error": "Invalid credentials"}), 401
+
+
+@app.route("/api/admin/games", methods=["GET"])
+@require_admin
+def admin_list_games():
+    """List all games with their file paths (admin only)."""
+    global DISCOVERED_GAMES, GAME_INDEX
+    DISCOVERED_GAMES = discover_games()
+    GAME_INDEX = {g["game_id"]: g for g in DISCOVERED_GAMES}
+
+    out = []
+    for g in DISCOVERED_GAMES:
+        out.append({
+            "game_id": g["game_id"],
+            "tags": g["tags"],
+            "version_dir": g["version_dir"],
+        })
+    return jsonify({"games": out})
+
+
+@app.route("/api/admin/games/<game_id>", methods=["DELETE"])
+@require_admin
+def admin_delete_game(game_id):
+    """
+    Delete a game by game_id. Removes the version directory and the parent
+    game directory if it becomes empty. Also kills any active sessions for
+    that game.
+    """
+    global DISCOVERED_GAMES, GAME_INDEX
+
+    info = GAME_INDEX.get(game_id)
+    if not info:
+        return jsonify({"error": f"Game '{game_id}' not found"}), 404
+
+    version_dir = info["version_dir"]
+    game_dir = info["game_dir"]
+
+    try:
+        # Remove the version directory (e.g. environment_files/pm07/v1/)
+        if os.path.isdir(version_dir):
+            shutil.rmtree(version_dir)
+            logger.info(f"Deleted version dir: {version_dir}")
+
+        # If the parent game dir is now empty, remove it too
+        if os.path.isdir(game_dir) and not os.listdir(game_dir):
+            shutil.rmtree(game_dir)
+            logger.info(f"Deleted empty game dir: {game_dir}")
+
+        # Kill active sessions for this game
+        stale = [sid for sid, s in game_sessions.items() if s["game_id"] == game_id]
+        for sid in stale:
+            del game_sessions[sid]
+            logger.info(f"Killed session {sid} for deleted game {game_id}")
+
+        # Re-discover
+        DISCOVERED_GAMES = discover_games()
+        GAME_INDEX = {g["game_id"]: g for g in DISCOVERED_GAMES}
+
+        return jsonify({
+            "status": "ok",
+            "deleted": game_id,
+            "games_remaining": [g["game_id"] for g in DISCOVERED_GAMES],
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error deleting game {game_id}: {e}", exc_info=True)
         return jsonify({"error": str(e)}), 500
 
 
