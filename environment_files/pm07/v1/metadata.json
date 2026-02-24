@@ -1,0 +1,21 @@
+{
+  "game_id": "pm07-v1",
+  "default_fps": 10,
+  "baseline_actions": [
+    15,
+    20,
+    25,
+    30,
+    35,
+    40,
+    50
+  ],
+  "tags": [
+    "puzzle",
+    "pattern",
+    "hidden-rules",
+    "grid",
+    "interactive"
+  ],
+  "local_dir": "environment_files/pm07/v1"
+}

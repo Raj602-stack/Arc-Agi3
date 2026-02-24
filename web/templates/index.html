@@ -1,0 +1,1393 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ethara AI × ARC</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap");
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --bg: #0e1117;
+                --panel: #161b22;
+                --border: #30363d;
+                --border-bright: #58a6ff;
+                --text: #c9d1d9;
+                --text-dim: #8b949e;
+                --text-bright: #f0f6fc;
+                --accent: #58a6ff;
+                --green: #3fb950;
+                --green-dim: #238636;
+                --yellow: #d29922;
+                --red: #f85149;
+                --purple: #bc8cff;
+                --cyan: #39d2c0;
+                --orange: #f0883e;
+                --mono: "Share Tech Mono", "Courier New", monospace;
+                --pixel: "Press Start 2P", monospace;
+            }
+
+            body {
+                background: var(--bg);
+                color: var(--text);
+                font-family: var(--mono);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* ── Top bar ── */
+            #topbar {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 10px 20px;
+                background: var(--panel);
+                border-bottom: 1px solid var(--border);
+                flex-shrink: 0;
+            }
+            #topbar .logo {
+                font-family: var(--pixel);
+                font-size: 12px;
+                color: var(--accent);
+                white-space: nowrap;
+            }
+            #topbar .sep {
+                width: 1px;
+                height: 20px;
+                background: var(--border);
+            }
+            #topbar .status {
+                font-size: 12px;
+                color: var(--text-dim);
+            }
+            #topbar .status.connected {
+                color: var(--green);
+            }
+            #topbar .status.disconnected {
+                color: var(--red);
+            }
+            .spacer {
+                flex: 1;
+            }
+            .top-btn {
+                font-family: var(--mono);
+                font-size: 12px;
+                padding: 5px 14px;
+                background: transparent;
+                border: 1px solid var(--border);
+                color: var(--text);
+                cursor: pointer;
+                transition: all 0.15s;
+            }
+            .top-btn:hover {
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+
+            /* ── Main layout ── */
+            #main {
+                flex: 1;
+                display: flex;
+                overflow: hidden;
+            }
+
+            /* ── Lobby (game picker) ── */
+            #lobby {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 24px;
+                padding: 40px;
+            }
+            #lobby.hidden {
+                display: none;
+            }
+
+            #lobby h1 {
+                font-family: var(--pixel);
+                font-size: 20px;
+                color: var(--accent);
+                text-align: center;
+                line-height: 1.6;
+            }
+            #lobby .sub {
+                color: var(--text-dim);
+                font-size: 13px;
+                text-align: center;
+                max-width: 500px;
+                line-height: 1.6;
+            }
+
+            /* Game cards */
+            .game-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+                max-width: 800px;
+            }
+            .game-card {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                padding: 20px;
+                width: 340px;
+                cursor: pointer;
+                transition: all 0.15s;
+                position: relative;
+            }
+            .game-card:hover {
+                border-color: var(--accent);
+                box-shadow: 0 0 16px rgba(88, 166, 255, 0.15);
+                transform: translateY(-2px);
+            }
+            .game-card .gid {
+                font-family: var(--pixel);
+                font-size: 11px;
+                color: var(--accent);
+                margin-bottom: 8px;
+            }
+            .game-card .tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-top: 8px;
+            }
+            .tag {
+                font-size: 10px;
+                padding: 2px 8px;
+                background: rgba(88, 166, 255, 0.1);
+                border: 1px solid rgba(88, 166, 255, 0.2);
+                color: var(--accent);
+            }
+            .game-card .meta {
+                font-size: 11px;
+                color: var(--text-dim);
+                margin-top: 6px;
+            }
+
+            .no-games {
+                color: var(--text-dim);
+                font-size: 14px;
+                text-align: center;
+                padding: 30px;
+                border: 1px dashed var(--border);
+                max-width: 400px;
+            }
+
+            /* Config form (inside lobby) */
+            .config-panel {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+                padding: 24px;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                max-width: 380px;
+                width: 100%;
+            }
+            .config-panel.show {
+                display: flex;
+            }
+            .config-panel h2 {
+                font-family: var(--pixel);
+                font-size: 11px;
+                color: var(--accent);
+            }
+            .config-panel label {
+                font-size: 12px;
+                color: var(--text-dim);
+                letter-spacing: 1px;
+                align-self: flex-start;
+            }
+            .config-panel input {
+                width: 100%;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                color: var(--text);
+                font-family: var(--mono);
+                font-size: 14px;
+                padding: 8px 12px;
+                outline: none;
+                transition: border-color 0.15s;
+            }
+            .config-panel input:focus {
+                border-color: var(--accent);
+            }
+            .btn-row {
+                display: flex;
+                gap: 10px;
+                width: 100%;
+            }
+            .btn-primary {
+                flex: 1;
+                font-family: var(--mono);
+                font-size: 14px;
+                padding: 10px;
+                background: var(--green-dim);
+                border: 1px solid var(--green);
+                color: var(--text-bright);
+                cursor: pointer;
+                transition: all 0.15s;
+                letter-spacing: 1px;
+            }
+            .btn-primary:hover {
+                background: var(--green);
+                color: #fff;
+            }
+            .btn-secondary {
+                font-family: var(--mono);
+                font-size: 13px;
+                padding: 10px 16px;
+                background: transparent;
+                border: 1px solid var(--border);
+                color: var(--text-dim);
+                cursor: pointer;
+            }
+            .btn-secondary:hover {
+                border-color: var(--text);
+                color: var(--text);
+            }
+
+            /* ── Upload panel ── */
+            #upload-panel {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                padding: 30px;
+                max-width: 500px;
+                width: 100%;
+            }
+            #upload-panel.show {
+                display: flex;
+            }
+            #upload-panel h2 {
+                font-family: var(--pixel);
+                font-size: 12px;
+                color: var(--purple);
+            }
+            .drop-zone {
+                width: 100%;
+                padding: 40px 20px;
+                border: 2px dashed var(--border);
+                text-align: center;
+                color: var(--text-dim);
+                font-size: 13px;
+                line-height: 1.8;
+                cursor: pointer;
+                transition: all 0.15s;
+            }
+            .drop-zone:hover,
+            .drop-zone.dragover {
+                border-color: var(--purple);
+                color: var(--purple);
+                background: rgba(188, 140, 255, 0.05);
+            }
+            .drop-zone input {
+                display: none;
+            }
+            .file-list {
+                width: 100%;
+                font-size: 12px;
+                color: var(--text-dim);
+            }
+            .file-list .file-item {
+                padding: 6px 10px;
+                border: 1px solid var(--border);
+                margin-bottom: 4px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .file-item .fname {
+                color: var(--cyan);
+            }
+            .file-item .fsize {
+                color: var(--text-dim);
+            }
+            #upload-status {
+                font-size: 12px;
+                min-height: 18px;
+            }
+            #upload-status.ok {
+                color: var(--green);
+            }
+            #upload-status.err {
+                color: var(--red);
+            }
+
+            /* ── Game view ── */
+            #game-view {
+                flex: 1;
+                display: none;
+                flex-direction: row;
+                overflow: hidden;
+            }
+            #game-view.show {
+                display: flex;
+            }
+
+            /* Grid area */
+            #grid-area {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                background: #0d1117;
+                min-width: 0;
+            }
+            #grid-wrapper {
+                position: relative;
+                line-height: 0;
+            }
+            #grid-wrapper::before {
+                content: "";
+                position: absolute;
+                inset: -4px;
+                border: 1px solid var(--border);
+                pointer-events: none;
+            }
+            #game-canvas {
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                display: block;
+                background: #0d1117;
+            }
+
+            /* Sidebar */
+            #sidebar {
+                width: 280px;
+                min-width: 280px;
+                background: var(--panel);
+                border-left: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                font-size: 13px;
+            }
+
+            .sb-section {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border);
+            }
+            .sb-section h3 {
+                font-size: 10px;
+                color: var(--text-dim);
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                margin-bottom: 8px;
+            }
+
+            #sb-game-id {
+                font-family: var(--pixel);
+                font-size: 10px;
+                color: var(--accent);
+                margin-bottom: 4px;
+            }
+            #sb-state {
+                font-size: 14px;
+                font-weight: bold;
+            }
+            #sb-state.playing {
+                color: var(--green);
+            }
+            #sb-state.won {
+                color: var(--yellow);
+            }
+            #sb-state.lost {
+                color: var(--red);
+            }
+
+            /* Progress */
+            .progress-bar {
+                display: flex;
+                gap: 2px;
+                margin: 6px 0;
+            }
+            .progress-seg {
+                flex: 1;
+                height: 8px;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                transition: background 0.3s;
+            }
+            .progress-seg.filled {
+                background: var(--green);
+                border-color: var(--green);
+            }
+
+            #sb-actions {
+                font-size: 12px;
+                color: var(--text-dim);
+            }
+
+            /* Controls legend */
+            .controls-list {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3px 14px;
+            }
+            .ctrl-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: var(--text-dim);
+            }
+            kbd {
+                display: inline-block;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                padding: 1px 6px;
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--text);
+                min-width: 24px;
+                text-align: center;
+            }
+
+            /* Available actions */
+            .avail-list {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+            .avail-item {
+                font-size: 12px;
+                color: var(--green);
+                padding-left: 6px;
+                opacity: 0.8;
+            }
+
+            /* Sidebar buttons */
+            .sb-btn {
+                width: 100%;
+                font-family: var(--mono);
+                font-size: 12px;
+                padding: 8px;
+                background: transparent;
+                border: 1px solid var(--border);
+                color: var(--text);
+                cursor: pointer;
+                margin-top: 6px;
+                transition: all 0.15s;
+                letter-spacing: 1px;
+            }
+            .sb-btn:hover {
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+            .sb-btn.danger:hover {
+                border-color: var(--red);
+                color: var(--red);
+            }
+
+            .sb-footer {
+                margin-top: auto;
+                padding: 10px 16px;
+                font-size: 10px;
+                color: var(--text-dim);
+                border-top: 1px solid var(--border);
+            }
+
+            /* ── Victory overlay ── */
+            #victory-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 200;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: rgba(14, 17, 23, 0.85);
+                backdrop-filter: blur(6px);
+            }
+            #victory-overlay.show {
+                display: flex;
+            }
+            .victory-box {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                padding: 40px;
+                background: var(--panel);
+                border: 1px solid var(--green);
+                max-width: 460px;
+            }
+            .victory-box h1 {
+                font-family: var(--pixel);
+                font-size: 16px;
+                color: var(--green);
+            }
+            .victory-box .stats {
+                font-size: 14px;
+                color: var(--text);
+                line-height: 1.8;
+            }
+
+            /* ── Toast ── */
+            #toast {
+                position: fixed;
+                top: 16px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-60px);
+                z-index: 600;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                padding: 8px 24px;
+                font-size: 13px;
+                color: var(--text);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                transition: transform 0.25s ease;
+                pointer-events: none;
+            }
+            #toast.show {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            /* ── Mobile controls ── */
+            #mobile-controls {
+                display: none;
+                position: fixed;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                gap: 6px;
+            }
+            .dpad {
+                display: grid;
+                grid-template-areas:
+                    ". up ."
+                    "left . right"
+                    ". down .";
+                gap: 4px;
+            }
+            .dpad-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                color: var(--text);
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+            .dpad-btn:active {
+                background: var(--border);
+            }
+            .dpad-btn.up {
+                grid-area: up;
+            }
+            .dpad-btn.left {
+                grid-area: left;
+            }
+            .dpad-btn.right {
+                grid-area: right;
+            }
+            .dpad-btn.down {
+                grid-area: down;
+            }
+            .mobile-btns {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                margin-left: 14px;
+            }
+            .mobile-btns .dpad-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 10px;
+                letter-spacing: 0.5px;
+            }
+
+            /* ── Responsive ── */
+            @media (max-width: 900px) {
+                #sidebar {
+                    display: none;
+                }
+                #mobile-controls {
+                    display: flex;
+                }
+                #game-canvas {
+                    max-height: calc(100vh - 220px);
+                }
+            }
+            @media (max-width: 600px) {
+                #lobby {
+                    padding: 20px;
+                }
+                #lobby h1 {
+                    font-size: 14px;
+                }
+                .game-card {
+                    width: 100%;
+                }
+                .dpad-btn {
+                    width: 44px;
+                    height: 44px;
+                    font-size: 16px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ═══════════ TOP BAR ═══════════ -->
+        <div id="topbar">
+            <div class="logo">Ethara AI × ARC</div>
+            <div class="sep"></div>
+            <div class="status disconnected" id="conn-status">
+                ● DISCONNECTED
+            </div>
+            <div class="spacer"></div>
+            <button class="top-btn" id="btn-lobby" style="display: none">
+                ← GAMES
+            </button>
+            <button class="top-btn" id="btn-upload">UPLOAD GAME</button>
+        </div>
+
+        <!-- ═══════════ MAIN ═══════════ -->
+        <div id="main">
+            <!-- ── Lobby ── -->
+            <div id="lobby">
+                <h1>Ethara AI × ARC</h1>
+                <div class="sub">
+                    Drop any ARC-AGI game into
+                    <code>environment_files/</code> and it appears here
+                    automatically. Or use the <strong>UPLOAD</strong> button to
+                    add one from your browser.
+                </div>
+
+                <div class="game-list" id="game-list"></div>
+
+                <!-- Config (shown after picking a game) -->
+                <div class="config-panel" id="config-panel">
+                    <h2 id="config-game-id"></h2>
+                    <label>PLAYER NAME</label>
+                    <input
+                        type="text"
+                        id="in-player"
+                        value="PLAYER 1"
+                        maxlength="20"
+                        spellcheck="false"
+                        autocomplete="off"
+                    />
+                    <label>SEED</label>
+                    <input
+                        type="number"
+                        id="in-seed"
+                        value="0"
+                        min="0"
+                        max="99999"
+                    />
+                    <div class="btn-row">
+                        <button class="btn-secondary" id="btn-config-back">
+                            BACK
+                        </button>
+                        <button class="btn-primary" id="btn-start">
+                            ▶ START
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upload panel -->
+                <div id="upload-panel">
+                    <h2>UPLOAD GAME FILES</h2>
+                    <div class="sub" style="font-size: 12px">
+                        Select or drag-and-drop a <strong>game .py</strong> file
+                        and a <strong>metadata.json</strong> file.
+                    </div>
+                    <div class="drop-zone" id="drop-zone">
+                        <div>📁 Click or drop files here</div>
+                        <div style="margin-top: 6px; font-size: 11px">
+                            Requires: *.py + metadata.json
+                        </div>
+                        <input
+                            type="file"
+                            id="file-input"
+                            multiple
+                            accept=".py,.json"
+                        />
+                    </div>
+                    <div class="file-list" id="file-list"></div>
+                    <div class="btn-row">
+                        <button class="btn-secondary" id="btn-upload-back">
+                            BACK
+                        </button>
+                        <button class="btn-primary" id="btn-do-upload" disabled>
+                            UPLOAD &amp; RUN
+                        </button>
+                    </div>
+                    <div id="upload-status"></div>
+                </div>
+            </div>
+
+            <!-- ── Game view ── -->
+            <div id="game-view">
+                <div id="grid-area">
+                    <div id="grid-wrapper">
+                        <canvas
+                            id="game-canvas"
+                            width="512"
+                            height="512"
+                        ></canvas>
+                    </div>
+                </div>
+                <div id="sidebar">
+                    <div class="sb-section">
+                        <h3>GAME</h3>
+                        <div id="sb-game-id">—</div>
+                        <div id="sb-state" class="playing">LOADING…</div>
+                    </div>
+                    <div class="sb-section">
+                        <h3>PROGRESS</h3>
+                        <div class="progress-bar" id="progress-bar"></div>
+                        <div id="sb-actions">ACTIONS: 0</div>
+                    </div>
+                    <div class="sb-section">
+                        <h3>CONTROLS</h3>
+                        <div class="controls-list">
+                            <div class="ctrl-item">
+                                <kbd>W</kbd><kbd>↑</kbd> UP
+                            </div>
+                            <div class="ctrl-item">
+                                <kbd>S</kbd><kbd>↓</kbd> DN
+                            </div>
+                            <div class="ctrl-item">
+                                <kbd>A</kbd><kbd>←</kbd> LT
+                            </div>
+                            <div class="ctrl-item">
+                                <kbd>D</kbd><kbd>→</kbd> RT
+                            </div>
+                            <div class="ctrl-item"><kbd>⌘Z</kbd> UNDO</div>
+                            <div class="ctrl-item"><kbd>R</kbd> RESET</div>
+                            <div class="ctrl-item"><kbd>⌘R</kbd> RESTART</div>
+                        </div>
+                    </div>
+                    <div class="sb-section">
+                        <h3>AVAILABLE</h3>
+                        <div class="avail-list" id="avail-list"></div>
+                    </div>
+                    <div class="sb-section">
+                        <button class="sb-btn" id="btn-restart">
+                            RESTART GAME
+                        </button>
+                        <button class="sb-btn danger" id="btn-back-lobby">
+                            ← BACK TO GAMES
+                        </button>
+                    </div>
+                    <div class="sb-footer">
+                        <span id="sb-seed">SEED: 0</span> ·
+                        <span id="sb-session">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ VICTORY ═══════════ -->
+        <div id="victory-overlay">
+            <div class="victory-box">
+                <h1>🎉 ALL LEVELS COMPLETE</h1>
+                <div class="stats" id="victory-stats"></div>
+                <button
+                    class="btn-primary"
+                    id="btn-play-again"
+                    style="max-width: 250px"
+                >
+                    PLAY AGAIN
+                </button>
+                <button class="btn-secondary" id="btn-victory-lobby">
+                    BACK TO GAMES
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════════ MOBILE ═══════════ -->
+        <div id="mobile-controls">
+            <div class="dpad">
+                <button class="dpad-btn up" data-action="up">▲</button>
+                <button class="dpad-btn left" data-action="left">◄</button>
+                <button class="dpad-btn right" data-action="right">►</button>
+                <button class="dpad-btn down" data-action="down">▼</button>
+            </div>
+            <div class="mobile-btns">
+                <button class="dpad-btn" data-action="undo">UNDO</button>
+            </div>
+        </div>
+
+        <!-- ═══════════ TOAST ═══════════ -->
+        <div id="toast"></div>
+
+        <!-- ═══════════ SCRIPTS ═══════════ -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+        <script>
+            (function () {
+                "use strict";
+
+                // ── Elements ──
+                const $ = (s) => document.getElementById(s);
+                const connStatus = $("conn-status");
+                const lobby = $("lobby");
+                const gameListEl = $("game-list");
+                const configPanel = $("config-panel");
+                const configGameId = $("config-game-id");
+                const uploadPanel = $("upload-panel");
+                const gameView = $("game-view");
+                const canvas = $("game-canvas");
+                const ctx = canvas.getContext("2d");
+                const toastEl = $("toast");
+                const victoryOverlay = $("victory-overlay");
+                const victoryStats = $("victory-stats");
+                const dropZone = $("drop-zone");
+                const fileInput = $("file-input");
+                const fileListEl = $("file-list");
+                const uploadStatus = $("upload-status");
+
+                // Sidebar
+                const sbGameId = $("sb-game-id");
+                const sbState = $("sb-state");
+                const sbActions = $("sb-actions");
+                const sbSeed = $("sb-seed");
+                const sbSession = $("sb-session");
+                const progressBar = $("progress-bar");
+                const availList = $("avail-list");
+
+                // ── State ──
+                let socket = null;
+                let sessionId = null;
+                let selectedGameId = null;
+                let gameState = null;
+                let prevLevels = 0;
+                let frameImg = new Image();
+                let toastTimer = null;
+                let uploadedFiles = { py: null, json: null };
+
+                // ── Helpers ──
+                function showToast(msg, ms) {
+                    ms = ms || 2500;
+                    toastEl.textContent = msg;
+                    toastEl.classList.add("show");
+                    if (toastTimer) clearTimeout(toastTimer);
+                    toastTimer = setTimeout(
+                        () => toastEl.classList.remove("show"),
+                        ms,
+                    );
+                }
+
+                function pad(n, len) {
+                    return String(n).padStart(len, "0");
+                }
+
+                // ── Navigation ──
+                function showLobby() {
+                    lobby.classList.remove("hidden");
+                    gameView.classList.remove("show");
+                    victoryOverlay.classList.remove("show");
+                    $("btn-lobby").style.display = "none";
+                    configPanel.classList.remove("show");
+                    uploadPanel.classList.remove("show");
+                    gameListEl.style.display = "";
+                    fetchGames();
+                }
+
+                function showConfig(gameId) {
+                    selectedGameId = gameId;
+                    configGameId.textContent = gameId;
+                    gameListEl.style.display = "none";
+                    uploadPanel.classList.remove("show");
+                    configPanel.classList.add("show");
+                    $("in-player").focus();
+                }
+
+                function showUpload() {
+                    gameListEl.style.display = "none";
+                    configPanel.classList.remove("show");
+                    uploadPanel.classList.add("show");
+                    uploadedFiles = { py: null, json: null };
+                    fileListEl.innerHTML = "";
+                    uploadStatus.textContent = "";
+                    uploadStatus.className = "";
+                    $("btn-do-upload").disabled = true;
+                }
+
+                function showGame() {
+                    lobby.classList.add("hidden");
+                    gameView.classList.add("show");
+                    $("btn-lobby").style.display = "";
+                }
+
+                // ── Fetch games ──
+                function fetchGames() {
+                    fetch("/api/games")
+                        .then((r) => r.json())
+                        .then((data) => renderGameList(data.games || []))
+                        .catch(() => {
+                            gameListEl.innerHTML =
+                                '<div class="no-games">Could not load games. Is the server running?</div>';
+                        });
+                }
+
+                function renderGameList(games) {
+                    if (games.length === 0) {
+                        gameListEl.innerHTML =
+                            '<div class="no-games">No games found in <code>environment_files/</code>.<br>Upload one to get started.</div>';
+                        return;
+                    }
+                    gameListEl.innerHTML = "";
+                    games.forEach((g) => {
+                        const card = document.createElement("div");
+                        card.className = "game-card";
+                        card.innerHTML = `
+        <div class="gid">${g.game_id}</div>
+        <div class="tags">${(g.tags || []).map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+        <div class="meta">FPS: ${g.default_fps || "?"} · Baseline: [${(g.baseline_actions || []).join(", ")}]</div>
+      `;
+                        card.addEventListener("click", () =>
+                            showConfig(g.game_id),
+                        );
+                        gameListEl.appendChild(card);
+                    });
+                }
+
+                // ── Upload logic ──
+                function handleFiles(files) {
+                    for (const f of files) {
+                        if (f.name.endsWith(".py")) uploadedFiles.py = f;
+                        else if (f.name.endsWith(".json"))
+                            uploadedFiles.json = f;
+                    }
+                    renderFileList();
+                }
+
+                function renderFileList() {
+                    fileListEl.innerHTML = "";
+                    if (uploadedFiles.py) {
+                        fileListEl.innerHTML += `<div class="file-item"><span class="fname">${uploadedFiles.py.name}</span><span class="fsize">${(uploadedFiles.py.size / 1024).toFixed(1)} KB</span></div>`;
+                    }
+                    if (uploadedFiles.json) {
+                        fileListEl.innerHTML += `<div class="file-item"><span class="fname">${uploadedFiles.json.name}</span><span class="fsize">${(uploadedFiles.json.size / 1024).toFixed(1)} KB</span></div>`;
+                    }
+                    $("btn-do-upload").disabled = !(
+                        uploadedFiles.py && uploadedFiles.json
+                    );
+                }
+
+                function doUpload() {
+                    if (!uploadedFiles.py || !uploadedFiles.json) return;
+                    uploadStatus.textContent = "Uploading…";
+                    uploadStatus.className = "";
+
+                    const form = new FormData();
+                    form.append("game_py", uploadedFiles.py);
+                    form.append("metadata", uploadedFiles.json);
+
+                    fetch("/api/upload", { method: "POST", body: form })
+                        .then((r) =>
+                            r.json().then((d) => ({ ok: r.ok, data: d })),
+                        )
+                        .then(({ ok, data }) => {
+                            if (ok) {
+                                uploadStatus.textContent = `✓ Uploaded ${data.game_id}. Games: ${data.games_available.join(", ")}`;
+                                uploadStatus.className = "ok";
+                                showToast(
+                                    "Game uploaded! Returning to lobby…",
+                                    2000,
+                                );
+                                setTimeout(showLobby, 1500);
+                            } else {
+                                uploadStatus.textContent = `✗ ${data.error || "Upload failed"}`;
+                                uploadStatus.className = "err";
+                            }
+                        })
+                        .catch((e) => {
+                            uploadStatus.textContent = `✗ ${e.message}`;
+                            uploadStatus.className = "err";
+                        });
+                }
+
+                // ── Render frame ──
+                function renderFrame(base64Png) {
+                    if (!base64Png) return;
+                    frameImg.onload = function () {
+                        const area = $("grid-area");
+                        const maxSize = Math.min(
+                            area.clientWidth - 32,
+                            area.clientHeight - 32,
+                        );
+                        const size = Math.max(256, Math.min(maxSize, 576));
+                        canvas.width = size;
+                        canvas.height = size;
+                        canvas.style.width = size + "px";
+                        canvas.style.height = size + "px";
+                        ctx.imageSmoothingEnabled = false;
+                        ctx.drawImage(frameImg, 0, 0, size, size);
+
+                        // Subtle grid overlay
+                        const cellSize = size / 8;
+                        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+                        ctx.lineWidth = 1;
+                        for (let i = 1; i < 8; i++) {
+                            ctx.beginPath();
+                            ctx.moveTo(i * cellSize, 0);
+                            ctx.lineTo(i * cellSize, size);
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.moveTo(0, i * cellSize);
+                            ctx.lineTo(size, i * cellSize);
+                            ctx.stroke();
+                        }
+                    };
+                    frameImg.src = "data:image/png;base64," + base64Png;
+                }
+
+                // ── Update UI ──
+                const ACTION_NAMES = {
+                    1: "↑ UP",
+                    2: "↓ DOWN",
+                    3: "← LEFT",
+                    4: "→ RIGHT",
+                    5: "⚡ ACT5",
+                    6: "⚡ ACT6",
+                    7: "↶ UNDO",
+                    0: "⟳ RESET",
+                };
+
+                function updateUI(state) {
+                    if (!state) return;
+                    gameState = state;
+
+                    sbGameId.textContent = state.game_id || "—";
+
+                    if (state.state === "WON") {
+                        sbState.textContent = "★ VICTORY";
+                        sbState.className = "won";
+                    } else if (state.state && state.state.includes("LOST")) {
+                        sbState.textContent = "✗ GAME OVER";
+                        sbState.className = "lost";
+                    } else {
+                        sbState.textContent = "▶ PLAYING";
+                        sbState.className = "playing";
+                    }
+
+                    // Progress
+                    const total = state.total_levels || 0;
+                    const done = state.levels_completed || 0;
+                    progressBar.innerHTML = "";
+                    if (total > 0) {
+                        for (let i = 0; i < total; i++) {
+                            const seg = document.createElement("div");
+                            seg.className =
+                                "progress-seg" + (i < done ? " filled" : "");
+                            progressBar.appendChild(seg);
+                        }
+                    }
+
+                    sbActions.textContent =
+                        "ACTIONS: " + (state.total_actions || 0);
+                    sbSeed.textContent = "SEED: " + (state.seed || 0);
+                    sbSession.textContent = state.session_id || "—";
+
+                    // Available actions
+                    availList.innerHTML = "";
+                    if (state.available_actions) {
+                        [...state.available_actions]
+                            .sort((a, b) => a - b)
+                            .forEach((a) => {
+                                const el = document.createElement("div");
+                                el.className = "avail-item";
+                                el.textContent = ACTION_NAMES[a] || "ACT" + a;
+                                availList.appendChild(el);
+                            });
+                    }
+
+                    if (state.frame) renderFrame(state.frame);
+                }
+
+                // ── Socket ──
+                function connectSocket() {
+                    if (socket) return;
+
+                    socket = io({
+                        transports: ["websocket", "polling"],
+                        reconnectionAttempts: 10,
+                        reconnectionDelay: 1000,
+                    });
+
+                    socket.on("connect", () => {
+                        connStatus.textContent = "● CONNECTED";
+                        connStatus.className = "status connected";
+                        if (sessionId) {
+                            socket.emit("join_game", { session_id: sessionId });
+                        }
+                    });
+
+                    socket.on("disconnect", () => {
+                        connStatus.textContent = "● DISCONNECTED";
+                        connStatus.className = "status disconnected";
+                    });
+
+                    socket.on("connect_error", () => {
+                        connStatus.textContent = "● ERROR";
+                        connStatus.className = "status disconnected";
+                    });
+
+                    socket.on("game_created", (state) => {
+                        sessionId = state.session_id;
+                        prevLevels = 0;
+                        localStorage.setItem("arc_session", sessionId);
+                        showGame();
+                        updateUI(state);
+                        showToast("Game started");
+                    });
+
+                    socket.on("game_joined", (state) => {
+                        sessionId = state.session_id;
+                        prevLevels = state.levels_completed || 0;
+                        showGame();
+                        updateUI(state);
+                        showToast("Reconnected");
+                    });
+
+                    socket.on("frame_update", (state) => {
+                        const newLvl = state.levels_completed || 0;
+                        if (
+                            newLvl > prevLevels &&
+                            newLvl < (state.total_levels || 999)
+                        ) {
+                            showToast("LEVEL " + newLvl + " COMPLETE!", 2000);
+                        }
+                        prevLevels = newLvl;
+                        updateUI(state);
+                    });
+
+                    socket.on("level_complete", (data) => {
+                        showToast("LEVEL " + data.level + " COMPLETE!", 2000);
+                    });
+
+                    socket.on("game_won", (data) => {
+                        victoryStats.innerHTML =
+                            "Total actions: " +
+                            (data.total_actions || 0) +
+                            '<br><br><span style="font-size:12px;color:var(--text-dim);">Scorecard</span><br>' +
+                            '<span style="font-size:12px;color:var(--cyan);">' +
+                            (data.scorecard || "N/A") +
+                            "</span>";
+                        victoryOverlay.classList.add("show");
+                    });
+
+                    socket.on("game_restarted", (state) => {
+                        victoryOverlay.classList.remove("show");
+                        prevLevels = 0;
+                        updateUI(state);
+                        showToast("Restarted");
+                    });
+
+                    socket.on("level_reset", (state) => {
+                        updateUI(state);
+                        showToast("Level reset");
+                    });
+
+                    socket.on("error", (data) => {
+                        showToast("Error: " + (data.message || "?"), 4000);
+                    });
+                }
+
+                // ── Actions ──
+                function sendAction(action) {
+                    if (!socket || !sessionId) return;
+                    if (gameState && gameState.state === "WON") return;
+                    socket.emit("action", {
+                        session_id: sessionId,
+                        action: action,
+                    });
+                }
+                function sendRestart() {
+                    if (!socket || !sessionId) return;
+                    socket.emit("restart", { session_id: sessionId });
+                }
+                function sendResetLevel() {
+                    if (!socket || !sessionId) return;
+                    socket.emit("reset_level", { session_id: sessionId });
+                }
+
+                function startGame() {
+                    if (!selectedGameId) return;
+                    const name = $("in-player").value.trim() || "PLAYER 1";
+                    const seed = parseInt($("in-seed").value) || 0;
+
+                    connectSocket();
+
+                    // Wait for connection then create
+                    let tries = 0;
+                    const iv = setInterval(() => {
+                        tries++;
+                        if (socket && socket.connected) {
+                            clearInterval(iv);
+                            socket.emit("create_game", {
+                                game_id: selectedGameId,
+                                seed: seed,
+                                player_name: name,
+                            });
+                        }
+                        if (tries > 50) {
+                            clearInterval(iv);
+                            showToast("Connection failed", 3000);
+                        }
+                    }, 100);
+                }
+
+                // ── Keyboard ──
+                document.addEventListener("keydown", (e) => {
+                    if (e.target.tagName === "INPUT") return;
+                    // Only handle keys when game view is visible
+                    if (!gameView.classList.contains("show")) return;
+
+                    const ctrl = e.ctrlKey || e.metaKey;
+
+                    if (ctrl && e.key === "r") {
+                        e.preventDefault();
+                        sendRestart();
+                        return;
+                    }
+                    if (ctrl && e.key === "z") {
+                        e.preventDefault();
+                        sendAction("undo");
+                        return;
+                    }
+
+                    switch (e.key) {
+                        case "w":
+                        case "W":
+                        case "ArrowUp":
+                            e.preventDefault();
+                            sendAction("up");
+                            break;
+                        case "s":
+                        case "S":
+                        case "ArrowDown":
+                            e.preventDefault();
+                            sendAction("down");
+                            break;
+                        case "a":
+                        case "A":
+                        case "ArrowLeft":
+                            e.preventDefault();
+                            sendAction("left");
+                            break;
+                        case "d":
+                        case "D":
+                        case "ArrowRight":
+                            e.preventDefault();
+                            sendAction("right");
+                            break;
+                        case "r":
+                        case "R":
+                            sendResetLevel();
+                            break;
+                    }
+                });
+
+                // Prevent arrow key scrolling
+                window.addEventListener("keydown", (e) => {
+                    if (
+                        [
+                            "ArrowUp",
+                            "ArrowDown",
+                            "ArrowLeft",
+                            "ArrowRight",
+                            " ",
+                        ].includes(e.key) &&
+                        e.target.tagName !== "INPUT"
+                    ) {
+                        e.preventDefault();
+                    }
+                });
+
+                // ── Button wiring ──
+                $("btn-lobby").addEventListener("click", () => {
+                    sessionId = null;
+                    showLobby();
+                });
+                $("btn-upload").addEventListener("click", showUpload);
+                $("btn-config-back").addEventListener("click", showLobby);
+                $("btn-upload-back").addEventListener("click", showLobby);
+                $("btn-start").addEventListener("click", startGame);
+                $("btn-do-upload").addEventListener("click", doUpload);
+                $("btn-restart").addEventListener("click", sendRestart);
+                $("btn-back-lobby").addEventListener("click", () => {
+                    sessionId = null;
+                    showLobby();
+                });
+                $("btn-play-again").addEventListener("click", sendRestart);
+                $("btn-victory-lobby").addEventListener("click", () => {
+                    victoryOverlay.classList.remove("show");
+                    sessionId = null;
+                    showLobby();
+                });
+
+                // Enter key on config form
+                $("in-seed").addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") startGame();
+                });
+                $("in-player").addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") startGame();
+                });
+
+                // ── Mobile controls ──
+                document.querySelectorAll("[data-action]").forEach((btn) => {
+                    function handler(e) {
+                        e.preventDefault();
+                        sendAction(btn.getAttribute("data-action"));
+                    }
+                    btn.addEventListener("click", handler);
+                    btn.addEventListener("touchstart", handler, {
+                        passive: false,
+                    });
+                });
+
+                // ── File upload drag & drop ──
+                dropZone.addEventListener("click", () => fileInput.click());
+                fileInput.addEventListener("change", () =>
+                    handleFiles(fileInput.files),
+                );
+                dropZone.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add("dragover");
+                });
+                dropZone.addEventListener("dragleave", () =>
+                    dropZone.classList.remove("dragover"),
+                );
+                dropZone.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove("dragover");
+                    handleFiles(e.dataTransfer.files);
+                });
+
+                // ── Resize ──
+                window.addEventListener("resize", () => {
+                    if (gameState && gameState.frame)
+                        renderFrame(gameState.frame);
+                });
+
+                // ── Init ──
+                connectSocket();
+                fetchGames();
+            })();
+        </script>
+    </body>
+</html>

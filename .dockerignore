@@ -1,0 +1,40 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+wheels/
+
+# Git
+.git/
+.github/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local dev files (not needed on server)
+play_gui.py
+play.py
+run.py
+main.py
+run_game.command
+
+# Docker itself
+Dockerfile
+docker-compose*.yml
+.dockerignore
