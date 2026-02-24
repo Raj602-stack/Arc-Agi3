@@ -6,7 +6,7 @@ HOST="${HOST:-0.0.0.0}"
 WORKERS="${WORKERS:-1}"
 
 echo "╔══════════════════════════════════════════════════╗"
-echo "║       Ethara AI × ARC  —  Web Runner            ║"
+echo "║       Ethara AI × ARC-3  —  Web Runner          ║"
 echo "╠══════════════════════════════════════════════════╣"
 echo "║  Host:    $HOST                                  "
 echo "║  Port:    $PORT                                  "

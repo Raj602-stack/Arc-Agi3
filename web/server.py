@@ -1,5 +1,5 @@
 """
-web/server.py — Ethara AI × ARC Web Runner.
+web/server.py — Ethara AI × ARC-3 Web Runner.
 
 Drop any ARC-AGI game (game.py + metadata.json) into environment_files/<game>/<version>/
 and this server auto-discovers it, spins up sessions, and serves a browser-based player.
@@ -714,7 +714,7 @@ def main():
     port = int(os.environ.get("PORT", 8080))
     debug = os.environ.get("FLASK_DEBUG", "0") == "1"
 
-    logger.info(f"Ethara AI × ARC Web Runner starting on {host}:{port}")
+    logger.info(f"Ethara AI × ARC-3 Web Runner starting on {host}:{port}")
     logger.info(f"Environment dir: {ENVIRONMENTS_DIR}")
     logger.info(f"Discovered games: {[g['game_id'] for g in DISCOVERED_GAMES]}")
     logger.info(f"Debug: {debug}")
