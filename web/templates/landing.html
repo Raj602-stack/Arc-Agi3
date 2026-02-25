@@ -420,17 +420,22 @@
                 overflow: hidden;
                 position: relative;
                 z-index: 0;
-                background: rgba(13, 17, 23, 0.5);
-                border: 1px solid rgba(48, 54, 61, 0.45);
-                border-radius: 10px;
-                margin: 6px 14px;
+                background: transparent;
             }
 
-            /* ── Divider between sections (now just spacing) ── */
+            /* ── Thick visual divider between sections ── */
             .section-divider {
                 flex-shrink: 0;
-                height: 0;
-                background: none;
+                height: 3px;
+                background: linear-gradient(
+                    90deg,
+                    var(--purple) 0%,
+                    var(--accent) 50%,
+                    var(--green) 100%
+                );
+                box-shadow:
+                    0 0 12px rgba(88, 166, 255, 0.3),
+                    0 0 24px rgba(88, 166, 255, 0.1);
                 position: relative;
                 z-index: 2;
             }
@@ -440,52 +445,66 @@
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                padding: 14px 20px 12px;
-                border-bottom: none;
-                background: transparent;
+                gap: 20px;
+                padding: 14px 28px 12px;
+                border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+                background: rgba(22, 27, 34, 0.55);
+                backdrop-filter: blur(10px);
             }
 
-            /* ── Section label (text only, no box) ── */
+            /* ── Large prominent badge ── */
             .section-badge {
                 font-family: var(--pixel);
                 font-size: 13px;
-                letter-spacing: 1px;
-                padding: 0;
-                border-radius: 0;
+                letter-spacing: 2px;
+                padding: 8px 18px;
+                border-radius: 6px;
                 white-space: nowrap;
                 flex-shrink: 0;
                 text-transform: uppercase;
-                font-weight: 600;
-                border: none;
-                background: none;
             }
             .badge-purple {
-                color: rgba(63, 185, 80, 0.9);
-                background: none;
-                border: none;
+                background: linear-gradient(
+                    135deg,
+                    rgba(188, 140, 255, 0.2),
+                    rgba(188, 140, 255, 0.08)
+                );
+                color: var(--purple);
+                border: 2px solid rgba(188, 140, 255, 0.5);
+                box-shadow:
+                    0 0 16px rgba(188, 140, 255, 0.2),
+                    inset 0 0 12px rgba(188, 140, 255, 0.06);
             }
             .badge-green {
-                color: rgba(63, 185, 80, 0.9);
-                background: none;
-                border: none;
+                background: linear-gradient(
+                    135deg,
+                    rgba(63, 185, 80, 0.2),
+                    rgba(63, 185, 80, 0.08)
+                );
+                color: var(--green);
+                border: 2px solid rgba(63, 185, 80, 0.5);
+                box-shadow:
+                    0 0 16px rgba(63, 185, 80, 0.2),
+                    inset 0 0 12px rgba(63, 185, 80, 0.06);
             }
 
             /* ── Title + count ── */
             .section-title-group {
-                display: none;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                flex-shrink: 0;
             }
             .section-title {
-                font-family: var(--mono);
+                font-family: var(--pixel);
                 font-size: 14px;
-                color: rgba(201, 209, 217, 0.9);
-                letter-spacing: 0.8px;
-                font-weight: 400;
+                color: var(--text-bright);
+                letter-spacing: 0.5px;
             }
             .section-subtitle {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.5);
+                color: var(--text-dim);
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -493,59 +512,65 @@
             .section-count {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.5);
+                color: var(--text-dim);
+                opacity: 0.8;
             }
 
             .section-desc {
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.5);
+                color: var(--text-dim);
                 line-height: 1.5;
                 flex: 1;
                 min-width: 120px;
-                display: none;
             }
 
             /* ── Category tabs ── */
             .cat-tabs {
-                display: none;
+                display: flex;
+                gap: 2px;
+                flex-shrink: 0;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 6px;
+                padding: 3px;
             }
             .cat-tab {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.6);
+                color: var(--text-dim);
                 background: none;
                 border: none;
-                border-bottom: 2px solid transparent;
-                border-radius: 0;
+                border-radius: 4px;
                 padding: 6px 14px;
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: all 0.15s;
                 display: flex;
                 align-items: center;
                 gap: 6px;
                 white-space: nowrap;
             }
             .cat-tab:hover {
-                color: rgba(201, 209, 217, 0.9);
+                color: var(--text-bright);
+                background: rgba(255, 255, 255, 0.04);
             }
             .cat-tab.active {
-                color: rgba(188, 140, 255, 0.9);
-                border-bottom-color: rgba(188, 140, 255, 0.5);
+                color: var(--purple);
+                background: rgba(188, 140, 255, 0.1);
+                box-shadow: 0 0 0 1px rgba(188, 140, 255, 0.3);
             }
             .cat-tab .ct-count {
                 font-size: 9px;
-                background: rgba(255, 255, 255, 0.04);
+                background: rgba(255, 255, 255, 0.06);
                 color: inherit;
                 padding: 1px 6px;
                 border-radius: 8px;
-                opacity: 0.6;
+                opacity: 0.7;
             }
             .cat-tab.active .ct-count {
-                background: rgba(188, 140, 255, 0.12);
+                background: rgba(188, 140, 255, 0.2);
                 opacity: 1;
             }
 
-            /* ── Controls (count + arrows on right) ── */
+            /* ── Controls (search, upload, pagination) ── */
             .section-controls {
                 display: flex;
                 align-items: center;
@@ -576,7 +601,24 @@
             }
 
             .upload-btn {
-                display: none;
+                font-family: var(--code);
+                font-size: 10px;
+                padding: 7px 14px;
+                background: transparent;
+                border: 1px dashed var(--border);
+                color: var(--text-dim);
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.15s;
+                white-space: nowrap;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .upload-btn:hover {
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: rgba(88, 166, 255, 0.05);
             }
             .upload-btn input[type="file"] {
                 display: none;
@@ -622,45 +664,47 @@
                 overflow: hidden;
                 min-height: 0;
                 position: relative;
-                padding: 0 6px;
+                padding: 0 8px;
                 background: transparent;
             }
 
             .carousel-btn {
                 flex-shrink: 0;
-                width: 30px;
-                height: 30px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
-                border: 1px solid rgba(48, 54, 61, 0.4);
-                background: rgba(13, 17, 23, 0.5);
-                color: rgba(139, 148, 158, 0.5);
-                font-size: 16px;
+                border: 1px solid var(--border);
+                background: rgba(22, 27, 34, 0.7);
+                backdrop-filter: blur(4px);
+                color: var(--text-dim);
+                font-size: 20px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.2s ease;
+                transition: all 0.15s;
                 z-index: 5;
                 user-select: none;
             }
             .carousel-btn:hover:not(:disabled) {
-                border-color: rgba(139, 148, 158, 0.4);
-                color: rgba(201, 209, 217, 0.8);
-                background: rgba(22, 27, 34, 0.6);
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: var(--panel2);
+                box-shadow: 0 0 12px rgba(88, 166, 255, 0.15);
             }
             .carousel-btn:disabled {
-                opacity: 0.15;
+                opacity: 0.2;
                 cursor: default;
             }
 
             .carousel-track {
                 flex: 1;
                 display: flex;
-                gap: 30px;
+                gap: 24px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 scroll-behavior: smooth;
-                padding: 20px 16px;
+                padding: 24px 20px;
                 min-height: 0;
                 align-items: center;
                 justify-content: center;
@@ -678,29 +722,36 @@
             /* ═══ GAME / TASK CARD ═══ */
             .g-card {
                 flex-shrink: 0;
-                width: 165px;
-                height: 210px;
-                background: rgba(13, 17, 23, 0.7);
-                border: 1px solid rgba(48, 54, 61, 0.5);
+                width: 280px;
+                height: 370px;
+                background: rgba(22, 27, 34, 0.75);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 cursor: pointer;
-                transition: all 0.25s ease;
+                transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 position: relative;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
             }
             .g-card:hover {
-                transform: translateY(-2px);
-                border-color: rgba(139, 148, 158, 0.3);
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+                transform: translateY(-6px) scale(1.02);
             }
             .g-card.agi3-card:hover {
-                border-color: rgba(63, 185, 80, 0.3);
+                border-color: rgba(63, 185, 80, 0.5);
+                box-shadow:
+                    0 12px 40px rgba(63, 185, 80, 0.2),
+                    0 0 0 1px rgba(63, 185, 80, 0.12),
+                    0 0 60px rgba(63, 185, 80, 0.06);
             }
             .g-card.agi2-card:hover {
-                border-color: rgba(63, 185, 80, 0.3);
+                border-color: rgba(188, 140, 255, 0.5);
+                box-shadow:
+                    0 12px 40px rgba(188, 140, 255, 0.2),
+                    0 0 0 1px rgba(188, 140, 255, 0.12),
+                    0 0 60px rgba(188, 140, 255, 0.06);
             }
 
             /* ── Card Preview ── */
@@ -709,12 +760,12 @@
                 width: 100%;
                 flex: 1;
                 min-height: 0;
-                background: #080b10;
+                background: #06080c;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             }
             .g-card-preview img,
             .g-card-preview canvas {
@@ -723,11 +774,11 @@
                 object-fit: contain;
                 image-rendering: pixelated;
                 image-rendering: crisp-edges;
-                transition: transform 0.3s ease;
+                transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             }
             .g-card:hover .g-card-preview img,
             .g-card:hover .g-card-preview canvas {
-                transform: scale(1.04);
+                transform: scale(1.08);
             }
             .g-card-preview .loading-text {
                 font-family: var(--code);
@@ -744,50 +795,55 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: rgba(6, 8, 12, 0.55);
+                background: rgba(6, 8, 12, 0.65);
                 opacity: 0;
-                transition: opacity 0.2s ease;
+                transition: opacity 0.3s;
             }
             .g-card:hover .card-overlay {
                 opacity: 1;
             }
             .play-circle {
-                width: 34px;
-                height: 34px;
+                width: 60px;
+                height: 60px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 14px;
+                font-size: 22px;
                 color: #fff;
-                transition: transform 0.2s ease;
+                transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+                backdrop-filter: blur(6px);
             }
             .agi3-play {
-                background: rgba(63, 185, 80, 0.2);
-                border: 2px solid rgba(63, 185, 80, 0.6);
-                box-shadow: 0 0 16px rgba(63, 185, 80, 0.2);
+                background: rgba(63, 185, 80, 0.25);
+                border: 2px solid rgba(63, 185, 80, 0.7);
+                box-shadow:
+                    0 0 24px rgba(63, 185, 80, 0.3),
+                    inset 0 0 12px rgba(63, 185, 80, 0.1);
             }
             .agi2-play {
-                background: rgba(188, 140, 255, 0.15);
-                border: 2px solid rgba(188, 140, 255, 0.6);
-                box-shadow: 0 0 16px rgba(188, 140, 255, 0.2);
+                background: rgba(188, 140, 255, 0.18);
+                border: 2px solid rgba(188, 140, 255, 0.7);
+                box-shadow:
+                    0 0 24px rgba(188, 140, 255, 0.3),
+                    inset 0 0 12px rgba(188, 140, 255, 0.1);
             }
             .g-card:hover .play-circle {
-                transform: scale(1.08);
+                transform: scale(1.12);
             }
 
             /* ── Card Info ── */
             .g-card-info {
-                padding: 8px 10px;
+                padding: 14px 16px 16px;
                 display: flex;
                 flex-direction: column;
-                gap: 3px;
-                background: transparent;
+                gap: 8px;
+                background: rgba(22, 27, 34, 0.6);
                 flex-shrink: 0;
-                min-height: 36px;
+                min-height: 90px;
             }
             .g-card-id {
-                font-family: var(--mono);
+                font-family: var(--pixel);
                 font-size: 11px;
                 letter-spacing: 0.5px;
                 white-space: nowrap;
@@ -795,10 +851,10 @@
                 text-overflow: ellipsis;
             }
             .agi3-card .g-card-id {
-                color: rgba(63, 185, 80, 0.85);
+                color: var(--green);
             }
             .agi2-card .g-card-id {
-                color: rgba(201, 209, 217, 0.8);
+                color: var(--purple);
             }
 
             .g-card-tags {
@@ -809,8 +865,8 @@
             .g-tag {
                 font-family: var(--code);
                 font-size: 9px;
-                padding: 2px 6px;
-                border-radius: 3px;
+                padding: 3px 8px;
+                border-radius: 4px;
                 letter-spacing: 0.3px;
             }
             .agi3-card .g-tag {
@@ -843,912 +899,148 @@
 
             /* ═══ FOOTER ═══ */
             #footer {
-                padding: 8px 28px;
+                padding: 6px 28px;
                 text-align: center;
-                border-top: none;
-                font-size: 11px;
-                color: rgba(63, 185, 80, 0.6);
+                border-top: 1px solid rgba(48, 54, 61, 0.6);
+                font-size: 10px;
+                color: var(--text-dim);
                 flex-shrink: 0;
-                background: transparent;
+                background: rgba(22, 27, 34, 0.55);
+                backdrop-filter: blur(12px);
                 position: relative;
                 z-index: 0;
-                font-family: var(--mono);
-                letter-spacing: 0.5px;
             }
             #footer a {
-                color: rgba(63, 185, 80, 0.7);
+                color: var(--accent);
                 text-decoration: none;
             }
             #footer a:hover {
-                color: rgba(63, 185, 80, 0.9);
-                text-decoration: none;
+                text-decoration: underline;
             }
 
-            /* ═══════════════════════════════════════════════════════
-               RESPONSIVE — mobile-first progressive enhancement
-               Breakpoints:
-                 ≤ 359px  — tiny phones (SE 1st gen, Galaxy Fold closed)
-                 ≤ 479px  — small phones (iPhone SE, Galaxy S)
-                 ≤ 599px  — phones (iPhone 14, Pixel 7)
-                 ≤ 767px  — large phones / small tablets portrait
-                 ≤ 899px  — tablets portrait (iPad Mini)
-                 ≤ 1099px — tablets landscape / small laptops
-                 ≤ 1399px — laptops / small desktops
-                 ≥ 1400px — large desktops (default styles)
-               ═══════════════════════════════════════════════════════ */
-
-            /* ── Large desktop tweaks (>1400) — make cards wider ── */
-            @media (min-width: 1400px) {
-                .g-card {
-                    width: 185px;
-                    height: 240px;
-                }
-                .carousel-track {
-                    gap: 36px;
-                    padding: 22px 18px;
-                }
-            }
-
-            /* ── Laptops / small desktops (≤1399) ── */
-            @media (max-width: 1399px) {
-                .section-header {
-                    padding: 6px 16px 5px;
-                    gap: 10px;
-                }
+            /* ═══ RESPONSIVE ═══ */
+            @media (max-width: 1100px) {
                 .section-desc {
                     display: none;
                 }
-                .section-badge {
-                    font-size: 11px;
-                    padding: 5px 10px;
-                }
-                .section-title {
-                    font-size: 13px;
-                }
-                .cat-tab {
-                    font-size: 10px;
-                    padding: 4px 9px;
-                }
-                .g-card {
-                    width: 150px;
-                    height: 198px;
-                }
-                .carousel-track {
-                    gap: 30px;
-                    padding: 18px 14px;
+                .section-header {
+                    gap: 14px;
+                    padding: 12px 20px 10px;
                 }
             }
 
-            /* ── Smaller desktops / large laptops (≤1199) ── */
-            @media (max-width: 1199px) {
+            @media (max-width: 900px) {
                 .section-header {
-                    gap: 8px;
-                    padding: 5px 14px 4px;
+                    gap: 10px;
+                    padding: 10px 16px 8px;
+                    flex-wrap: wrap;
                 }
                 .section-badge {
                     font-size: 10px;
-                    padding: 4px 9px;
+                    padding: 6px 12px;
                 }
                 .section-title {
                     font-size: 12px;
                 }
-                .cat-tab {
-                    font-size: 10px;
-                    padding: 4px 8px;
+                .search-box {
+                    width: 150px;
                 }
                 .g-card {
-                    width: 140px;
-                    height: 185px;
+                    width: 230px;
+                    height: 320px;
                 }
                 .carousel-track {
-                    gap: 26px;
+                    gap: 18px;
                     padding: 16px 12px;
                 }
-                .play-circle {
-                    width: 32px;
-                    height: 32px;
-                    font-size: 13px;
-                }
                 .carousel-btn {
-                    width: 32px;
-                    height: 32px;
-                    font-size: 16px;
+                    width: 34px;
+                    height: 34px;
+                    font-size: 17px;
                 }
             }
 
-            /* ── Tablets landscape / small laptops (≤1099) ── */
-            @media (max-width: 1099px) {
-                .section-header {
-                    gap: 6px 8px;
-                    padding: 5px 12px 4px;
-                    flex-wrap: wrap;
-                }
-                .section-controls {
-                    width: 100%;
-                    order: 10;
-                    margin-left: 0;
-                    gap: 6px;
-                }
-                .section-badge {
-                    font-size: 10px;
-                    padding: 4px 8px;
-                }
-                .section-title {
-                    font-size: 11px;
-                }
-                .section-subtitle {
-                    font-size: 9px;
-                }
-                .cat-tabs {
-                    flex-wrap: wrap;
-                }
-                .cat-tab {
-                    font-size: 9px;
-                    padding: 3px 7px;
-                }
-                .upload-btn {
-                    font-size: 9px;
-                    padding: 4px 8px;
-                }
-                .g-card {
-                    width: 130px;
-                    height: 172px;
-                }
-                .carousel-track {
-                    gap: 22px;
-                    padding: 14px 10px;
-                }
-                .g-card-info {
-                    padding: 5px 6px;
-                    gap: 3px;
-                    min-height: 42px;
-                }
-                .play-circle {
-                    width: 30px;
-                    height: 30px;
-                    font-size: 12px;
-                }
-                .carousel-btn {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 14px;
-                }
-            }
-
-            /* ── Tablets portrait / small tablets (≤899) ── */
-            @media (max-width: 899px) {
+            @media (max-width: 600px) {
                 #topbar {
                     padding: 0 14px;
                     gap: 10px;
                     height: 42px;
                 }
                 .logo {
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                 .tagline {
-                    font-size: 10px;
+                    display: none;
                 }
                 .section-header {
-                    gap: 6px 8px;
                     padding: 8px 12px 6px;
+                    gap: 8px;
                 }
                 .section-badge {
-                    font-size: 10px;
+                    font-size: 9px;
                     padding: 5px 10px;
                 }
                 .section-title {
-                    font-size: 11px;
-                }
-                .section-subtitle {
-                    font-size: 9px;
-                }
-                .section-controls {
-                    gap: 6px;
-                }
-                .search-box {
-                    min-width: 0;
-                    font-size: 10px;
-                    padding: 6px 10px;
-                }
-                .cat-tab {
-                    font-size: 10px;
-                    padding: 4px 10px;
-                }
-                .g-card {
-                    width: 120px;
-                    height: 160px;
-                }
-                .carousel-track {
-                    gap: 20px;
-                    padding: 12px 8px;
-                }
-                .carousel-btn {
-                    width: 32px;
-                    height: 32px;
-                    font-size: 16px;
-                }
-                .g-card-info {
-                    padding: 4px 5px;
-                    gap: 3px;
-                    min-height: 38px;
-                }
-                .g-card-id {
-                    font-size: 9px;
-                }
-                .play-circle {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 12px;
-                }
-                .random-btn {
-                    width: 32px;
-                    height: 32px;
-                    font-size: 14px;
-                }
-                #footer {
-                    padding: 5px 14px;
-                    font-size: 9px;
-                }
-                .upload-box {
-                    padding: 24px;
-                    width: 420px;
-                    max-width: 92vw;
-                    border-radius: 10px;
-                }
-                .kb-box {
-                    padding: 22px;
-                    width: 380px;
-                    max-width: 92vw;
-                    border-radius: 10px;
-                }
-                .admin-box {
-                    padding: 24px;
-                    max-width: 92vw;
-                    border-radius: 10px;
-                }
-                .upload-btn {
-                    font-size: 9px;
-                    padding: 5px 9px;
-                }
-                .pag-btn {
-                    padding: 3px 8px;
-                    font-size: 10px;
-                }
-            }
-
-            /* ── Large phones / small tablets portrait (≤767) ── */
-            @media (max-width: 767px) {
-                html,
-                body {
-                    height: auto;
-                    overflow: auto;
-                }
-                #app {
-                    height: auto;
-                    min-height: 100vh;
-                }
-                #content {
-                    overflow: visible;
-                    flex: none;
-                }
-                .section-panel {
-                    flex: none;
-                    overflow: visible;
-                }
-                .carousel-wrapper {
-                    flex: none;
-                    overflow: hidden;
-                    min-height: 180px;
-                }
-                .carousel-track {
-                    gap: 28px;
-                    padding: 16px 12px;
-                    overflow-x: auto;
-                    justify-content: flex-start;
-                }
-                .carousel-btn {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 14px;
-                }
-                #topbar {
-                    padding: 0 10px;
-                    gap: 8px;
-                    height: 40px;
-                }
-                .logo {
-                    font-size: 9px;
-                }
-                .sep {
-                    display: none;
-                }
-                .tagline {
-                    display: none;
-                }
-                .top-btn {
-                    font-size: 9px;
-                    padding: 4px 9px;
-                }
-                .kb-help-btn {
-                    display: none;
-                }
-                .section-header {
-                    padding: 6px 10px 5px;
-                    gap: 6px;
-                    flex-wrap: wrap;
-                }
-                .section-badge {
-                    font-size: 9px;
-                    padding: 4px 8px;
-                    letter-spacing: 0.5px;
-                }
-                .section-title-group {
-                    min-width: 0;
-                    flex: 1;
-                }
-                .section-title {
                     font-size: 10px;
                 }
                 .section-subtitle {
-                    font-size: 9px;
+                    font-size: 10px;
                 }
-                .section-controls {
-                    width: 100%;
-                    order: 10;
-                    margin-left: 0;
-                    gap: 5px;
-                    flex-wrap: wrap;
+                .section-desc {
+                    display: none;
                 }
                 .cat-tabs {
                     padding: 2px;
-                    flex-wrap: wrap;
-                    width: 100%;
-                    order: 1;
                 }
                 .cat-tab {
                     font-size: 9px;
                     padding: 4px 8px;
                     gap: 4px;
-                    flex: 1;
-                    justify-content: center;
-                }
-                .cat-tab .ct-count {
-                    font-size: 9px;
-                    padding: 1px 5px;
                 }
                 .search-box {
-                    flex: 1;
-                    min-width: 0;
-                    width: auto;
+                    width: 110px;
                     font-size: 10px;
                     padding: 5px 8px;
                 }
-                .upload-btn {
-                    font-size: 9px;
-                    padding: 5px 8px;
-                }
                 .g-card {
-                    width: 115px;
-                    height: 154px;
-                    border-radius: 5px;
-                }
-                .g-card-preview .loading-text {
-                    font-size: 9px;
-                    letter-spacing: 2px;
-                }
-                .g-card-info {
-                    padding: 4px 5px;
-                    gap: 2px;
-                    min-height: 36px;
-                }
-                .g-card-id {
-                    font-size: 9px;
-                }
-                .g-tag {
-                    font-size: 9px;
-                    padding: 2px 5px;
-                }
-                .play-circle {
-                    width: 26px;
-                    height: 26px;
-                    font-size: 11px;
-                }
-
-                .section-divider {
-                    height: 2px;
-                }
-                .random-btn {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 13px;
-                }
-                .pag-btn {
-                    padding: 3px 7px;
-                    font-size: 9px;
-                }
-                .pag-info {
-                    font-size: 9px;
-                }
-                #footer {
-                    font-size: 9px;
-                    padding: 4px 10px;
-                }
-                #footer kbd {
-                    display: none;
-                }
-                .upload-box {
-                    padding: 20px;
-                    gap: 14px;
-                    width: 94vw;
-                    max-height: 90vh;
-                    overflow-y: auto;
+                    width: 190px;
+                    height: 280px;
                     border-radius: 10px;
-                }
-                .upload-box h2 {
-                    font-size: 11px;
-                }
-                .upload-drop-zone {
-                    padding: 14px 10px;
-                    font-size: 11px;
-                }
-                .upload-file-label {
-                    font-size: 10px;
-                }
-                .upload-submit {
-                    font-size: 9px;
-                    padding: 9px;
-                }
-                .upload-hint {
-                    font-size: 9px;
-                }
-                .kb-box {
-                    padding: 18px;
-                    width: 94vw;
-                    border-radius: 10px;
-                }
-                .kb-box h2 {
-                    font-size: 10px;
-                }
-                .kb-grid {
-                    gap: 5px 10px;
-                }
-                .admin-box {
-                    width: 94vw;
-                    padding: 20px;
-                    border-radius: 10px;
-                }
-                .card-delete-btn {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 11px;
-                    top: 5px;
-                    right: 5px;
-                }
-                /* Keep grid background visible on mobile */
-                .grid-bg {
-                    height: 50vh;
-                    opacity: 0.5;
-                }
-                .grid-glow {
-                    opacity: 0.4;
-                }
-            }
-
-            /* ── Phones (≤599) ── */
-            @media (max-width: 599px) {
-                #topbar {
-                    padding: 0 8px;
-                    gap: 6px;
-                    height: 38px;
-                }
-                .logo {
-                    font-size: 9px;
-                }
-                .top-btn {
-                    font-size: 9px;
-                    padding: 4px 7px;
-                    border-radius: 4px;
-                }
-                .top-btn-admin {
-                    padding: 4px 6px;
-                }
-                .section-header {
-                    padding: 5px 8px 4px;
-                    gap: 5px;
-                }
-                .section-badge {
-                    font-size: 9px;
-                    padding: 3px 7px;
-                    letter-spacing: 0.5px;
-                    border-width: 1px;
-                }
-                .section-title {
-                    font-size: 10px;
-                }
-                .section-subtitle {
-                    font-size: 9px;
-                }
-                .section-count {
-                    font-size: 9px;
-                }
-                .cat-tab {
-                    font-size: 9px;
-                    padding: 3px 6px;
-                }
-                .section-controls {
-                    gap: 4px;
-                }
-                .search-box {
-                    min-width: 0;
-                    font-size: 9px;
-                    padding: 4px 7px;
-                }
-                .upload-btn {
-                    font-size: 9px;
-                    padding: 4px 7px;
-                }
-                .g-card {
-                    width: 105px;
-                    height: 142px;
-                    border-radius: 4px;
-                }
-                .g-card-info {
-                    padding: 3px 4px;
-                    gap: 2px;
-                    min-height: 34px;
-                }
-                .g-card-id {
-                    font-size: 9px;
-                }
-                .g-tag {
-                    font-size: 9px;
-                    padding: 2px 4px;
-                }
-                .play-circle {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 10px;
-                }
-                .carousel-track {
-                    gap: 24px;
-                    padding: 12px 8px;
                 }
                 .carousel-btn {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 12px;
-                }
-                .carousel-wrapper {
-                    padding: 0 2px;
-                }
-                #footer {
-                    font-size: 9px;
-                    padding: 3px 8px;
-                }
-                .empty-msg {
-                    padding: 16px 10px;
-                    font-size: 10px;
-                }
-                .random-btn {
-                    width: 26px;
-                    height: 26px;
-                    font-size: 12px;
-                }
-                /* Toast adjustments */
-                #toast {
-                    font-size: 10px;
-                    padding: 7px 14px;
-                    max-width: 92vw;
-                }
-            }
-
-            /* ── Small phones (≤479) ── */
-            @media (max-width: 479px) {
-                #topbar {
-                    padding: 0 6px;
-                    gap: 5px;
-                    height: 36px;
-                }
-                .logo {
-                    font-size: 9px;
-                }
-                .top-btn {
-                    font-size: 9px;
-                    padding: 3px 6px;
-                }
-                .section-header {
-                    padding: 4px 6px 3px;
-                    gap: 4px;
-                }
-                .section-badge {
-                    font-size: 9px;
-                    padding: 3px 5px;
-                }
-                .section-title {
-                    font-size: 9px;
-                }
-                .section-subtitle {
-                    display: none;
-                }
-                .cat-tab {
-                    font-size: 9px;
-                    padding: 3px 5px;
-                }
-                .cat-tab .ct-count {
-                    font-size: 9px;
-                    padding: 0 4px;
-                }
-                .search-box {
-                    font-size: 9px;
-                    padding: 4px 6px;
-                }
-                .upload-btn {
-                    font-size: 9px;
-                    padding: 3px 6px;
-                    gap: 3px;
-                }
-                .pag-btn {
-                    padding: 2px 5px;
-                    font-size: 9px;
-                }
-                .pag-info {
-                    font-size: 9px;
-                }
-                .g-card {
-                    width: 95px;
-                    height: 128px;
-                    border-radius: 4px;
-                }
-                .g-card-info {
-                    padding: 3px 4px;
-                    gap: 2px;
-                    min-height: 30px;
-                }
-                .g-card-id {
-                    font-size: 9px;
-                }
-                .g-card-tags {
-                    gap: 2px;
-                }
-                .g-tag {
-                    font-size: 9px;
-                    padding: 1px 3px;
-                    border-radius: 2px;
-                }
-                .play-circle {
-                    width: 22px;
-                    height: 22px;
-                    font-size: 9px;
-                }
-                .carousel-btn {
-                    width: 22px;
-                    height: 22px;
-                    font-size: 11px;
+                    width: 30px;
+                    height: 30px;
+                    font-size: 15px;
                 }
                 .carousel-track {
-                    gap: 20px;
-                    padding: 10px 6px;
-                }
-                .carousel-wrapper {
-                    padding: 0;
-                }
-                #footer {
-                    font-size: 9px;
-                    padding: 2px 6px;
-                }
-                .random-btn {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 11px;
-                    border-radius: 5px;
-                }
-                .upload-box {
-                    padding: 16px;
                     gap: 12px;
-                    border-radius: 8px;
-                }
-                .upload-box h2 {
-                    font-size: 10px;
-                }
-                .upload-drop-zone {
                     padding: 12px 8px;
-                    font-size: 10px;
-                }
-                .upload-drop-zone span[style] {
-                    font-size: 20px !important;
-                }
-                .upload-file-label {
-                    font-size: 9px;
-                }
-                .upload-file-pick input[type="file"] {
-                    font-size: 9px;
-                }
-                .upload-file-pick input[type="file"]::file-selector-button {
-                    font-size: 9px;
-                    padding: 3px 6px;
-                }
-                .upload-submit {
-                    font-size: 9px;
-                    padding: 8px;
-                }
-                .upload-cancel {
-                    font-size: 9px;
-                    padding: 4px;
-                }
-                .upload-hint {
-                    font-size: 9px;
-                }
-                .upload-status {
-                    font-size: 9px;
-                }
-                .admin-box {
-                    padding: 16px;
-                    width: 94vw;
-                    border-radius: 8px;
-                }
-                .admin-box h2 {
-                    font-size: 10px;
-                }
-                .admin-input {
-                    font-size: 10px;
-                    padding: 7px 8px;
-                }
-                .admin-submit {
-                    font-size: 9px;
-                    padding: 8px;
-                }
-                .card-delete-btn {
-                    width: 22px;
-                    height: 22px;
-                    font-size: 10px;
-                    top: 3px;
-                    right: 3px;
-                    border-width: 1px;
-                }
-                #toast {
-                    font-size: 9px;
-                    padding: 5px 10px;
-                    border-radius: 5px;
-                }
-            }
-
-            /* ── Tiny phones (≤359) — iPhone SE 1st gen, Galaxy Fold closed ── */
-            @media (max-width: 359px) {
-                #topbar {
-                    padding: 0 4px;
-                    gap: 4px;
-                    height: 34px;
-                }
-                .logo {
-                    font-size: 9px;
-                }
-                .top-btn {
-                    font-size: 9px;
-                    padding: 2px 5px;
-                }
-                .section-header {
-                    padding: 3px 4px 2px;
-                    gap: 3px;
-                }
-                .section-badge {
-                    font-size: 9px;
-                    padding: 2px 4px;
-                    letter-spacing: 0;
-                }
-                .section-title {
-                    font-size: 9px;
-                }
-                .cat-tab {
-                    font-size: 9px;
-                    padding: 2px 4px;
-                }
-                .g-card {
-                    width: 85px;
-                    height: 115px;
-                    border-radius: 3px;
-                }
-                .g-card-info {
-                    padding: 2px 3px;
-                    min-height: 26px;
-                    gap: 2px;
                 }
                 .g-card-id {
                     font-size: 9px;
                 }
-                .g-tag {
-                    font-size: 9px;
-                    padding: 1px 3px;
+                .g-card-info {
+                    padding: 10px 12px 12px;
+                    gap: 5px;
+                    min-height: 70px;
                 }
-                .g-card-tags {
-                    display: none;
+                .g-tag {
+                    font-size: 7px;
+                    padding: 2px 5px;
                 }
                 .play-circle {
-                    width: 20px;
-                    height: 20px;
-                    font-size: 9px;
-                }
-                .carousel-btn {
-                    width: 20px;
-                    height: 20px;
-                    font-size: 10px;
-                }
-                .carousel-track {
-                    gap: 16px;
-                    padding: 8px 4px;
-                }
-                .random-btn {
-                    width: 22px;
-                    height: 22px;
-                    font-size: 10px;
-                }
-                .pag-row {
-                    display: none;
-                }
-                .upload-box {
-                    padding: 14px;
-                    gap: 10px;
-                    border-radius: 6px;
-                }
-                .kb-box {
-                    padding: 14px;
-                    border-radius: 6px;
-                }
-                .admin-box {
-                    padding: 14px;
-                    border-radius: 6px;
-                }
-                #footer {
-                    padding: 2px 4px;
-                }
-            }
-
-            /* ── Landscape orientation helpers ── */
-            @media (max-height: 500px) and (orientation: landscape) {
-                #topbar {
-                    height: 34px;
-                }
-                .section-header {
-                    padding: 3px 10px 2px;
-                }
-                .g-card {
-                    height: auto;
-                    min-height: 120px;
-                    width: 120px;
-                }
-                .g-card-info {
-                    min-height: auto;
-                    padding: 5px 6px;
-                }
-                .carousel-track {
-                    padding: 12px 10px;
-                    gap: 24px;
+                    width: 44px;
+                    height: 44px;
+                    font-size: 16px;
                 }
                 .section-divider {
                     height: 2px;
                 }
-                #footer {
-                    padding: 2px 8px;
-                    font-size: 9px;
-                }
-                .upload-box,
-                .kb-box,
-                .admin-box {
-                    max-height: 85vh;
-                    overflow-y: auto;
-                }
-                .section-subtitle {
+                .bg-layer,
+                .grid-bg,
+                .grid-fade,
+                .grid-glow {
                     display: none;
-                }
-            }
-
-            /* ── High-DPI / Retina — ensure crisp grid lines ── */
-            @media (-webkit-min-device-pixel-ratio: 2),
-                (min-resolution: 192dpi) {
-                .g-card {
-                    border-width: 0.5px;
-                }
-                .section-divider {
-                    height: 2px;
                 }
             }
 
@@ -1764,7 +1056,7 @@
                 }
             }
             .g-card.card-enter {
-                animation: cardFadeIn 0.25s ease both;
+                animation: cardFadeIn 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
             }
 
             /* ═══ RANDOM BUTTON ═══ */
@@ -1911,6 +1203,17 @@
             }
             .kb-close:hover {
                 color: var(--text-bright);
+            }
+
+            @media (max-width: 600px) {
+                .random-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 14px;
+                }
+                .kb-help-btn {
+                    display: none;
+                }
             }
 
             /* ═══ UPLOAD MODAL (AGI-3) ═══ */
@@ -2110,6 +1413,21 @@
                 text-align: center;
                 line-height: 1.6;
             }
+
+            /* ═══ UPLOAD MODAL (AGI-3) ═══ */
+            #upload-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(6px);
+                align-items: center;
+                justify-content: center;
+            }
+            #upload-modal.show {
+                display: flex;
+            }
         </style>
     </head>
     <body>
@@ -2287,16 +1605,18 @@
                 <!-- ── TOP: AGI-2 Puzzles ── -->
                 <div class="section-panel" id="panel-agi2">
                     <div class="section-header">
-                        <span class="section-badge badge-purple"
-                            >ARC-AGI-2 →</span
-                        >
-                        <div
-                            class="cat-tabs"
-                            id="agi2-tabs"
-                            style="display: none"
-                        >
+                        <span class="section-badge badge-purple">AGI-2</span>
+                        <div class="section-title-group">
+                            <span class="section-title">ARC Puzzles</span>
+                            <span class="section-subtitle">
+                                <span id="agi2-count"></span>
+                                <span style="color: #333">·</span>
+                                Classic pattern recognition
+                            </span>
+                        </div>
+                        <div class="cat-tabs" id="agi2-tabs">
                             <button class="cat-tab active" data-cat="my_tasks">
-                                Arc Arena
+                                ★ My Tasks
                                 <span class="ct-count" id="ct-my_tasks">0</span>
                             </button>
                             <button class="cat-tab" data-cat="training">
@@ -2311,15 +1631,22 @@
                             </button>
                         </div>
                         <div class="section-controls">
-                            <span
-                                id="agi2-count"
-                                style="
-                                    font-family: var(--mono);
-                                    font-size: 12px;
-                                    color: rgba(139, 148, 158, 0.55);
-                                    letter-spacing: 0.5px;
-                                "
-                            ></span>
+                            <input
+                                type="text"
+                                class="search-box"
+                                id="agi2-search"
+                                placeholder="Search task ID…"
+                            />
+                            <button
+                                class="random-btn"
+                                id="agi2-random"
+                                title="Random puzzle"
+                            >
+                                🎲
+                                <span class="random-tooltip"
+                                    >Random puzzle (R)</span
+                                >
+                            </button>
                             <label class="upload-btn" for="agi2-upload">
                                 ↑ Upload .json
                                 <input
@@ -2371,17 +1698,36 @@
                 <!-- ── BOTTOM: AGI-3 Games ── -->
                 <div class="section-panel" id="panel-agi3">
                     <div class="section-header">
-                        <span class="section-badge badge-green">ARC-AGI-3</span>
+                        <span class="section-badge badge-green">AGI-3</span>
+                        <div class="section-title-group">
+                            <span class="section-title">Interactive Games</span>
+                            <span class="section-subtitle">
+                                <span id="agi3-count"></span>
+                                <span style="color: #333">·</span>
+                                Real-time game environments
+                            </span>
+                        </div>
+                        <div class="section-desc">
+                            Keyboard controls, multiple levels, instant
+                            feedback.
+                        </div>
                         <div class="section-controls">
-                            <span
-                                id="agi3-count"
-                                style="
-                                    font-family: var(--mono);
-                                    font-size: 12px;
-                                    color: rgba(139, 148, 158, 0.55);
-                                    letter-spacing: 0.5px;
-                                "
-                            ></span>
+                            <input
+                                type="text"
+                                class="search-box"
+                                id="agi3-search"
+                                placeholder="Search game ID…"
+                            />
+                            <button
+                                class="random-btn"
+                                id="agi3-random"
+                                title="Random game"
+                            >
+                                🎲
+                                <span class="random-tooltip"
+                                    >Random game (R)</span
+                                >
+                            </button>
                             <button class="upload-btn" id="agi3-upload-btn">
                                 ↑ Upload game
                             </button>
@@ -2409,8 +1755,27 @@
 
             <!-- ═══ FOOTER ═══ -->
             <div id="footer">
-                &gt; arc-agi-player developed and maintained by
-                <a href="https://ethara.ai" target="_blank">Ethara.AI</a>🔺
+                Powered by
+                <a href="https://ethara.ai" target="_blank">Ethara AI</a> ·
+                <a
+                    href="https://github.com/Raj602-stack/Arc-Agi3"
+                    target="_blank"
+                    >GitHub</a
+                >
+                · Press
+                <kbd
+                    style="
+                        font-family: var(--code);
+                        font-size: 9px;
+                        background: var(--bg);
+                        border: 1px solid var(--border);
+                        border-radius: 3px;
+                        padding: 1px 5px;
+                        color: var(--text);
+                    "
+                    >?</kbd
+                >
+                for shortcuts
             </div>
         </div>
 
@@ -2596,7 +1961,17 @@
                     idEl.className = "g-card-id";
                     idEl.textContent = g.game_id;
 
+                    var tagsEl = document.createElement("div");
+                    tagsEl.className = "g-card-tags";
+                    (g.tags || []).forEach(function (t) {
+                        var tag = document.createElement("span");
+                        tag.className = "g-tag";
+                        tag.textContent = t;
+                        tagsEl.appendChild(tag);
+                    });
+
                     info.appendChild(idEl);
+                    if ((g.tags || []).length) info.appendChild(tagsEl);
 
                     card.appendChild(previewDiv);
                     card.appendChild(info);
@@ -2616,13 +1991,12 @@
             }
 
             // ── AGI-3 Search ──
-            var _agi3Search = document.getElementById("agi3-search");
-            if (_agi3Search) {
-                _agi3Search.addEventListener("input", function () {
+            document
+                .getElementById("agi3-search")
+                .addEventListener("input", function () {
                     agi3Search = this.value.trim();
                     renderAgi3();
                 });
-            }
 
             // ── AGI-3 Upload Modal ──
             var uploadModal = document.getElementById("upload-modal");
@@ -2924,7 +2298,7 @@
                     if (el) el.textContent = arr.length;
                 });
                 document.getElementById("agi2-count").textContent =
-                    total + " tasks";
+                    total + " puzzles";
             }
 
             function getAgi2Files() {
@@ -3059,7 +2433,17 @@
                 idEl.className = "g-card-id";
                 idEl.textContent = taskId;
 
+                var tagsEl = document.createElement("div");
+                tagsEl.className = "g-card-tags";
+
+                var catTag = document.createElement("span");
+                catTag.className = "g-tag";
+                catTag.textContent =
+                    agi2Category === "my_tasks" ? "my task" : agi2Category;
+                tagsEl.appendChild(catTag);
+
                 info.appendChild(idEl);
+                info.appendChild(tagsEl);
 
                 card.appendChild(previewDiv);
                 card.appendChild(info);
@@ -3100,9 +2484,9 @@
             // ── AGI-2 Search (debounced) ──
             (function () {
                 var timer = null;
-                var _agi2Search = document.getElementById("agi2-search");
-                if (_agi2Search) {
-                    _agi2Search.addEventListener("input", function () {
+                document
+                    .getElementById("agi2-search")
+                    .addEventListener("input", function () {
                         var val = this.value.trim();
                         clearTimeout(timer);
                         timer = setTimeout(function () {
@@ -3111,7 +2495,6 @@
                             renderAgi2();
                         }, 200);
                     });
-                }
             })();
 
             // ── AGI-2 Pagination ──
@@ -3486,12 +2869,12 @@
                 }, 400);
             }
 
-            var _agi2Random = document.getElementById("agi2-random");
-            if (_agi2Random)
-                _agi2Random.addEventListener("click", randomAgi2Task);
-            var _agi3Random = document.getElementById("agi3-random");
-            if (_agi3Random)
-                _agi3Random.addEventListener("click", randomAgi3Game);
+            document
+                .getElementById("agi2-random")
+                .addEventListener("click", randomAgi2Task);
+            document
+                .getElementById("agi3-random")
+                .addEventListener("click", randomAgi3Game);
 
             // ══════════════════════════════════════════════════════════════
             //  KEYBOARD HELP PANEL
@@ -3552,8 +2935,7 @@
                 // / — focus search (AGI-2 by default)
                 if (e.key === "/") {
                     e.preventDefault();
-                    var _s = document.getElementById("agi2-search");
-                    if (_s) _s.focus();
+                    document.getElementById("agi2-search").focus();
                     return;
                 }
 
