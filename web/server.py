@@ -314,9 +314,13 @@ def _sync_state(session: dict):
     session["state"] = fd.state.value if hasattr(fd.state, "value") else str(fd.state)
     session["levels_completed"] = getattr(fd, "levels_completed", 0)
 
-    # Total levels — try to read from the game object
+    # Total levels — try multiple sources
     total = getattr(fd, "total_levels", 0)
     if total == 0:
+        # Try win_levels (used by arcengine)
+        total = getattr(fd, "win_levels", 0)
+    if total == 0:
+        # Fall back to counting levels on the game object
         try:
             game_obj = session["env"]._game
             total = len(getattr(game_obj, "_levels", []))
