@@ -420,21 +420,17 @@
                 overflow: hidden;
                 position: relative;
                 z-index: 0;
-                background: transparent;
+                background: rgba(13, 17, 23, 0.5);
+                border: 1px solid rgba(48, 54, 61, 0.45);
+                border-radius: 10px;
+                margin: 6px 14px;
             }
 
-            /* ── Subtle divider between sections ── */
+            /* ── Divider between sections (now just spacing) ── */
             .section-divider {
                 flex-shrink: 0;
-                height: 1px;
-                background: linear-gradient(
-                    90deg,
-                    transparent 0%,
-                    rgba(88, 166, 255, 0.15) 20%,
-                    rgba(188, 140, 255, 0.12) 50%,
-                    rgba(63, 185, 80, 0.15) 80%,
-                    transparent 100%
-                );
+                height: 0;
+                background: none;
                 position: relative;
                 z-index: 2;
             }
@@ -444,42 +440,40 @@
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
-                gap: 14px;
-                padding: 10px 24px 8px;
-                border-bottom: 1px solid rgba(48, 54, 61, 0.3);
-                background: rgba(13, 17, 23, 0.4);
-                backdrop-filter: blur(12px);
+                gap: 10px;
+                padding: 14px 20px 12px;
+                border-bottom: none;
+                background: transparent;
             }
 
-            /* ── Refined badge ── */
+            /* ── Section label (text only, no box) ── */
             .section-badge {
-                font-family: var(--mono);
-                font-size: 11px;
-                letter-spacing: 1.5px;
-                padding: 5px 12px;
-                border-radius: 4px;
+                font-family: var(--pixel);
+                font-size: 13px;
+                letter-spacing: 1px;
+                padding: 0;
+                border-radius: 0;
                 white-space: nowrap;
                 flex-shrink: 0;
                 text-transform: uppercase;
                 font-weight: 600;
+                border: none;
+                background: none;
             }
             .badge-purple {
-                background: rgba(188, 140, 255, 0.08);
-                color: rgba(188, 140, 255, 0.85);
-                border: 1px solid rgba(188, 140, 255, 0.25);
+                color: rgba(63, 185, 80, 0.9);
+                background: none;
+                border: none;
             }
             .badge-green {
-                background: rgba(63, 185, 80, 0.08);
-                color: rgba(63, 185, 80, 0.85);
-                border: 1px solid rgba(63, 185, 80, 0.25);
+                color: rgba(63, 185, 80, 0.9);
+                background: none;
+                border: none;
             }
 
             /* ── Title + count ── */
             .section-title-group {
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-                flex-shrink: 0;
+                display: none;
             }
             .section-title {
                 font-family: var(--mono);
@@ -491,7 +485,7 @@
             .section-subtitle {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.7);
+                color: rgba(139, 148, 158, 0.5);
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -499,30 +493,26 @@
             .section-count {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.6);
+                color: rgba(139, 148, 158, 0.5);
             }
 
             .section-desc {
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.6);
+                color: rgba(139, 148, 158, 0.5);
                 line-height: 1.5;
                 flex: 1;
                 min-width: 120px;
+                display: none;
             }
 
             /* ── Category tabs ── */
             .cat-tabs {
-                display: flex;
-                gap: 1px;
-                flex-shrink: 0;
-                background: transparent;
-                border-radius: 4px;
-                padding: 0;
+                display: none;
             }
             .cat-tab {
                 font-family: var(--code);
                 font-size: 11px;
-                color: rgba(139, 148, 158, 0.7);
+                color: rgba(139, 148, 158, 0.6);
                 background: none;
                 border: none;
                 border-bottom: 2px solid transparent;
@@ -555,11 +545,11 @@
                 opacity: 1;
             }
 
-            /* ── Controls (search, upload, pagination) ── */
+            /* ── Controls (count + arrows on right) ── */
             .section-controls {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 10px;
                 flex-shrink: 0;
                 margin-left: auto;
             }
@@ -586,24 +576,7 @@
             }
 
             .upload-btn {
-                font-family: var(--code);
-                font-size: 10px;
-                padding: 5px 12px;
-                background: transparent;
-                border: 1px solid rgba(48, 54, 61, 0.4);
-                color: rgba(139, 148, 158, 0.6);
-                border-radius: 4px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                white-space: nowrap;
-                display: inline-flex;
-                align-items: center;
-                gap: 5px;
-            }
-            .upload-btn:hover {
-                border-color: rgba(88, 166, 255, 0.4);
-                color: rgba(201, 209, 217, 0.8);
-                background: rgba(88, 166, 255, 0.04);
+                display: none;
             }
             .upload-btn input[type="file"] {
                 display: none;
@@ -649,47 +622,45 @@
                 overflow: hidden;
                 min-height: 0;
                 position: relative;
-                padding: 0 8px;
+                padding: 0 6px;
                 background: transparent;
             }
 
             .carousel-btn {
                 flex-shrink: 0;
-                width: 40px;
-                height: 40px;
+                width: 30px;
+                height: 30px;
                 border-radius: 50%;
-                border: 1px solid var(--border);
-                background: rgba(22, 27, 34, 0.7);
-                backdrop-filter: blur(4px);
-                color: var(--text-dim);
-                font-size: 20px;
+                border: 1px solid rgba(48, 54, 61, 0.4);
+                background: rgba(13, 17, 23, 0.5);
+                color: rgba(139, 148, 158, 0.5);
+                font-size: 16px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.15s;
+                transition: all 0.2s ease;
                 z-index: 5;
                 user-select: none;
             }
             .carousel-btn:hover:not(:disabled) {
-                border-color: var(--accent);
-                color: var(--text-bright);
-                background: var(--panel2);
-                box-shadow: 0 0 12px rgba(88, 166, 255, 0.15);
+                border-color: rgba(139, 148, 158, 0.4);
+                color: rgba(201, 209, 217, 0.8);
+                background: rgba(22, 27, 34, 0.6);
             }
             .carousel-btn:disabled {
-                opacity: 0.2;
+                opacity: 0.15;
                 cursor: default;
             }
 
             .carousel-track {
                 flex: 1;
                 display: flex;
-                gap: 40px;
+                gap: 30px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 scroll-behavior: smooth;
-                padding: 24px 20px;
+                padding: 20px 16px;
                 min-height: 0;
                 align-items: center;
                 justify-content: center;
@@ -707,33 +678,29 @@
             /* ═══ GAME / TASK CARD ═══ */
             .g-card {
                 flex-shrink: 0;
-                width: 155px;
-                height: 205px;
-                background: rgba(22, 27, 34, 0.9);
-                border: 1px solid rgba(255, 255, 255, 0.07);
+                width: 165px;
+                height: 210px;
+                background: rgba(13, 17, 23, 0.7);
+                border: 1px solid rgba(48, 54, 61, 0.5);
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: all 0.25s ease;
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 position: relative;
-                border-radius: 6px;
-                box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             }
             .g-card:hover {
-                transform: translateY(-3px);
+                transform: translateY(-2px);
+                border-color: rgba(139, 148, 158, 0.3);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
             }
             .g-card.agi3-card:hover {
-                border-color: rgba(63, 185, 80, 0.45);
-                box-shadow:
-                    0 6px 24px rgba(63, 185, 80, 0.15),
-                    0 0 0 1px rgba(63, 185, 80, 0.1);
+                border-color: rgba(63, 185, 80, 0.3);
             }
             .g-card.agi2-card:hover {
-                border-color: rgba(188, 140, 255, 0.45);
-                box-shadow:
-                    0 6px 24px rgba(188, 140, 255, 0.15),
-                    0 0 0 1px rgba(188, 140, 255, 0.1);
+                border-color: rgba(63, 185, 80, 0.3);
             }
 
             /* ── Card Preview ── */
@@ -811,27 +778,27 @@
 
             /* ── Card Info ── */
             .g-card-info {
-                padding: 6px 8px;
+                padding: 8px 10px;
                 display: flex;
                 flex-direction: column;
                 gap: 3px;
-                background: rgba(22, 27, 34, 0.7);
+                background: transparent;
                 flex-shrink: 0;
-                min-height: 46px;
+                min-height: 36px;
             }
             .g-card-id {
-                font-family: var(--pixel);
-                font-size: 9px;
+                font-family: var(--mono);
+                font-size: 11px;
                 letter-spacing: 0.5px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
             .agi3-card .g-card-id {
-                color: var(--green);
+                color: rgba(63, 185, 80, 0.85);
             }
             .agi2-card .g-card-id {
-                color: var(--purple);
+                color: rgba(201, 209, 217, 0.8);
             }
 
             .g-card-tags {
@@ -876,23 +843,25 @@
 
             /* ═══ FOOTER ═══ */
             #footer {
-                padding: 6px 28px;
+                padding: 8px 28px;
                 text-align: center;
-                border-top: 1px solid rgba(48, 54, 61, 0.6);
-                font-size: 10px;
-                color: var(--text-dim);
+                border-top: none;
+                font-size: 11px;
+                color: rgba(63, 185, 80, 0.6);
                 flex-shrink: 0;
-                background: rgba(22, 27, 34, 0.55);
-                backdrop-filter: blur(12px);
+                background: transparent;
                 position: relative;
                 z-index: 0;
+                font-family: var(--mono);
+                letter-spacing: 0.5px;
             }
             #footer a {
-                color: var(--accent);
+                color: rgba(63, 185, 80, 0.7);
                 text-decoration: none;
             }
             #footer a:hover {
-                text-decoration: underline;
+                color: rgba(63, 185, 80, 0.9);
+                text-decoration: none;
             }
 
             /* ═══════════════════════════════════════════════════════
@@ -911,12 +880,12 @@
             /* ── Large desktop tweaks (>1400) — make cards wider ── */
             @media (min-width: 1400px) {
                 .g-card {
-                    width: 180px;
-                    height: 238px;
+                    width: 185px;
+                    height: 240px;
                 }
                 .carousel-track {
-                    gap: 44px;
-                    padding: 24px 20px;
+                    gap: 36px;
+                    padding: 22px 18px;
                 }
             }
 
@@ -945,8 +914,8 @@
                     height: 198px;
                 }
                 .carousel-track {
-                    gap: 36px;
-                    padding: 20px 16px;
+                    gap: 30px;
+                    padding: 18px 14px;
                 }
             }
 
@@ -972,8 +941,8 @@
                     height: 185px;
                 }
                 .carousel-track {
-                    gap: 32px;
-                    padding: 18px 14px;
+                    gap: 26px;
+                    padding: 16px 12px;
                 }
                 .play-circle {
                     width: 32px;
@@ -1026,8 +995,8 @@
                     height: 172px;
                 }
                 .carousel-track {
-                    gap: 28px;
-                    padding: 16px 12px;
+                    gap: 22px;
+                    padding: 14px 10px;
                 }
                 .g-card-info {
                     padding: 5px 6px;
@@ -1090,8 +1059,8 @@
                     height: 160px;
                 }
                 .carousel-track {
-                    gap: 24px;
-                    padding: 14px 10px;
+                    gap: 20px;
+                    padding: 12px 8px;
                 }
                 .carousel-btn {
                     width: 32px;
@@ -2318,16 +2287,14 @@
                 <!-- ── TOP: AGI-2 Puzzles ── -->
                 <div class="section-panel" id="panel-agi2">
                     <div class="section-header">
-                        <span class="section-badge badge-purple">AGI-2</span>
-                        <div class="section-title-group">
-                            <span class="section-title">ARC Puzzles</span>
-                            <span class="section-subtitle">
-                                <span id="agi2-count"></span>
-                                <span style="color: #333">·</span>
-                                Classic pattern recognition
-                            </span>
-                        </div>
-                        <div class="cat-tabs" id="agi2-tabs">
+                        <span class="section-badge badge-purple"
+                            >ARC-AGI-2 →</span
+                        >
+                        <div
+                            class="cat-tabs"
+                            id="agi2-tabs"
+                            style="display: none"
+                        >
                             <button class="cat-tab active" data-cat="my_tasks">
                                 Arc Arena
                                 <span class="ct-count" id="ct-my_tasks">0</span>
@@ -2344,6 +2311,15 @@
                             </button>
                         </div>
                         <div class="section-controls">
+                            <span
+                                id="agi2-count"
+                                style="
+                                    font-family: var(--mono);
+                                    font-size: 12px;
+                                    color: rgba(139, 148, 158, 0.55);
+                                    letter-spacing: 0.5px;
+                                "
+                            ></span>
                             <label class="upload-btn" for="agi2-upload">
                                 ↑ Upload .json
                                 <input
@@ -2395,17 +2371,17 @@
                 <!-- ── BOTTOM: AGI-3 Games ── -->
                 <div class="section-panel" id="panel-agi3">
                     <div class="section-header">
-                        <span class="section-badge badge-green">AGI-3</span>
-                        <div class="section-title-group">
-                            <span class="section-title">Interactive Games</span>
-                            <span class="section-subtitle">
-                                <span id="agi3-count"></span>
-                                <span style="color: #333">·</span>
-                                Real-time game environments
-                            </span>
-                        </div>
-
+                        <span class="section-badge badge-green">ARC-AGI-3</span>
                         <div class="section-controls">
+                            <span
+                                id="agi3-count"
+                                style="
+                                    font-family: var(--mono);
+                                    font-size: 12px;
+                                    color: rgba(139, 148, 158, 0.55);
+                                    letter-spacing: 0.5px;
+                                "
+                            ></span>
                             <button class="upload-btn" id="agi3-upload-btn">
                                 ↑ Upload game
                             </button>
@@ -2433,27 +2409,8 @@
 
             <!-- ═══ FOOTER ═══ -->
             <div id="footer">
-                Powered by
-                <a href="https://ethara.ai" target="_blank">Ethara AI</a> ·
-                <a
-                    href="https://github.com/Raj602-stack/Arc-Agi3"
-                    target="_blank"
-                    >GitHub</a
-                >
-                · Press
-                <kbd
-                    style="
-                        font-family: var(--code);
-                        font-size: 9px;
-                        background: var(--bg);
-                        border: 1px solid var(--border);
-                        border-radius: 3px;
-                        padding: 1px 5px;
-                        color: var(--text);
-                    "
-                    >?</kbd
-                >
-                for shortcuts
+                &gt; arc-agi-player developed and maintained by
+                <a href="https://ethara.ai" target="_blank">Ethara.AI</a>🔺
             </div>
         </div>
 
@@ -2967,7 +2924,7 @@
                     if (el) el.textContent = arr.length;
                 });
                 document.getElementById("agi2-count").textContent =
-                    total + " puzzles";
+                    total + " tasks";
             }
 
             function getAgi2Files() {
