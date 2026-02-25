@@ -77,7 +77,7 @@ function handleTaskJSON(json, folder, filename) {
 }
 
 function loadTaskByPath(folder, filename) {
-  var url = "../data/" + folder + "/" + filename;
+  var url = "data/" + folder + "/" + filename;
 
   // Try $.getJSON first (works on local servers)
   $.getJSON(url, function (json) {

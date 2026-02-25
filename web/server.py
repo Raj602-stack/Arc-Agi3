@@ -466,6 +466,7 @@ def game_direct_legacy(game_id):
 # ARC AGI-2 (static HTML/CSS/JS from ARC-AGI copy/apps)
 # ---------------------------------------------------------------------------
 ARC_AGI_2_DIR = str(PROJECT_ROOT / "ARC-AGI copy" / "apps")
+ARC_AGI_2_DATA_DIR = str(PROJECT_ROOT / "ARC-AGI copy" / "data")
 
 
 @app.route("/arc-agi-2")
@@ -475,21 +476,29 @@ def arc_agi_2_index():
     return send_from_directory(ARC_AGI_2_DIR, "index.html")
 
 
+@app.route("/arc-agi-2/data/<path:filename>")
+def arc_agi_2_data_nested(filename):
+    """Serve ARC AGI-2 puzzle data via /arc-agi-2/data/ path.
+
+    The JS loads tasks from this path (e.g. /arc-agi-2/data/my_tasks/task_001.json).
+    This route MUST be registered before the catch-all /arc-agi-2/<path:filename>
+    so Flask matches it first.
+    """
+    return send_from_directory(ARC_AGI_2_DATA_DIR, filename)
+
+
 @app.route("/arc-agi-2/<path:filename>")
 def arc_agi_2_static(filename):
     """Serve ARC AGI-2 static files (JS, CSS, images)."""
     return send_from_directory(ARC_AGI_2_DIR, filename)
 
 
-# The ARC-AGI-2 JS loads puzzle data via relative URLs like "../data/<folder>/<file>".
-# When served at /arc-agi-2/, that resolves to /data/<folder>/<file>.
-# This route serves those files from ARC-AGI copy/data/.
-ARC_AGI_2_DATA_DIR = str(PROJECT_ROOT / "ARC-AGI copy" / "data")
-
-
 @app.route("/data/<path:filename>")
 def arc_agi_2_data(filename):
-    """Serve ARC AGI-2 puzzle data (training/evaluation JSON files)."""
+    """Serve ARC AGI-2 puzzle data (training/evaluation JSON files).
+
+    Legacy fallback — kept for backwards compatibility.
+    """
     return send_from_directory(ARC_AGI_2_DATA_DIR, filename)
 
 
