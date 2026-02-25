@@ -1011,6 +1011,18 @@
             #top_bar {
                 top: 40px !important;
             }
+            #desc_bar {
+                font-family: "Share Tech Mono", "Courier New", monospace;
+                font-size: 12px;
+                color: #8b949e;
+                background: rgba(22, 27, 34, 0.85);
+                border-bottom: 1px solid #30363d;
+                padding: 6px 20px;
+                line-height: 1.4;
+            }
+            #desc_bar strong {
+                color: #58a6ff;
+            }
 
             /* ── Site nav responsive ── */
             @media (max-width: 899px) {
@@ -1035,6 +1047,10 @@
                 }
                 #top_bar {
                     top: 36px !important;
+                }
+                #desc_bar {
+                    font-size: 11px;
+                    padding: 5px 14px;
                 }
             }
 
@@ -1064,6 +1080,10 @@
                 #top_bar {
                     top: 32px !important;
                 }
+                #desc_bar {
+                    font-size: 10px;
+                    padding: 4px 10px;
+                }
             }
 
             @media (max-width: 599px) {
@@ -1088,6 +1108,10 @@
                 }
                 #top_bar {
                     top: 28px !important;
+                }
+                #desc_bar {
+                    font-size: 9px;
+                    padding: 3px 8px;
                 }
             }
 
@@ -1114,6 +1138,10 @@
                 #top_bar {
                     top: 26px !important;
                 }
+                #desc_bar {
+                    font-size: 9px;
+                    padding: 3px 6px;
+                }
             }
 
             @media (max-width: 359px) {
@@ -1138,6 +1166,10 @@
                 }
                 #top_bar {
                     top: 24px !important;
+                }
+                #desc_bar {
+                    font-size: 9px;
+                    padding: 2px 4px;
                 }
             }
         </style>
@@ -1298,6 +1330,12 @@
                     style="display: none"
                 />
             </div>
+        </div>
+
+        <!-- ── Description Bar ────────────────────────────────────── -->
+        <div id="desc_bar">
+            <strong>Play</strong> — Try ARC-AGI-1 and 2: Given the examples,
+            identify the pattern, solve the test puzzle.
         </div>
 
         <!-- ── Main Workspace ────────────────────────────────────── -->
