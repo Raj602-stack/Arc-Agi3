@@ -2440,22 +2440,6 @@
                             </button>
                         </div>
                         <div class="section-controls">
-                            <input
-                                type="text"
-                                class="search-box"
-                                id="agi2-search"
-                                placeholder="Search task ID…"
-                            />
-                            <button
-                                class="random-btn"
-                                id="agi2-random"
-                                title="Random puzzle"
-                            >
-                                🎲
-                                <span class="random-tooltip"
-                                    >Random puzzle (R)</span
-                                >
-                            </button>
                             <label class="upload-btn" for="agi2-upload">
                                 ↑ Upload .json
                                 <input
@@ -2521,22 +2505,6 @@
                             feedback.
                         </div>
                         <div class="section-controls">
-                            <input
-                                type="text"
-                                class="search-box"
-                                id="agi3-search"
-                                placeholder="Search game ID…"
-                            />
-                            <button
-                                class="random-btn"
-                                id="agi3-random"
-                                title="Random game"
-                            >
-                                🎲
-                                <span class="random-tooltip"
-                                    >Random game (R)</span
-                                >
-                            </button>
                             <button class="upload-btn" id="agi3-upload-btn">
                                 ↑ Upload game
                             </button>
@@ -2770,17 +2738,7 @@
                     idEl.className = "g-card-id";
                     idEl.textContent = g.game_id;
 
-                    var tagsEl = document.createElement("div");
-                    tagsEl.className = "g-card-tags";
-                    (g.tags || []).forEach(function (t) {
-                        var tag = document.createElement("span");
-                        tag.className = "g-tag";
-                        tag.textContent = t;
-                        tagsEl.appendChild(tag);
-                    });
-
                     info.appendChild(idEl);
-                    if ((g.tags || []).length) info.appendChild(tagsEl);
 
                     card.appendChild(previewDiv);
                     card.appendChild(info);
@@ -2800,9 +2758,9 @@
             }
 
             // ── AGI-3 Search ──
-            document
-                .getElementById("agi3-search")
-                .addEventListener("input", function () {
+            var agi3SearchEl = document.getElementById("agi3-search");
+            if (agi3SearchEl)
+                agi3SearchEl.addEventListener("input", function () {
                     agi3Search = this.value.trim();
                     renderAgi3();
                 });
@@ -3242,17 +3200,7 @@
                 idEl.className = "g-card-id";
                 idEl.textContent = taskId;
 
-                var tagsEl = document.createElement("div");
-                tagsEl.className = "g-card-tags";
-
-                var catTag = document.createElement("span");
-                catTag.className = "g-tag";
-                catTag.textContent =
-                    agi2Category === "my_tasks" ? "my task" : agi2Category;
-                tagsEl.appendChild(catTag);
-
                 info.appendChild(idEl);
-                info.appendChild(tagsEl);
 
                 card.appendChild(previewDiv);
                 card.appendChild(info);
@@ -3293,9 +3241,9 @@
             // ── AGI-2 Search (debounced) ──
             (function () {
                 var timer = null;
-                document
-                    .getElementById("agi2-search")
-                    .addEventListener("input", function () {
+                var agi2SearchEl = document.getElementById("agi2-search");
+                if (agi2SearchEl)
+                    agi2SearchEl.addEventListener("input", function () {
                         var val = this.value.trim();
                         clearTimeout(timer);
                         timer = setTimeout(function () {
@@ -3678,12 +3626,12 @@
                 }, 400);
             }
 
-            document
-                .getElementById("agi2-random")
-                .addEventListener("click", randomAgi2Task);
-            document
-                .getElementById("agi3-random")
-                .addEventListener("click", randomAgi3Game);
+            var agi2RandomEl = document.getElementById("agi2-random");
+            if (agi2RandomEl)
+                agi2RandomEl.addEventListener("click", randomAgi2Task);
+            var agi3RandomEl = document.getElementById("agi3-random");
+            if (agi3RandomEl)
+                agi3RandomEl.addEventListener("click", randomAgi3Game);
 
             // ══════════════════════════════════════════════════════════════
             //  KEYBOARD HELP PANEL
@@ -3744,7 +3692,8 @@
                 // / — focus search (AGI-2 by default)
                 if (e.key === "/") {
                     e.preventDefault();
-                    document.getElementById("agi2-search").focus();
+                    var searchEl = document.getElementById("agi2-search");
+                    if (searchEl) searchEl.focus();
                     return;
                 }
 
