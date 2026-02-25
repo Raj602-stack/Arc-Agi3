@@ -1087,6 +1087,177 @@
                     display: none;
                 }
             }
+
+            /* ═══ UPLOAD MODAL (AGI-3) ═══ */
+            #upload-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(6px);
+                align-items: center;
+                justify-content: center;
+            }
+            #upload-modal.show {
+                display: flex;
+            }
+            .upload-box {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 32px;
+                width: 480px;
+                max-width: 92vw;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+            .upload-box h2 {
+                font-family: var(--pixel);
+                font-size: 12px;
+                color: var(--green);
+                text-align: center;
+                letter-spacing: 1px;
+            }
+            .upload-file-row {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .upload-file-label {
+                font-family: var(--code);
+                font-size: 11px;
+                color: var(--text-dim);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .upload-file-label .ufl-req {
+                color: var(--red);
+                font-size: 9px;
+            }
+            .upload-file-pick {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .upload-file-pick label {
+                font-family: var(--code);
+                font-size: 10px;
+                padding: 8px 16px;
+                border: 1px dashed var(--border);
+                border-radius: 6px;
+                color: var(--text-dim);
+                cursor: pointer;
+                transition: all 0.15s;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .upload-file-pick label:hover {
+                border-color: var(--green);
+                color: var(--text-bright);
+                background: rgba(63, 185, 80, 0.06);
+            }
+            .upload-file-pick label.has-file {
+                border-color: var(--green);
+                border-style: solid;
+                color: var(--green);
+                background: rgba(63, 185, 80, 0.08);
+            }
+            .upload-file-pick input[type="file"] {
+                display: none;
+            }
+            .upload-file-name {
+                font-family: var(--code);
+                font-size: 10px;
+                color: #444;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                min-width: 0;
+            }
+            .upload-file-name.selected {
+                color: var(--green);
+            }
+            .upload-submit {
+                width: 100%;
+                padding: 11px;
+                font-family: var(--pixel);
+                font-size: 10px;
+                letter-spacing: 1px;
+                color: #fff;
+                background: linear-gradient(
+                    135deg,
+                    var(--green),
+                    var(--green-dim)
+                );
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .upload-submit:hover:not(:disabled) {
+                box-shadow: 0 4px 20px rgba(63, 185, 80, 0.3);
+                transform: translateY(-1px);
+            }
+            .upload-submit:disabled {
+                opacity: 0.35;
+                cursor: default;
+                transform: none;
+                box-shadow: none;
+            }
+            .upload-status {
+                font-family: var(--code);
+                font-size: 11px;
+                text-align: center;
+                min-height: 16px;
+            }
+            .upload-status.err {
+                color: var(--red);
+            }
+            .upload-status.ok {
+                color: var(--green);
+            }
+            .upload-status.info {
+                color: var(--accent);
+            }
+            .upload-cancel {
+                font-family: var(--code);
+                font-size: 11px;
+                color: var(--text-dim);
+                background: none;
+                border: none;
+                cursor: pointer;
+                text-align: center;
+                padding: 4px;
+            }
+            .upload-cancel:hover {
+                color: var(--text-bright);
+            }
+            .upload-hint {
+                font-family: var(--code);
+                font-size: 9px;
+                color: #444;
+                text-align: center;
+                line-height: 1.6;
+            }
+
+            /* ═══ UPLOAD MODAL (AGI-3) ═══ */
+            #upload-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(6px);
+                align-items: center;
+                justify-content: center;
+            }
+            #upload-modal.show {
+                display: flex;
+            }
         </style>
     </head>
     <body>
@@ -1179,6 +1350,65 @@
                     <button class="kb-close" id="kb-close">
                         Press <strong>?</strong> or <strong>Esc</strong> to
                         close
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ AGI-3 UPLOAD MODAL ═══ -->
+            <div id="upload-modal">
+                <div class="upload-box">
+                    <h2>↑ UPLOAD AGI-3 GAME</h2>
+
+                    <div class="upload-file-row">
+                        <div class="upload-file-label">
+                            Game Python file
+                            <span class="ufl-req">*required</span>
+                        </div>
+                        <div class="upload-file-pick">
+                            <label for="upload-py" id="upload-py-label"
+                                >Choose .py file</label
+                            >
+                            <input type="file" id="upload-py" accept=".py" />
+                            <span class="upload-file-name" id="upload-py-name"
+                                >No file selected</span
+                            >
+                        </div>
+                    </div>
+
+                    <div class="upload-file-row">
+                        <div class="upload-file-label">
+                            Metadata JSON <span class="ufl-req">*required</span>
+                        </div>
+                        <div class="upload-file-pick">
+                            <label for="upload-json" id="upload-json-label"
+                                >Choose .json file</label
+                            >
+                            <input
+                                type="file"
+                                id="upload-json"
+                                accept=".json"
+                            />
+                            <span class="upload-file-name" id="upload-json-name"
+                                >No file selected</span
+                            >
+                        </div>
+                    </div>
+
+                    <button
+                        class="upload-submit"
+                        id="upload-submit-btn"
+                        disabled
+                    >
+                        UPLOAD GAME
+                    </button>
+                    <div class="upload-status" id="upload-status"></div>
+                    <div class="upload-hint">
+                        Select both files, then click Upload.<br />
+                        The metadata.json must contain a
+                        <strong>game_id</strong> field.
+                    </div>
+                    <button class="upload-cancel" id="upload-cancel">
+                        Cancel
                     </button>
                 </div>
             </div>
@@ -1314,15 +1544,9 @@
                                     >Random game (R)</span
                                 >
                             </button>
-                            <label class="upload-btn" for="agi3-upload">
+                            <button class="upload-btn" id="agi3-upload-btn">
                                 ↑ Upload game
-                                <input
-                                    type="file"
-                                    id="agi3-upload"
-                                    accept=".py,.json"
-                                    multiple
-                                />
-                            </label>
+                            </button>
                         </div>
                     </div>
                     <div class="carousel-wrapper">
@@ -1590,85 +1814,133 @@
                     renderAgi3();
                 });
 
-            // ── AGI-3 Upload ──
+            // ── AGI-3 Upload Modal ──
+            var uploadModal = document.getElementById("upload-modal");
+            var uploadPyInput = document.getElementById("upload-py");
+            var uploadJsonInput = document.getElementById("upload-json");
+            var uploadPyLabel = document.getElementById("upload-py-label");
+            var uploadJsonLabel = document.getElementById("upload-json-label");
+            var uploadPyName = document.getElementById("upload-py-name");
+            var uploadJsonName = document.getElementById("upload-json-name");
+            var uploadSubmitBtn = document.getElementById("upload-submit-btn");
+            var uploadStatusEl = document.getElementById("upload-status");
+
+            function openUploadModal() {
+                uploadPyInput.value = "";
+                uploadJsonInput.value = "";
+                uploadPyName.textContent = "No file selected";
+                uploadPyName.classList.remove("selected");
+                uploadJsonName.textContent = "No file selected";
+                uploadJsonName.classList.remove("selected");
+                uploadPyLabel.classList.remove("has-file");
+                uploadJsonLabel.classList.remove("has-file");
+                uploadSubmitBtn.disabled = true;
+                uploadStatusEl.textContent = "";
+                uploadStatusEl.className = "upload-status";
+                uploadModal.classList.add("show");
+            }
+
+            function closeUploadModal() {
+                uploadModal.classList.remove("show");
+            }
+
+            function checkUploadReady() {
+                var ready =
+                    uploadPyInput.files.length > 0 &&
+                    uploadJsonInput.files.length > 0;
+                uploadSubmitBtn.disabled = !ready;
+            }
+
             document
-                .getElementById("agi3-upload")
-                .addEventListener("change", function (e) {
-                    var files = e.target.files;
-                    if (!files || files.length === 0) return;
+                .getElementById("agi3-upload-btn")
+                .addEventListener("click", openUploadModal);
+            document
+                .getElementById("upload-cancel")
+                .addEventListener("click", closeUploadModal);
+            uploadModal.addEventListener("click", function (e) {
+                if (e.target === uploadModal) closeUploadModal();
+            });
 
-                    var hasPy = false;
-                    var hasJson = false;
-                    var form = new FormData();
-                    for (var i = 0; i < files.length; i++) {
-                        var name = files[i].name;
-                        if (name.endsWith(".py")) {
-                            form.append("game_py", files[i]);
-                            hasPy = true;
-                        }
-                        if (name.endsWith(".json")) {
-                            form.append("metadata", files[i]);
-                            hasJson = true;
-                        }
-                    }
+            uploadPyInput.addEventListener("change", function () {
+                if (this.files.length > 0) {
+                    uploadPyName.textContent = this.files[0].name;
+                    uploadPyName.classList.add("selected");
+                    uploadPyLabel.classList.add("has-file");
+                    uploadPyLabel.textContent = "✓ .py selected";
+                } else {
+                    uploadPyName.textContent = "No file selected";
+                    uploadPyName.classList.remove("selected");
+                    uploadPyLabel.classList.remove("has-file");
+                    uploadPyLabel.textContent = "Choose .py file";
+                }
+                checkUploadReady();
+            });
 
-                    if (!hasPy && !hasJson) {
-                        showToast(
-                            "Please select a game .py file and a metadata.json file",
-                            "err",
-                            4000,
-                        );
-                        e.target.value = "";
-                        return;
-                    }
-                    if (!hasPy) {
-                        showToast(
-                            "Missing game .py file — select both game.py + metadata.json together",
-                            "err",
-                            4000,
-                        );
-                        e.target.value = "";
-                        return;
-                    }
-                    if (!hasJson) {
-                        showToast(
-                            "Missing metadata.json — select both game.py + metadata.json together",
-                            "err",
-                            4000,
-                        );
-                        e.target.value = "";
-                        return;
-                    }
+            uploadJsonInput.addEventListener("change", function () {
+                if (this.files.length > 0) {
+                    uploadJsonName.textContent = this.files[0].name;
+                    uploadJsonName.classList.add("selected");
+                    uploadJsonLabel.classList.add("has-file");
+                    uploadJsonLabel.textContent = "✓ .json selected";
+                } else {
+                    uploadJsonName.textContent = "No file selected";
+                    uploadJsonName.classList.remove("selected");
+                    uploadJsonLabel.classList.remove("has-file");
+                    uploadJsonLabel.textContent = "Choose .json file";
+                }
+                checkUploadReady();
+            });
 
-                    showToast("Uploading game…", "", 10000);
+            uploadSubmitBtn.addEventListener("click", function () {
+                var pyFile = uploadPyInput.files[0];
+                var jsonFile = uploadJsonInput.files[0];
+                if (!pyFile || !jsonFile) return;
 
-                    fetch("/api/upload", { method: "POST", body: form })
-                        .then(function (r) {
-                            return r.json();
-                        })
-                        .then(function (data) {
-                            if (data.error) {
-                                showToast(
-                                    "Upload error: " + data.error,
-                                    "err",
-                                    5000,
-                                );
-                            } else {
-                                showToast(
-                                    "✓ Game uploaded: " +
-                                        (data.game_id || "OK"),
-                                    "ok",
-                                    3000,
-                                );
-                                fetchAgi3Games();
-                            }
-                        })
-                        .catch(function (err) {
-                            showToast("Upload failed: " + err, "err", 5000);
+                uploadSubmitBtn.disabled = true;
+                uploadSubmitBtn.textContent = "UPLOADING…";
+                uploadStatusEl.textContent = "Uploading files…";
+                uploadStatusEl.className = "upload-status info";
+
+                var form = new FormData();
+                form.append("game_py", pyFile);
+                form.append("metadata", jsonFile);
+
+                fetch("/api/upload", { method: "POST", body: form })
+                    .then(function (r) {
+                        return r.json().then(function (d) {
+                            return { ok: r.ok, data: d };
                         });
-
-                    e.target.value = "";
-                });
+                    })
+                    .then(function (res) {
+                        if (res.ok) {
+                            uploadStatusEl.textContent =
+                                "✓ Game uploaded: " +
+                                (res.data.game_id || "OK");
+                            uploadStatusEl.className = "upload-status ok";
+                            uploadSubmitBtn.textContent = "✓ DONE";
+                            showToast(
+                                "✓ Game uploaded: " +
+                                    (res.data.game_id || "OK"),
+                                "ok",
+                                3000,
+                            );
+                            fetchAgi3Games();
+                            setTimeout(closeUploadModal, 1200);
+                        } else {
+                            uploadStatusEl.textContent =
+                                "✗ " + (res.data.error || "Upload failed");
+                            uploadStatusEl.className = "upload-status err";
+                            uploadSubmitBtn.disabled = false;
+                            uploadSubmitBtn.textContent = "UPLOAD GAME";
+                        }
+                    })
+                    .catch(function (err) {
+                        uploadStatusEl.textContent = "✗ " + err.message;
+                        uploadStatusEl.className = "upload-status err";
+                        uploadSubmitBtn.disabled = false;
+                        uploadSubmitBtn.textContent = "UPLOAD GAME";
+                    });
+            });
 
             // ══════════════════════════════════════════════════════════════
             //  AGI-2 — Fetch task index and render cards
@@ -2312,6 +2584,10 @@
 
                 // ESC — close any modal/panel
                 if (e.key === "Escape") {
+                    if (uploadModal.classList.contains("show")) {
+                        closeUploadModal();
+                        return;
+                    }
                     if (kbPanel.classList.contains("show")) {
                         kbPanel.classList.remove("show");
                         return;
