@@ -481,6 +481,18 @@ def arc_agi_2_static(filename):
     return send_from_directory(ARC_AGI_2_DIR, filename)
 
 
+# The ARC-AGI-2 JS loads puzzle data via relative URLs like "../data/<folder>/<file>".
+# When served at /arc-agi-2/, that resolves to /data/<folder>/<file>.
+# This route serves those files from ARC-AGI copy/data/.
+ARC_AGI_2_DATA_DIR = str(PROJECT_ROOT / "ARC-AGI copy" / "data")
+
+
+@app.route("/data/<path:filename>")
+def arc_agi_2_data(filename):
+    """Serve ARC AGI-2 puzzle data (training/evaluation JSON files)."""
+    return send_from_directory(ARC_AGI_2_DATA_DIR, filename)
+
+
 @app.route("/health")
 def health():
     return jsonify({
