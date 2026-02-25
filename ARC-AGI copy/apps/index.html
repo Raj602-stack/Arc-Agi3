@@ -406,8 +406,9 @@
                 font-size: 9px;
                 padding: 2px 6px;
                 background: rgba(88, 166, 255, 0.1);
-                border: 1px solid rgba(88,transform: rotate(360deg);
-                }
+                border: 1px solid rgba(88, 166, 255, 0.2);
+                color: #58a6ff;
+                border-radius: 3px;
             }
 
             /* ── Footer ────────────────────────────────────────────── */
@@ -584,15 +585,11 @@
             /* ── Responsive ────────────────────────────────────────── */
             @media (max-width: 800px) {
                 .task_card {
-                    grid-template-columns: 1fr;
+                    width: 260px;
                 }
                 .task_card_info {
-                    border-right: none;
-                    border-bottom: 1px solid #141414;
-                    padding: 28px 24px;
-                }
-                .task_card_preview {
-                    padding: 20px 24px;
+                    padding: 12px 14px;
+                    gap: 6px;
                 }
                 .browser_header {
                     padding: 40px 20px 30px;
@@ -608,8 +605,8 @@
                     font-size: 14px;
                 }
                 .task_cards_container {
-                    padding: 30px 20px 40px;
-                    gap: 28px;
+                    padding: 28px 20px 36px;
+                    gap: 20px;
                 }
                 .browser_tabs {
                     padding: 0 20px;
@@ -618,7 +615,7 @@
                     padding: 16px 20px 0;
                 }
                 .browser_pagination {
-                    padding: 8px 20px 40px;
+                    padding: 8px 20px 36px;
                 }
             }
 
@@ -656,33 +653,34 @@
                 }
                 .task_cards_container {
                     padding: 24px 16px 32px;
-                    gap: 20px;
+                    gap: 18px;
+                }
+                .task_card {
+                    width: calc(50% - 12px);
+                    min-width: 200px;
                 }
                 .task_card_info {
-                    padding: 22px 18px;
+                    padding: 10px 12px;
+                    gap: 5px;
                 }
                 .task_card_id {
-                    font-size: 15px;
+                    font-size: 10px;
                 }
                 .task_card_desc {
-                    font-size: 13px;
+                    font-size: 11px;
                 }
                 .task_card_btn {
-                    padding: 10px 22px;
+                    padding: 9px 18px;
                     font-size: 10px;
                     width: 100%;
                     justify-content: center;
-                }
-                .task_card_preview {
-                    padding: 16px;
-                    gap: 12px;
                 }
                 .preview_arrow {
                     font-size: 14px;
                     padding: 0 6px;
                 }
                 .preview_grid_label {
-                    font-size: 8px;
+                    font-size: 9px;
                 }
                 .task_card_meta {
                     font-size: 10px;
@@ -748,33 +746,34 @@
                     padding: 16px 10px 24px;
                     gap: 14px;
                 }
+                .task_card {
+                    width: calc(50% - 8px);
+                    min-width: 160px;
+                }
                 .task_card_info {
-                    padding: 16px 14px;
+                    padding: 10px 10px;
+                    gap: 5px;
                 }
                 .task_card_id {
-                    font-size: 13px;
+                    font-size: 10px;
                 }
                 .task_card_desc {
-                    font-size: 11px;
+                    font-size: 10px;
                 }
                 .task_card_tag {
                     font-size: 9px;
                     padding: 2px 6px;
                 }
                 .task_card_btn {
-                    padding: 8px 16px;
+                    padding: 8px 14px;
                     font-size: 9px;
-                }
-                .task_card_preview {
-                    padding: 12px;
-                    gap: 8px;
                 }
                 .preview_arrow {
                     font-size: 12px;
                     padding: 0 4px;
                 }
                 .preview_grid_label {
-                    font-size: 7px;
+                    font-size: 9px;
                 }
                 .task_card_meta {
                     font-size: 9px;
@@ -862,36 +861,37 @@
                     padding: 6px 10px;
                 }
                 .browser_label {
-                    font-size: 8px;
+                    font-size: 9px;
                     padding: 3px 8px;
                 }
                 .task_cards_container {
                     padding: 12px 6px 20px;
                     gap: 10px;
                 }
+                .task_card {
+                    width: calc(50% - 6px);
+                    min-width: 140px;
+                }
                 .task_card_info {
-                    padding: 12px 10px;
+                    padding: 8px 8px;
+                    gap: 4px;
                 }
                 .task_card_id {
-                    font-size: 12px;
+                    font-size: 9px;
                 }
                 .task_card_desc {
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                 .task_card_tag {
-                    font-size: 8px;
-                    padding: 1px 4px;
+                    font-size: 9px;
+                    padding: 2px 4px;
                 }
                 .task_card_btn {
                     padding: 7px 12px;
-                    font-size: 8px;
-                }
-                .task_card_preview {
-                    padding: 8px;
-                    gap: 6px;
+                    font-size: 9px;
                 }
                 .preview_grid_label {
-                    font-size: 6px;
+                    font-size: 9px;
                 }
                 .browser_tabs {
                     padding: 0 6px;
@@ -901,7 +901,7 @@
                     font-size: 9px;
                 }
                 .tab_count {
-                    font-size: 8px;
+                    font-size: 9px;
                     padding: 0 4px;
                 }
                 .browser_search {
@@ -1116,13 +1116,13 @@
                     height: 26px;
                 }
                 #site_nav a.nav-logo {
-                    font-size: 8px;
+                    font-size: 9px;
                 }
                 #site_nav a.nav-link,
                 #site_nav .nav-active,
                 #site_nav a.nav-link-agi3 {
                     padding: 1px 4px;
-                    font-size: 8px;
+                    font-size: 9px;
                 }
                 body {
                     padding-top: 26px !important;
@@ -1143,13 +1143,13 @@
                     height: 24px;
                 }
                 #site_nav a.nav-logo {
-                    font-size: 7px;
+                    font-size: 9px;
                 }
                 #site_nav a.nav-link,
                 #site_nav .nav-active,
                 #site_nav a.nav-link-agi3 {
                     padding: 1px 3px;
-                    font-size: 7px;
+                    font-size: 9px;
                 }
                 body {
                     padding-top: 24px !important;

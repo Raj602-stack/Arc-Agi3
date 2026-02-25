@@ -582,7 +582,7 @@ body {
         white-space: nowrap;
     }
     .pair_grid_label .pair_grid_dims {
-        font-size: 8px;
+        font-size: 9px;
         margin-left: 3px;
     }
 
@@ -649,7 +649,7 @@ body {
         margin-bottom: 3px;
     }
     .grid_dims {
-        font-size: 8px;
+        font-size: 9px;
     }
 
     /* Controls */
@@ -762,11 +762,11 @@ body {
         overflow: visible;
     }
     .pair_grid_label {
-        font-size: 8px;
+        font-size: 9px;
         margin-bottom: 2px;
     }
     .pair_grid_label .pair_grid_dims {
-        font-size: 7px;
+        font-size: 9px;
     }
     .pair_arrow {
         padding: 0 4px;
@@ -811,10 +811,10 @@ body {
         font-size: 10px;
     }
     .grid_label {
-        font-size: 8px;
+        font-size: 9px;
     }
     .grid_dims {
-        font-size: 7px;
+        font-size: 9px;
     }
 }
 
