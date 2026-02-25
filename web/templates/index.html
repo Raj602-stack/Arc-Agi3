@@ -1557,9 +1557,14 @@
     <body>
         <!-- ═══════════ TOP BAR ═══════════ -->
         <div id="topbar">
-            <div class="logo" id="btn-logo" style="cursor: pointer">
+            <a
+                href="/"
+                class="logo"
+                id="btn-logo"
+                style="cursor: pointer; text-decoration: none; color: inherit"
+            >
                 Ethara AI × ARC AGI-3
-            </div>
+            </a>
             <div class="sep"></div>
             <div class="status disconnected" id="conn-status">
                 ● DISCONNECTED
@@ -2602,9 +2607,9 @@
                     });
                 if ($("btn-upload"))
                     $("btn-upload").addEventListener("click", showUpload);
-                $("btn-logo").addEventListener("click", () => {
-                    sessionId = null;
-                    showLobby();
+                $("btn-logo").addEventListener("click", (e) => {
+                    e.preventDefault();
+                    window.location.href = "/";
                 });
                 window.addEventListener("popstate", () => {
                     var path = window.location.pathname;
