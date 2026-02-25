@@ -183,46 +183,6 @@
                 max-width: 400px;
             }
 
-            /* Config form (inside lobby) */
-            .config-panel {
-                display: none;
-                flex-direction: column;
-                align-items: center;
-                gap: 14px;
-                padding: 24px;
-                background: var(--panel);
-                border: 1px solid var(--border);
-                max-width: 380px;
-                width: 100%;
-            }
-            .config-panel.show {
-                display: flex;
-            }
-            .config-panel h2 {
-                font-family: var(--pixel);
-                font-size: 11px;
-                color: var(--accent);
-            }
-            .config-panel label {
-                font-size: 12px;
-                color: var(--text-dim);
-                letter-spacing: 1px;
-                align-self: flex-start;
-            }
-            .config-panel input {
-                width: 100%;
-                background: var(--bg);
-                border: 1px solid var(--border);
-                color: var(--text);
-                font-family: var(--mono);
-                font-size: 14px;
-                padding: 8px 12px;
-                outline: none;
-                transition: border-color 0.15s;
-            }
-            .config-panel input:focus {
-                border-color: var(--accent);
-            }
             .btn-row {
                 display: flex;
                 gap: 10px;
@@ -787,28 +747,6 @@
 
                 <div class="game-list" id="game-list"></div>
 
-                <!-- Config (shown after picking a game) -->
-                <div class="config-panel" id="config-panel">
-                    <h2 id="config-game-id"></h2>
-                    <label>PLAYER NAME</label>
-                    <input
-                        type="text"
-                        id="in-player"
-                        value="PLAYER 1"
-                        maxlength="20"
-                        spellcheck="false"
-                        autocomplete="off"
-                    />
-                    <div class="btn-row">
-                        <button class="btn-secondary" id="btn-config-back">
-                            BACK
-                        </button>
-                        <button class="btn-primary" id="btn-start">
-                            ▶ START
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Admin panel -->
                 <div id="admin-panel">
                     <h2>🔒 ADMIN PANEL</h2>
@@ -1003,8 +941,6 @@
                 const connStatus = $("conn-status");
                 const lobby = $("lobby");
                 const gameListEl = $("game-list");
-                const configPanel = $("config-panel");
-                const configGameId = $("config-game-id");
                 const uploadPanel = $("upload-panel");
                 const gameView = $("game-view");
                 const canvas = $("game-canvas");
@@ -1036,6 +972,7 @@
                 let uploadedFiles = { py: null, json: null };
                 let adminCreds = { username: null, password: null };
                 let adminLoggedIn = false;
+                let autoStartGameId = null;
 
                 // ── Helpers ──
                 function showToast(msg, ms) {
@@ -1059,26 +996,25 @@
                     gameView.classList.remove("show");
                     victoryOverlay.classList.remove("show");
                     $("btn-lobby").style.display = "none";
-                    configPanel.classList.remove("show");
                     uploadPanel.classList.remove("show");
                     $("admin-panel").classList.remove("show");
                     gameListEl.style.display = "";
+                    history.pushState(null, "", "/");
                     fetchGames();
                 }
 
-                function showConfig(gameId) {
+                function launchGame(gameId) {
                     selectedGameId = gameId;
-                    configGameId.textContent = gameId;
-                    gameListEl.style.display = "none";
-                    uploadPanel.classList.remove("show");
-                    $("admin-panel").classList.remove("show");
-                    configPanel.classList.add("show");
-                    $("in-player").focus();
+                    history.pushState(
+                        null,
+                        "",
+                        "/game/" + encodeURIComponent(gameId),
+                    );
+                    startGame();
                 }
 
                 function showUpload() {
                     gameListEl.style.display = "none";
-                    configPanel.classList.remove("show");
                     $("admin-panel").classList.remove("show");
                     uploadPanel.classList.add("show");
                     uploadedFiles = { py: null, json: null };
@@ -1090,7 +1026,6 @@
 
                 function showAdmin() {
                     gameListEl.style.display = "none";
-                    configPanel.classList.remove("show");
                     uploadPanel.classList.remove("show");
                     $("admin-panel").classList.add("show");
                     if (adminLoggedIn) {
@@ -1332,7 +1267,7 @@
         <div class="meta">FPS: ${g.default_fps || "?"} · Baseline: [${(g.baseline_actions || []).join(", ")}]</div>
       `;
                         card.addEventListener("click", () =>
-                            showConfig(g.game_id),
+                            launchGame(g.game_id),
                         );
                         gameListEl.appendChild(card);
                     });
@@ -1609,7 +1544,7 @@
 
                 function startGame() {
                     if (!selectedGameId) return;
-                    const name = $("in-player").value.trim() || "PLAYER 1";
+                    const name = "PLAYER 1";
                     const seed = 0;
 
                     connectSocket();
@@ -1720,6 +1655,17 @@
                     sessionId = null;
                     showLobby();
                 });
+                window.addEventListener("popstate", () => {
+                    var path = window.location.pathname;
+                    var match = path.match(/^\/game\/(.+)$/);
+                    if (match) {
+                        selectedGameId = decodeURIComponent(match[1]);
+                        startGame();
+                    } else {
+                        sessionId = null;
+                        showLobby();
+                    }
+                });
                 $("btn-admin").addEventListener("click", showAdmin);
                 $("btn-admin-login").addEventListener("click", adminLogin);
                 $("btn-admin-back").addEventListener("click", showLobby);
@@ -1730,9 +1676,7 @@
                 $("admin-user").addEventListener("keydown", (e) => {
                     if (e.key === "Enter") $("admin-pass").focus();
                 });
-                $("btn-config-back").addEventListener("click", showLobby);
                 $("btn-upload-back").addEventListener("click", showLobby);
-                $("btn-start").addEventListener("click", startGame);
                 $("btn-do-upload").addEventListener("click", doUpload);
                 $("btn-restart").addEventListener("click", sendRestart);
                 $("btn-back-lobby").addEventListener("click", () => {
@@ -1744,11 +1688,6 @@
                     victoryOverlay.classList.remove("show");
                     sessionId = null;
                     showLobby();
-                });
-
-                // Enter key on config form
-                $("in-player").addEventListener("keydown", (e) => {
-                    if (e.key === "Enter") startGame();
                 });
 
                 // ── Mobile controls ──
@@ -1789,7 +1728,18 @@
 
                 // ── Init ──
                 connectSocket();
-                fetchGames();
+
+                // Check URL for direct game link: /game/<game_id>
+                (function checkRoute() {
+                    var path = window.location.pathname;
+                    var match = path.match(/^\/game\/(.+)$/);
+                    if (match) {
+                        selectedGameId = decodeURIComponent(match[1]);
+                        startGame();
+                    } else {
+                        fetchGames();
+                    }
+                })();
             })();
         </script>
     </body>

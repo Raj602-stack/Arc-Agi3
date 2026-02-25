@@ -432,6 +432,12 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/game/<game_id>")
+def game_direct(game_id):
+    """Direct link to a specific game — serves the same SPA, JS reads the URL."""
+    return render_template("index.html")
+
+
 @app.route("/health")
 def health():
     return jsonify({
