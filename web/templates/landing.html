@@ -918,8 +918,40 @@
                 text-decoration: underline;
             }
 
-            /* ═══ RESPONSIVE ═══ */
-            @media (max-width: 1100px) {
+            /* ═══════════════════════════════════════════════════════
+               RESPONSIVE — mobile-first progressive enhancement
+               Breakpoints:
+                 ≤ 359px  — tiny phones (SE 1st gen, Galaxy Fold closed)
+                 ≤ 479px  — small phones (iPhone SE, Galaxy S)
+                 ≤ 599px  — phones (iPhone 14, Pixel 7)
+                 ≤ 767px  — large phones / small tablets portrait
+                 ≤ 899px  — tablets portrait (iPad Mini)
+                 ≤ 1099px — tablets landscape / small laptops
+                 ≤ 1399px — laptops / small desktops
+                 ≥ 1400px — large desktops (default styles)
+               ═══════════════════════════════════════════════════════ */
+
+            /* ── Large desktop tweaks (>1400) — make cards wider ── */
+            @media (min-width: 1400px) {
+                .g-card {
+                    width: 300px;
+                    height: 390px;
+                }
+                .carousel-track {
+                    gap: 28px;
+                    padding: 28px 24px;
+                }
+            }
+
+            /* ── Laptops / small desktops (≤1399) ── */
+            @media (max-width: 1399px) {
+                .section-header {
+                    padding: 12px 24px 10px;
+                }
+            }
+
+            /* ── Tablets landscape / small laptops (≤1099) ── */
+            @media (max-width: 1099px) {
                 .section-desc {
                     display: none;
                 }
@@ -927,12 +959,28 @@
                     gap: 14px;
                     padding: 12px 20px 10px;
                 }
+                .g-card {
+                    width: 250px;
+                    height: 345px;
+                }
             }
 
-            @media (max-width: 900px) {
+            /* ── Tablets portrait / small tablets (≤899) ── */
+            @media (max-width: 899px) {
+                #topbar {
+                    padding: 0 16px;
+                    gap: 12px;
+                    height: 44px;
+                }
+                .logo {
+                    font-size: 10px;
+                }
+                .tagline {
+                    font-size: 11px;
+                }
                 .section-header {
                     gap: 10px;
-                    padding: 10px 16px 8px;
+                    padding: 10px 14px 8px;
                     flex-wrap: wrap;
                 }
                 .section-badge {
@@ -942,15 +990,26 @@
                 .section-title {
                     font-size: 12px;
                 }
+                .section-subtitle {
+                    font-size: 10px;
+                }
+                .section-controls {
+                    width: 100%;
+                    order: 10;
+                    margin-left: 0;
+                    flex-wrap: wrap;
+                }
                 .search-box {
-                    width: 150px;
+                    flex: 1;
+                    min-width: 120px;
+                    width: auto;
                 }
                 .g-card {
-                    width: 230px;
-                    height: 320px;
+                    width: 220px;
+                    height: 310px;
                 }
                 .carousel-track {
-                    gap: 18px;
+                    gap: 16px;
                     padding: 16px 12px;
                 }
                 .carousel-btn {
@@ -958,89 +1017,581 @@
                     height: 34px;
                     font-size: 17px;
                 }
+                .g-card-info {
+                    padding: 12px 14px 14px;
+                    min-height: 80px;
+                }
+                #footer {
+                    padding: 6px 16px;
+                }
+                .upload-box {
+                    padding: 24px;
+                    width: 440px;
+                }
+                .kb-box {
+                    padding: 24px;
+                    width: 380px;
+                }
+                .admin-box {
+                    padding: 24px;
+                }
             }
 
-            @media (max-width: 600px) {
+            /* ── Large phones / small tablets portrait (≤767) ── */
+            @media (max-width: 767px) {
                 #topbar {
-                    padding: 0 14px;
+                    padding: 0 12px;
                     gap: 10px;
                     height: 42px;
                 }
                 .logo {
                     font-size: 9px;
                 }
+                .sep {
+                    display: none;
+                }
                 .tagline {
+                    display: none;
+                }
+                .top-btn {
+                    font-size: 9px;
+                    padding: 5px 10px;
+                }
+                .kb-help-btn {
                     display: none;
                 }
                 .section-header {
                     padding: 8px 12px 6px;
                     gap: 8px;
+                    flex-wrap: wrap;
                 }
                 .section-badge {
                     font-size: 9px;
                     padding: 5px 10px;
+                    letter-spacing: 1px;
+                }
+                .section-title-group {
+                    min-width: 0;
                 }
                 .section-title {
-                    font-size: 10px;
+                    font-size: 11px;
                 }
                 .section-subtitle {
-                    font-size: 10px;
+                    font-size: 9px;
                 }
-                .section-desc {
-                    display: none;
+                .section-controls {
+                    width: 100%;
+                    order: 10;
+                    margin-left: 0;
+                    gap: 6px;
+                    flex-wrap: wrap;
                 }
                 .cat-tabs {
                     padding: 2px;
+                    flex-wrap: wrap;
                 }
                 .cat-tab {
                     font-size: 9px;
-                    padding: 4px 8px;
+                    padding: 5px 10px;
                     gap: 4px;
                 }
+                .cat-tab .ct-count {
+                    font-size: 8px;
+                    padding: 1px 5px;
+                }
                 .search-box {
-                    width: 110px;
+                    flex: 1;
+                    min-width: 100px;
+                    width: auto;
                     font-size: 10px;
-                    padding: 5px 8px;
+                    padding: 6px 10px;
+                }
+                .upload-btn {
+                    font-size: 9px;
+                    padding: 6px 10px;
                 }
                 .g-card {
-                    width: 190px;
-                    height: 280px;
-                    border-radius: 10px;
+                    width: 200px;
+                    height: 290px;
+                    border-radius: 12px;
+                }
+                .g-card-preview .loading-text {
+                    font-size: 9px;
+                    letter-spacing: 2px;
+                }
+                .g-card-info {
+                    padding: 10px 12px 12px;
+                    gap: 6px;
+                    min-height: 74px;
+                }
+                .g-card-id {
+                    font-size: 10px;
+                }
+                .g-tag {
+                    font-size: 8px;
+                    padding: 2px 6px;
+                }
+                .play-circle {
+                    width: 50px;
+                    height: 50px;
+                    font-size: 18px;
+                }
+                .carousel-track {
+                    gap: 14px;
+                    padding: 14px 10px;
                 }
                 .carousel-btn {
                     width: 30px;
                     height: 30px;
                     font-size: 15px;
                 }
-                .carousel-track {
-                    gap: 12px;
-                    padding: 12px 8px;
+                .section-divider {
+                    height: 2px;
+                }
+                .random-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 14px;
+                }
+                .pag-btn {
+                    padding: 3px 8px;
+                    font-size: 10px;
+                }
+                .pag-info {
+                    font-size: 9px;
+                }
+                #footer {
+                    font-size: 9px;
+                    padding: 5px 12px;
+                }
+                #footer kbd {
+                    display: none;
+                }
+                .upload-box {
+                    padding: 20px;
+                    gap: 14px;
+                    width: 94vw;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                }
+                .upload-box h2 {
+                    font-size: 11px;
+                }
+                .upload-drop-zone {
+                    padding: 16px 12px;
+                    font-size: 11px;
+                }
+                .upload-file-label {
+                    font-size: 10px;
+                }
+                .upload-submit {
+                    font-size: 9px;
+                    padding: 10px;
+                }
+                .upload-hint {
+                    font-size: 9px;
+                }
+                .kb-box {
+                    padding: 20px;
+                    width: 94vw;
+                }
+                .kb-box h2 {
+                    font-size: 10px;
+                }
+                .kb-grid {
+                    gap: 6px 12px;
+                }
+                .admin-box {
+                    width: 92vw;
+                    padding: 20px;
+                }
+                .card-delete-btn {
+                    width: 26px;
+                    height: 26px;
+                    font-size: 12px;
+                    top: 6px;
+                    right: 6px;
+                }
+            }
+
+            /* ── Phones (≤599) ── */
+            @media (max-width: 599px) {
+                #topbar {
+                    padding: 0 10px;
+                    gap: 8px;
+                    height: 40px;
+                }
+                .logo {
+                    font-size: 8px;
+                }
+                .top-btn {
+                    font-size: 8px;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                }
+                .top-btn-admin {
+                    padding: 4px 6px;
+                }
+                .section-header {
+                    padding: 6px 10px 5px;
+                    gap: 6px;
+                }
+                .section-badge {
+                    font-size: 8px;
+                    padding: 4px 8px;
+                    letter-spacing: 0.5px;
+                    border-width: 1px;
+                }
+                .section-title {
+                    font-size: 10px;
+                }
+                .section-subtitle {
+                    font-size: 8px;
+                }
+                .section-count {
+                    font-size: 9px;
+                }
+                .cat-tabs {
+                    width: 100%;
+                    order: 5;
+                }
+                .cat-tab {
+                    font-size: 8px;
+                    padding: 4px 7px;
+                    flex: 1;
+                    justify-content: center;
+                }
+                .section-controls {
+                    gap: 5px;
+                }
+                .search-box {
+                    min-width: 80px;
+                    font-size: 10px;
+                    padding: 5px 8px;
+                }
+                .upload-btn {
+                    font-size: 8px;
+                    padding: 5px 8px;
+                }
+                .g-card {
+                    width: 170px;
+                    height: 260px;
+                    border-radius: 10px;
+                }
+                .g-card-info {
+                    padding: 8px 10px 10px;
+                    gap: 4px;
+                    min-height: 64px;
                 }
                 .g-card-id {
                     font-size: 9px;
-                }
-                .g-card-info {
-                    padding: 10px 12px 12px;
-                    gap: 5px;
-                    min-height: 70px;
                 }
                 .g-tag {
                     font-size: 7px;
                     padding: 2px 5px;
                 }
                 .play-circle {
-                    width: 44px;
-                    height: 44px;
+                    width: 42px;
+                    height: 42px;
                     font-size: 16px;
                 }
-                .section-divider {
-                    height: 2px;
+                .carousel-track {
+                    gap: 10px;
+                    padding: 10px 6px;
                 }
+                .carousel-btn {
+                    width: 26px;
+                    height: 26px;
+                    font-size: 13px;
+                }
+                .carousel-wrapper {
+                    padding: 0 4px;
+                }
+                #footer {
+                    font-size: 8px;
+                    padding: 4px 10px;
+                }
+                .empty-msg {
+                    padding: 20px 14px;
+                    font-size: 11px;
+                }
+                .random-btn {
+                    width: 28px;
+                    height: 28px;
+                    font-size: 13px;
+                }
+                /* Hide grid background on small phones */
                 .bg-layer,
                 .grid-bg,
                 .grid-fade,
                 .grid-glow {
                     display: none;
+                }
+                /* Toast adjustments */
+                #toast {
+                    font-size: 10px;
+                    padding: 8px 16px;
+                    max-width: 90vw;
+                }
+            }
+
+            /* ── Small phones (≤479) ── */
+            @media (max-width: 479px) {
+                .section-header {
+                    padding: 5px 8px 4px;
+                    gap: 5px;
+                }
+                .section-badge {
+                    font-size: 7px;
+                    padding: 3px 6px;
+                }
+                .section-title {
+                    font-size: 9px;
+                }
+                .section-subtitle {
+                    font-size: 7px;
+                }
+                .cat-tab {
+                    font-size: 7px;
+                    padding: 3px 5px;
+                }
+                .cat-tab .ct-count {
+                    font-size: 7px;
+                    padding: 0 4px;
+                }
+                .search-box {
+                    font-size: 9px;
+                    padding: 4px 6px;
+                    min-width: 0;
+                }
+                .upload-btn {
+                    font-size: 7px;
+                    padding: 4px 6px;
+                    gap: 3px;
+                }
+                .pag-btn {
+                    padding: 2px 6px;
+                    font-size: 9px;
+                }
+                .pag-info {
+                    font-size: 8px;
+                }
+                .g-card {
+                    width: 150px;
+                    height: 235px;
+                    border-radius: 8px;
+                }
+                .g-card-info {
+                    padding: 6px 8px 8px;
+                    gap: 3px;
+                    min-height: 56px;
+                }
+                .g-card-id {
+                    font-size: 8px;
+                }
+                .g-card-tags {
+                    gap: 3px;
+                }
+                .g-tag {
+                    font-size: 6px;
+                    padding: 1px 4px;
+                    border-radius: 3px;
+                }
+                .play-circle {
+                    width: 36px;
+                    height: 36px;
+                    font-size: 14px;
+                }
+                .carousel-btn {
+                    width: 24px;
+                    height: 24px;
+                    font-size: 12px;
+                }
+                .carousel-track {
+                    gap: 8px;
+                    padding: 8px 4px;
+                }
+                .carousel-wrapper {
+                    padding: 0 2px;
+                }
+                #footer {
+                    font-size: 7px;
+                    padding: 3px 8px;
+                }
+                .random-btn {
+                    width: 26px;
+                    height: 26px;
+                    font-size: 12px;
+                    border-radius: 6px;
+                }
+                .upload-box {
+                    padding: 16px;
+                    gap: 12px;
+                    border-radius: 10px;
+                }
+                .upload-box h2 {
+                    font-size: 10px;
+                }
+                .upload-drop-zone {
+                    padding: 12px 10px;
+                    font-size: 10px;
+                }
+                .upload-drop-zone span[style] {
+                    font-size: 22px !important;
+                }
+                .upload-file-label {
+                    font-size: 9px;
+                }
+                .upload-file-pick input[type="file"] {
+                    font-size: 9px;
+                }
+                .upload-file-pick input[type="file"]::file-selector-button {
+                    font-size: 9px;
+                    padding: 4px 8px;
+                }
+                .upload-submit {
+                    font-size: 8px;
+                    padding: 8px;
+                }
+                .upload-cancel {
+                    font-size: 9px;
+                    padding: 5px;
+                }
+                .upload-hint {
+                    font-size: 8px;
+                }
+                .upload-status {
+                    font-size: 9px;
+                }
+                .admin-box {
+                    padding: 16px;
+                    width: 95vw;
+                }
+                .admin-box h2 {
+                    font-size: 10px;
+                }
+                .admin-input {
+                    font-size: 11px;
+                    padding: 8px 10px;
+                }
+                .admin-submit {
+                    font-size: 9px;
+                    padding: 8px;
+                }
+                .card-delete-btn {
+                    width: 22px;
+                    height: 22px;
+                    font-size: 10px;
+                    top: 4px;
+                    right: 4px;
+                    border-width: 1px;
+                }
+                #toast {
+                    font-size: 9px;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                }
+            }
+
+            /* ── Tiny phones (≤359) — iPhone SE 1st gen, Galaxy Fold closed ── */
+            @media (max-width: 359px) {
+                #topbar {
+                    padding: 0 6px;
+                    gap: 6px;
+                    height: 36px;
+                }
+                .logo {
+                    font-size: 7px;
+                }
+                .top-btn {
+                    font-size: 7px;
+                    padding: 3px 5px;
+                }
+                .section-badge {
+                    font-size: 6px;
+                    padding: 2px 5px;
+                }
+                .section-title {
+                    font-size: 8px;
+                }
+                .cat-tab {
+                    font-size: 6px;
+                    padding: 2px 4px;
+                }
+                .g-card {
+                    width: 130px;
+                    height: 210px;
+                    border-radius: 6px;
+                }
+                .g-card-info {
+                    padding: 4px 6px 6px;
+                    min-height: 48px;
+                }
+                .g-card-id {
+                    font-size: 7px;
+                }
+                .g-tag {
+                    font-size: 5px;
+                    padding: 1px 3px;
+                }
+                .play-circle {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 12px;
+                }
+                .carousel-btn {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 10px;
+                }
+                .carousel-track {
+                    gap: 6px;
+                    padding: 6px 2px;
+                }
+                .section-header {
+                    padding: 4px 6px 3px;
+                }
+            }
+
+            /* ── Landscape orientation helpers ── */
+            @media (max-height: 500px) and (orientation: landscape) {
+                #topbar {
+                    height: 36px;
+                }
+                .section-header {
+                    padding: 4px 12px 3px;
+                }
+                .g-card {
+                    height: auto;
+                    min-height: 180px;
+                }
+                .g-card-info {
+                    min-height: auto;
+                }
+                .carousel-track {
+                    padding: 8px 10px;
+                }
+                .section-divider {
+                    height: 2px;
+                }
+                #footer {
+                    padding: 2px 10px;
+                    font-size: 8px;
+                }
+                .upload-box {
+                    max-height: 85vh;
+                    overflow-y: auto;
+                }
+            }
+
+            /* ── High-DPI / Retina — ensure crisp grid lines ── */
+            @media (-webkit-min-device-pixel-ratio: 2),
+                (min-resolution: 192dpi) {
+                .g-card {
+                    border-width: 0.5px;
+                }
+                .section-divider {
+                    height: 2px;
                 }
             }
 
@@ -1203,17 +1754,6 @@
             }
             .kb-close:hover {
                 color: var(--text-bright);
-            }
-
-            @media (max-width: 600px) {
-                .random-btn {
-                    width: 30px;
-                    height: 30px;
-                    font-size: 14px;
-                }
-                .kb-help-btn {
-                    display: none;
-                }
             }
 
             /* ═══ UPLOAD MODAL (AGI-3) ═══ */

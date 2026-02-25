@@ -796,33 +796,462 @@
                 letter-spacing: 0.5px;
             }
 
-            /* ── Responsive ── */
-            @media (max-width: 900px) {
+            /* ═══════════════════════════════════════════════════════
+               RESPONSIVE
+               ≤359  tiny phones
+               ≤479  small phones
+               ≤599  phones
+               ≤767  large phones / small tablets
+               ≤899  tablets portrait
+               ≤1099 tablets landscape / small laptops
+               ≥1100 desktops (default)
+               ═══════════════════════════════════════════════════════ */
+
+            /* ── Tablets landscape / small laptops (≤1099) ── */
+            @media (max-width: 1099px) {
+                #sidebar {
+                    width: 240px;
+                    min-width: 240px;
+                    font-size: 12px;
+                }
+                .sb-section {
+                    padding: 10px 12px;
+                }
+                .game-card {
+                    width: calc(33.333% - 14px);
+                    min-width: 160px;
+                }
+            }
+
+            /* ── Tablets portrait (≤899) ── */
+            @media (max-width: 899px) {
                 #sidebar {
                     display: none;
                 }
                 #mobile-controls {
                     display: flex;
                 }
+                #topbar {
+                    padding: 8px 14px;
+                    gap: 12px;
+                }
+                #topbar .logo {
+                    font-size: 10px;
+                }
                 #game-canvas {
                     max-height: calc(100vh - 220px);
                 }
+                #lobby h1 {
+                    font-size: 16px;
+                }
+                #lobby .sub {
+                    font-size: 12px;
+                }
+                .game-card {
+                    width: calc(33.333% - 12px);
+                    min-width: 150px;
+                }
+                .game-card .card-info {
+                    padding: 8px 10px;
+                }
+                .game-card .gid {
+                    font-size: 10px;
+                }
+                .tag {
+                    font-size: 9px;
+                    padding: 2px 6px;
+                }
+                .btn-row {
+                    flex-wrap: wrap;
+                }
+                /* Upload panel */
+                #upload-panel {
+                    width: 90vw;
+                    max-width: 460px;
+                }
+                /* Admin panel */
+                #admin-panel {
+                    width: 90vw;
+                    max-width: 460px;
+                }
+                .victory-box {
+                    padding: 30px;
+                    min-width: auto;
+                    width: 85vw;
+                    max-width: 400px;
+                }
+                .victory-box h1 {
+                    font-size: 18px;
+                }
             }
-            @media (max-width: 600px) {
+
+            /* ── Large phones / small tablets (≤767) ── */
+            @media (max-width: 767px) {
+                #topbar {
+                    padding: 6px 10px;
+                    gap: 8px;
+                }
+                #topbar .logo {
+                    font-size: 9px;
+                }
+                #topbar .sep {
+                    display: none;
+                }
+                #topbar .status {
+                    font-size: 10px;
+                }
+                .top-btn {
+                    font-size: 10px;
+                    padding: 4px 10px;
+                }
                 #lobby {
-                    padding: 20px;
+                    padding: 24px 16px;
                 }
                 #lobby h1 {
                     font-size: 14px;
+                }
+                #lobby .sub {
+                    font-size: 11px;
+                }
+                .game-list {
+                    gap: 12px;
                 }
                 .game-card {
                     width: calc(50% - 10px);
                     min-width: 140px;
                 }
+                .game-card .card-preview {
+                    height: 120px;
+                }
+                .play-overlay .play-icon {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 16px;
+                }
+                .no-games {
+                    font-size: 12px;
+                    padding: 30px 16px;
+                }
+                .btn-primary,
+                .btn-secondary {
+                    font-size: 11px;
+                    padding: 8px 16px;
+                }
+                #game-canvas {
+                    max-height: calc(100vh - 200px);
+                }
+                .dpad-btn {
+                    width: 48px;
+                    height: 48px;
+                    font-size: 18px;
+                }
+                .mobile-btns .dpad-btn {
+                    width: 44px;
+                    height: 44px;
+                    font-size: 9px;
+                }
+                .loader-text {
+                    font-size: 12px;
+                }
+                .loader-game-id {
+                    font-size: 10px;
+                }
+                #toast {
+                    font-size: 11px;
+                    padding: 8px 16px;
+                    max-width: 90vw;
+                }
+                /* Drop zone */
+                .drop-zone {
+                    padding: 20px 16px;
+                    font-size: 12px;
+                }
+                #upload-panel h2,
+                #admin-panel h2 {
+                    font-size: 14px;
+                }
+            }
+
+            /* ── Phones (≤599) ── */
+            @media (max-width: 599px) {
+                #topbar {
+                    padding: 4px 8px;
+                    gap: 6px;
+                }
+                #topbar .logo {
+                    font-size: 8px;
+                }
+                .top-btn {
+                    font-size: 9px;
+                    padding: 3px 8px;
+                }
+                #lobby {
+                    padding: 16px 12px;
+                }
+                #lobby h1 {
+                    font-size: 12px;
+                }
+                #lobby .sub {
+                    font-size: 10px;
+                }
+                .game-list {
+                    gap: 10px;
+                }
+                .game-card {
+                    width: calc(50% - 8px);
+                    min-width: 130px;
+                }
+                .game-card .card-preview {
+                    height: 100px;
+                }
+                .game-card .card-info {
+                    padding: 6px 8px;
+                }
+                .game-card .gid {
+                    font-size: 9px;
+                }
+                .tag {
+                    font-size: 8px;
+                    padding: 1px 5px;
+                }
+                .game-card .meta {
+                    font-size: 9px;
+                }
+                .play-overlay .play-icon {
+                    width: 36px;
+                    height: 36px;
+                    font-size: 14px;
+                }
+                .btn-primary,
+                .btn-secondary {
+                    font-size: 10px;
+                    padding: 6px 12px;
+                }
+                #game-canvas {
+                    max-height: calc(100vh - 180px);
+                }
                 .dpad-btn {
                     width: 44px;
                     height: 44px;
                     font-size: 16px;
+                }
+                .dpad {
+                    gap: 3px;
+                }
+                .mobile-btns {
+                    margin-left: 8px;
+                    gap: 4px;
+                }
+                .mobile-btns .dpad-btn {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 8px;
+                }
+                #mobile-controls {
+                    bottom: 8px;
+                    gap: 4px;
+                }
+                .victory-box {
+                    padding: 24px 20px;
+                    width: 90vw;
+                }
+                .victory-box h1 {
+                    font-size: 16px;
+                }
+                .victory-box .stats {
+                    font-size: 12px;
+                }
+                .loader-spinner {
+                    width: 32px;
+                    height: 32px;
+                    border-width: 3px;
+                }
+                .loader-text {
+                    font-size: 11px;
+                }
+                #toast {
+                    font-size: 10px;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                }
+                #upload-panel,
+                #admin-panel {
+                    width: 95vw;
+                    padding: 16px;
+                }
+                .admin-login input {
+                    font-size: 12px;
+                }
+                .sb-btn {
+                    font-size: 11px;
+                    padding: 6px 12px;
+                }
+            }
+
+            /* ── Small phones (≤479) ── */
+            @media (max-width: 479px) {
+                #topbar {
+                    padding: 3px 6px;
+                }
+                #topbar .logo {
+                    font-size: 7px;
+                }
+                .top-btn {
+                    font-size: 8px;
+                    padding: 2px 6px;
+                }
+                #lobby {
+                    padding: 12px 8px;
+                }
+                #lobby h1 {
+                    font-size: 10px;
+                }
+                .game-list {
+                    gap: 8px;
+                }
+                .game-card {
+                    width: calc(50% - 6px);
+                    min-width: 110px;
+                }
+                .game-card .card-preview {
+                    height: 80px;
+                }
+                .game-card .card-info {
+                    padding: 4px 6px;
+                }
+                .game-card .gid {
+                    font-size: 8px;
+                }
+                .tag {
+                    font-size: 7px;
+                    padding: 1px 4px;
+                }
+                .dpad-btn {
+                    width: 38px;
+                    height: 38px;
+                    font-size: 14px;
+                }
+                .dpad {
+                    gap: 2px;
+                }
+                .mobile-btns .dpad-btn {
+                    width: 34px;
+                    height: 34px;
+                    font-size: 7px;
+                }
+                .mobile-btns {
+                    margin-left: 6px;
+                    gap: 3px;
+                }
+                .victory-box {
+                    padding: 20px 16px;
+                }
+                .victory-box h1 {
+                    font-size: 14px;
+                }
+                .btn-primary,
+                .btn-secondary {
+                    font-size: 9px;
+                    padding: 5px 10px;
+                }
+                .no-games {
+                    font-size: 11px;
+                    padding: 20px 10px;
+                }
+            }
+
+            /* ── Tiny phones (≤359) ── */
+            @media (max-width: 359px) {
+                #topbar .logo {
+                    font-size: 6px;
+                }
+                .top-btn {
+                    font-size: 7px;
+                    padding: 2px 4px;
+                }
+                #lobby h1 {
+                    font-size: 9px;
+                }
+                .game-card {
+                    min-width: 100px;
+                }
+                .game-card .card-preview {
+                    height: 70px;
+                }
+                .dpad-btn {
+                    width: 34px;
+                    height: 34px;
+                    font-size: 12px;
+                }
+                .mobile-btns .dpad-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 6px;
+                }
+            }
+
+            /* ── Landscape orientation with short viewport ── */
+            @media (max-height: 500px) and (orientation: landscape) {
+                #topbar {
+                    padding: 3px 10px;
+                    height: auto;
+                    min-height: 32px;
+                }
+                #game-canvas {
+                    max-height: calc(100vh - 140px);
+                }
+                #mobile-controls {
+                    bottom: 4px;
+                }
+                .dpad-btn {
+                    width: 36px;
+                    height: 36px;
+                    font-size: 14px;
+                }
+                .dpad {
+                    gap: 2px;
+                }
+                .mobile-btns .dpad-btn {
+                    width: 32px;
+                    height: 32px;
+                    font-size: 8px;
+                }
+                .mobile-btns {
+                    margin-left: 6px;
+                }
+                .victory-box {
+                    padding: 16px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                }
+                #loading-overlay {
+                    padding: 16px;
+                }
+                .loader-spinner {
+                    width: 28px;
+                    height: 28px;
+                }
+                #lobby {
+                    padding: 12px;
+                }
+                #lobby h1 {
+                    font-size: 12px;
+                    margin-bottom: 6px;
+                }
+            }
+
+            /* ── Medium landscape (tablet landscape, short) ── */
+            @media (max-height: 650px) and (min-width: 600px) and (orientation: landscape) {
+                #game-canvas {
+                    max-height: calc(100vh - 100px);
+                }
+            }
+
+            /* ── High-DPI / Retina ── */
+            @media (-webkit-min-device-pixel-ratio: 2),
+                (min-resolution: 192dpi) {
+                .game-card {
+                    border-width: 0.5px;
                 }
             }
         </style>
