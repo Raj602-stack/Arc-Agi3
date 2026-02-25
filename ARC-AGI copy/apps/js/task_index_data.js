@@ -7,7 +7,6 @@ var TASK_INDEX_DATA = {
     "task_005.json",
     "task_006.json",
     "task_007.json",
-    "task_008.json",
   ],
   evaluation: [
     "00576224.json",
