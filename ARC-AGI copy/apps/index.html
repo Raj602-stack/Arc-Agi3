@@ -2196,6 +2196,34 @@
                     $("#modal_bg").hide();
                 }
             });
+
+            // ── Auto-load task from URL parameter ─────────────────
+            // Landing page navigates to /arc-agi-2/?task=category/filename
+            (function () {
+                var params = new URLSearchParams(window.location.search);
+                var taskParam = params.get("task");
+                if (taskParam) {
+                    // Hide browser modal immediately so it doesn't flash
+                    $("#modal_bg").hide();
+
+                    // Parse "category/filename" e.g. "my_tasks/task_001.json"
+                    var slashIdx = taskParam.indexOf("/");
+                    if (slashIdx > 0) {
+                        var category = taskParam.substring(0, slashIdx);
+                        var filename = taskParam.substring(slashIdx + 1);
+
+                        // Wait for task index to be ready, then load
+                        var waitCount = 0;
+                        var waitForIndex = setInterval(function () {
+                            waitCount++;
+                            if (TASK_INDEX_LOADED || waitCount > 50) {
+                                clearInterval(waitForIndex);
+                                loadTaskByPath(category, filename);
+                            }
+                        }, 100);
+                    }
+                }
+            })();
         </script>
     </body>
 </html>

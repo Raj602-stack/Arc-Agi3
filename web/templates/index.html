@@ -4,6 +4,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Ethara AI × ARC AGI-3</title>
+        <script>
+            // Early detection: if URL is a direct game link, mark <html> so
+            // lobby never flashes and loading overlay shows immediately.
+            if (/^\/arc-agi-3\/game\/.+$/.test(window.location.pathname)) {
+                document.documentElement.classList.add("direct-game");
+            }
+        </script>
         <style>
             @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap");
 
@@ -110,6 +117,15 @@
             }
             #lobby.hidden {
                 display: none;
+            }
+
+            /* When arriving via a direct game URL, hide lobby and show
+               the loading overlay immediately so no intermediate UI flashes. */
+            .direct-game #lobby {
+                display: none !important;
+            }
+            .direct-game #loading-overlay {
+                display: flex;
             }
 
             #lobby h1 {
@@ -1115,6 +1131,7 @@
 
                 // ── Navigation ──
                 function showLobby() {
+                    document.documentElement.classList.remove("direct-game");
                     lobby.classList.remove("hidden");
                     gameView.classList.remove("show");
                     victoryOverlay.classList.remove("show");
@@ -1320,6 +1337,7 @@
                 }
 
                 function showGame() {
+                    document.documentElement.classList.remove("direct-game");
                     lobby.classList.add("hidden");
                     gameView.classList.add("show");
                     $("btn-lobby").style.display = "";
@@ -1684,6 +1702,16 @@
 
                     socket.on("error", (data) => {
                         hideLoading();
+                        // If we arrived via a direct game link and the game
+                        // failed to start, fall back to the lobby so the user
+                        // isn't stuck on a blank screen.
+                        if (
+                            document.documentElement.classList.contains(
+                                "direct-game",
+                            )
+                        ) {
+                            showLobby();
+                        }
                         showToast("Error: " + (data.message || "?"), 4000);
                     });
                 }
@@ -1733,6 +1761,15 @@
                         if (tries > 50) {
                             clearInterval(iv);
                             hideLoading();
+                            // If we arrived via a direct game link, fall back
+                            // to the lobby so the user isn't stuck on blank.
+                            if (
+                                document.documentElement.classList.contains(
+                                    "direct-game",
+                                )
+                            ) {
+                                showLobby();
+                            }
                             showToast("Connection failed", 3000);
                         }
                     }, 100);
@@ -1904,9 +1941,15 @@
                     var path = window.location.pathname;
                     var match = path.match(/^\/arc-agi-3\/game\/(.+)$/);
                     if (match) {
+                        // Hide lobby immediately so no intermediate UI shows
+                        lobby.classList.add("hidden");
                         selectedGameId = decodeURIComponent(match[1]);
                         startGame();
                     } else {
+                        // Not a direct game link — remove early-hide class
+                        document.documentElement.classList.remove(
+                            "direct-game",
+                        );
                         fetchGames();
                     }
                 })();

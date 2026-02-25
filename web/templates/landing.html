@@ -48,7 +48,7 @@
                 display: flex;
                 align-items: center;
                 gap: 16px;
-                padding: 10px 24px;
+                padding: 0 28px;
                 background: var(--panel);
                 border-bottom: 1px solid var(--border);
                 height: 48px;
@@ -57,7 +57,7 @@
             }
             .logo {
                 font-family: var(--pixel);
-                font-size: 12px;
+                font-size: 11px;
                 color: var(--accent);
                 white-space: nowrap;
                 text-decoration: none;
@@ -76,7 +76,217 @@
                 flex: 1;
             }
 
-            /* ═══ LAYOUT ═══ */
+            /* ═══ TOP BAR BUTTONS ═══ */
+            .top-btn {
+                font-family: var(--code);
+                font-size: 10px;
+                padding: 6px 14px;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                background: transparent;
+                color: var(--text-dim);
+                cursor: pointer;
+                transition: all 0.15s;
+                text-decoration: none;
+                white-space: nowrap;
+            }
+            .top-btn:hover {
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: rgba(88, 166, 255, 0.06);
+            }
+            .top-btn-admin {
+                color: var(--orange);
+                border-color: rgba(240, 136, 62, 0.3);
+            }
+            .top-btn-admin:hover {
+                border-color: var(--orange);
+                background: rgba(240, 136, 62, 0.08);
+                color: var(--orange);
+            }
+            .top-btn-admin.active {
+                background: rgba(240, 136, 62, 0.12);
+                border-color: var(--orange);
+                color: var(--orange);
+                box-shadow: 0 0 10px rgba(240, 136, 62, 0.15);
+            }
+            .top-btn-logout {
+                color: var(--red);
+                border-color: rgba(248, 81, 73, 0.3);
+            }
+            .top-btn-logout:hover {
+                border-color: var(--red);
+                background: rgba(248, 81, 73, 0.08);
+            }
+
+            /* ═══ ADMIN LOGIN MODAL ═══ */
+            #admin-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(6px);
+                align-items: center;
+                justify-content: center;
+            }
+            #admin-modal.show {
+                display: flex;
+            }
+            .admin-box {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 32px;
+                width: 360px;
+                max-width: 90vw;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+            .admin-box h2 {
+                font-family: var(--pixel);
+                font-size: 13px;
+                color: var(--orange);
+                text-align: center;
+                letter-spacing: 1px;
+            }
+            .admin-input {
+                width: 100%;
+                padding: 10px 14px;
+                font-family: var(--code);
+                font-size: 12px;
+                color: var(--text);
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                outline: none;
+                transition:
+                    border-color 0.2s,
+                    box-shadow 0.2s;
+            }
+            .admin-input:focus {
+                border-color: var(--orange);
+                box-shadow: 0 0 0 3px rgba(240, 136, 62, 0.12);
+            }
+            .admin-input::placeholder {
+                color: #444;
+            }
+            .admin-submit {
+                width: 100%;
+                padding: 10px;
+                font-family: var(--pixel);
+                font-size: 10px;
+                letter-spacing: 1px;
+                color: #fff;
+                background: linear-gradient(135deg, var(--orange), #e06820);
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .admin-submit:hover {
+                box-shadow: 0 4px 20px rgba(240, 136, 62, 0.3);
+                transform: translateY(-1px);
+            }
+            .admin-submit:disabled {
+                opacity: 0.5;
+                cursor: default;
+                transform: none;
+                box-shadow: none;
+            }
+            .admin-status {
+                font-family: var(--code);
+                font-size: 11px;
+                text-align: center;
+                min-height: 16px;
+            }
+            .admin-status.err {
+                color: var(--red);
+            }
+            .admin-status.ok {
+                color: var(--green);
+            }
+            .admin-cancel {
+                font-family: var(--code);
+                font-size: 11px;
+                color: var(--text-dim);
+                background: none;
+                border: none;
+                cursor: pointer;
+                text-align: center;
+                padding: 4px;
+            }
+            .admin-cancel:hover {
+                color: var(--text-bright);
+            }
+
+            /* ═══ CARD DELETE BADGE (admin mode) ═══ */
+            .card-delete-btn {
+                display: none;
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                z-index: 20;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                border: 2px solid var(--red);
+                background: rgba(248, 81, 73, 0.15);
+                color: var(--red);
+                font-size: 14px;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.15s;
+                backdrop-filter: blur(4px);
+                line-height: 1;
+            }
+            .card-delete-btn:hover {
+                background: var(--red);
+                color: #fff;
+                box-shadow: 0 0 16px rgba(248, 81, 73, 0.4);
+                transform: scale(1.1);
+            }
+            body.admin-mode .card-delete-btn {
+                display: flex;
+            }
+
+            /* ═══ TOAST NOTIFICATION ═══ */
+            #toast {
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%) translateY(80px);
+                z-index: 2000;
+                font-family: var(--code);
+                font-size: 12px;
+                padding: 10px 24px;
+                border-radius: 8px;
+                background: var(--panel2);
+                color: var(--text-bright);
+                border: 1px solid var(--border);
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                pointer-events: none;
+                white-space: nowrap;
+            }
+            #toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            #toast.toast-ok {
+                border-color: var(--green);
+                color: var(--green);
+            }
+            #toast.toast-err {
+                border-color: var(--red);
+                color: var(--red);
+            }
+
+            /* ═══ APP LAYOUT ═══ */
             #app {
                 display: flex;
                 flex-direction: column;
@@ -85,91 +295,190 @@
             #content {
                 flex: 1;
                 display: flex;
+                flex-direction: column;
                 overflow: hidden;
                 min-height: 0;
             }
 
-            /* ═══ HALF PANELS ═══ */
-            .half {
+            /* ═══ SECTION PANELS (top / bottom) ═══ */
+            .section-panel {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                min-width: 0;
+                min-height: 0;
                 overflow: hidden;
-            }
-            .half:first-child {
-                border-right: 1px solid var(--border);
+                position: relative;
             }
 
-            /* ── Section Header ── */
-            .section-head {
-                padding: 20px 24px 16px;
-                border-bottom: 1px solid var(--border);
+            /* ── Thick visual divider between sections ── */
+            .section-divider {
+                flex-shrink: 0;
+                height: 3px;
+                background: linear-gradient(
+                    90deg,
+                    var(--purple) 0%,
+                    var(--accent) 50%,
+                    var(--green) 100%
+                );
+                box-shadow:
+                    0 0 12px rgba(88, 166, 255, 0.3),
+                    0 0 24px rgba(88, 166, 255, 0.1);
+            }
+
+            /* ═══ SECTION HEADER ═══ */
+            .section-header {
                 flex-shrink: 0;
                 display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .section-title-row {
-                display: flex;
                 align-items: center;
-                gap: 12px;
+                gap: 20px;
+                padding: 14px 28px 12px;
+                border-bottom: 1px solid var(--border);
+                background: var(--panel);
             }
+
+            /* ── Large prominent badge ── */
             .section-badge {
                 font-family: var(--pixel);
-                font-size: 9px;
-                letter-spacing: 1px;
-                padding: 4px 10px;
-                border-radius: 3px;
+                font-size: 13px;
+                letter-spacing: 2px;
+                padding: 8px 18px;
+                border-radius: 6px;
                 white-space: nowrap;
+                flex-shrink: 0;
+                text-transform: uppercase;
             }
             .badge-purple {
-                background: var(--purple-dim);
+                background: linear-gradient(
+                    135deg,
+                    rgba(188, 140, 255, 0.2),
+                    rgba(188, 140, 255, 0.08)
+                );
                 color: var(--purple);
-                border: 1px solid rgba(188, 140, 255, 0.3);
+                border: 2px solid rgba(188, 140, 255, 0.5);
+                box-shadow:
+                    0 0 16px rgba(188, 140, 255, 0.2),
+                    inset 0 0 12px rgba(188, 140, 255, 0.06);
             }
             .badge-green {
-                background: rgba(63, 185, 80, 0.12);
+                background: linear-gradient(
+                    135deg,
+                    rgba(63, 185, 80, 0.2),
+                    rgba(63, 185, 80, 0.08)
+                );
                 color: var(--green);
-                border: 1px solid rgba(63, 185, 80, 0.3);
+                border: 2px solid rgba(63, 185, 80, 0.5);
+                box-shadow:
+                    0 0 16px rgba(63, 185, 80, 0.2),
+                    inset 0 0 12px rgba(63, 185, 80, 0.06);
+            }
+
+            /* ── Title + count ── */
+            .section-title-group {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                flex-shrink: 0;
             }
             .section-title {
                 font-family: var(--pixel);
                 font-size: 14px;
                 color: var(--text-bright);
+                letter-spacing: 0.5px;
+            }
+            .section-subtitle {
+                font-family: var(--code);
+                font-size: 11px;
+                color: var(--text-dim);
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
             .section-count {
                 font-family: var(--code);
                 font-size: 11px;
                 color: var(--text-dim);
-                margin-left: auto;
-            }
-            .section-desc {
-                font-size: 12px;
-                color: var(--text-dim);
-                line-height: 1.5;
+                opacity: 0.8;
             }
 
-            /* ── Controls row (search + upload) ── */
+            .section-desc {
+                font-size: 11px;
+                color: var(--text-dim);
+                line-height: 1.5;
+                flex: 1;
+                min-width: 120px;
+            }
+
+            /* ── Category tabs ── */
+            .cat-tabs {
+                display: flex;
+                gap: 2px;
+                flex-shrink: 0;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 6px;
+                padding: 3px;
+            }
+            .cat-tab {
+                font-family: var(--code);
+                font-size: 11px;
+                color: var(--text-dim);
+                background: none;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 14px;
+                cursor: pointer;
+                transition: all 0.15s;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+            }
+            .cat-tab:hover {
+                color: var(--text-bright);
+                background: rgba(255, 255, 255, 0.04);
+            }
+            .cat-tab.active {
+                color: var(--purple);
+                background: rgba(188, 140, 255, 0.1);
+                box-shadow: 0 0 0 1px rgba(188, 140, 255, 0.3);
+            }
+            .cat-tab .ct-count {
+                font-size: 9px;
+                background: rgba(255, 255, 255, 0.06);
+                color: inherit;
+                padding: 1px 6px;
+                border-radius: 8px;
+                opacity: 0.7;
+            }
+            .cat-tab.active .ct-count {
+                background: rgba(188, 140, 255, 0.2);
+                opacity: 1;
+            }
+
+            /* ── Controls (search, upload, pagination) ── */
             .section-controls {
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                flex-shrink: 0;
+                margin-left: auto;
             }
             .search-box {
-                flex: 1;
-                padding: 8px 12px;
+                width: 200px;
+                padding: 7px 12px;
                 font-family: var(--code);
-                font-size: 12px;
+                font-size: 11px;
                 color: var(--text);
                 background: var(--bg);
                 border: 1px solid var(--border);
-                border-radius: 4px;
+                border-radius: 6px;
                 outline: none;
-                transition: border-color 0.2s;
+                transition:
+                    border-color 0.2s,
+                    box-shadow 0.2s;
             }
             .search-box:focus {
                 border-color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
             }
             .search-box::placeholder {
                 color: #444;
@@ -177,18 +486,18 @@
 
             .upload-btn {
                 font-family: var(--code);
-                font-size: 11px;
-                padding: 8px 14px;
+                font-size: 10px;
+                padding: 7px 14px;
                 background: transparent;
                 border: 1px dashed var(--border);
                 color: var(--text-dim);
-                border-radius: 4px;
+                border-radius: 6px;
                 cursor: pointer;
                 transition: all 0.15s;
                 white-space: nowrap;
                 display: inline-flex;
                 align-items: center;
-                gap: 6px;
+                gap: 5px;
             }
             .upload-btn:hover {
                 border-color: var(--accent);
@@ -199,244 +508,20 @@
                 display: none;
             }
 
-            /* ── Category tabs (AGI-2 only) ── */
-            .cat-tabs {
-                display: flex;
-                gap: 0;
-                border-bottom: 1px solid var(--border);
-                flex-shrink: 0;
-                padding: 0 24px;
-            }
-            .cat-tab {
-                font-family: var(--code);
-                font-size: 11px;
-                color: #555;
-                background: none;
-                border: none;
-                border-bottom: 2px solid transparent;
-                padding: 10px 16px 8px;
-                cursor: pointer;
-                transition: all 0.15s;
+            .pag-row {
                 display: flex;
                 align-items: center;
                 gap: 6px;
-            }
-            .cat-tab:hover {
-                color: #999;
-            }
-            .cat-tab.active {
-                color: var(--purple);
-                border-bottom-color: var(--purple);
-            }
-            .cat-tab .ct-count {
-                font-size: 9px;
-                background: rgba(255, 255, 255, 0.06);
-                color: #555;
-                padding: 1px 6px;
-                border-radius: 8px;
-            }
-            .cat-tab.active .ct-count {
-                background: var(--purple-dim);
-                color: var(--purple);
-            }
-
-            /* ── Scrollable card area ── */
-            .card-scroll {
-                flex: 1;
-                overflow-y: auto;
-                overflow-x: hidden;
-                padding: 20px 24px 30px;
-            }
-            .card-scroll::-webkit-scrollbar {
-                width: 6px;
-            }
-            .card-scroll::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            .card-scroll::-webkit-scrollbar-thumb {
-                background: #2a2e36;
-                border-radius: 3px;
-            }
-            .card-scroll::-webkit-scrollbar-thumb:hover {
-                background: #3a3e46;
-            }
-
-            /* ── Card Grid ── */
-            .card-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 16px;
-            }
-
-            /* ── Game / Task Card (shared) ── */
-            .g-card {
-                background: var(--panel);
-                border: 1px solid var(--border);
-                cursor: pointer;
-                transition: all 0.2s;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-                position: relative;
-            }
-            .g-card:hover {
-                border-color: var(--accent);
-                box-shadow: 0 4px 24px rgba(88, 166, 255, 0.12);
-                transform: translateY(-2px);
-            }
-
-            /* AGI-2 card accent */
-            .g-card.agi2-card:hover {
-                border-color: var(--purple);
-                box-shadow: 0 4px 24px rgba(188, 140, 255, 0.12);
-            }
-
-            /* ── Card Preview (top) ── */
-            .g-card-preview {
-                position: relative;
-                width: 100%;
-                aspect-ratio: 1;
-                background: #0a0d12;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .g-card-preview img,
-            .g-card-preview canvas {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                image-rendering: pixelated;
-                image-rendering: crisp-edges;
-                transition: transform 0.3s;
-            }
-            .g-card:hover .g-card-preview img,
-            .g-card:hover .g-card-preview canvas {
-                transform: scale(1.05);
-            }
-            .g-card-preview .loading-text {
-                font-family: var(--code);
-                font-size: 10px;
-                color: #444;
-                letter-spacing: 1px;
-            }
-
-            /* Play overlay on hover */
-            .card-overlay {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(14, 17, 23, 0.55);
-                opacity: 0;
-                transition: opacity 0.2s;
-            }
-            .g-card:hover .card-overlay {
-                opacity: 1;
-            }
-            .play-circle {
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 18px;
-                color: #fff;
-                transition: transform 0.15s;
-            }
-            .agi3-play {
-                background: rgba(63, 185, 80, 0.2);
-                border: 2px solid var(--green);
-            }
-            .agi2-play {
-                background: var(--purple-dim);
-                border: 2px solid var(--purple);
-            }
-            .g-card:hover .play-circle {
-                transform: scale(1.1);
-            }
-
-            /* ── Card Info (bottom) ── */
-            .g-card-info {
-                padding: 10px 12px;
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-            .g-card-id {
-                font-family: var(--pixel);
-                font-size: 9px;
-                letter-spacing: 0.5px;
-            }
-            .agi3-card .g-card-id {
-                color: var(--accent);
-            }
-            .agi2-card .g-card-id {
-                color: var(--purple);
-            }
-
-            .g-card-tags {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-            .g-tag {
-                font-family: var(--code);
-                font-size: 8px;
-                padding: 2px 6px;
-                border-radius: 2px;
-            }
-            .agi3-card .g-tag {
-                background: rgba(88, 166, 255, 0.1);
-                border: 1px solid rgba(88, 166, 255, 0.2);
-                color: var(--accent);
-            }
-            .agi2-card .g-tag {
-                background: var(--purple-dim);
-                border: 1px solid rgba(188, 140, 255, 0.25);
-                color: var(--purple);
-            }
-            .g-card-meta {
-                font-family: var(--code);
-                font-size: 9px;
-                color: var(--text-dim);
-            }
-
-            /* ── Empty / No results ── */
-            .empty-msg {
-                grid-column: 1/-1;
-                text-align: center;
-                padding: 40px 20px;
-                color: var(--text-dim);
-                font-size: 13px;
-                line-height: 1.6;
-            }
-            .empty-msg code {
-                font-family: var(--code);
-                background: rgba(255, 255, 255, 0.06);
-                padding: 2px 6px;
-                border-radius: 3px;
-            }
-
-            /* ── Pagination ── */
-            .pagination {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-                padding: 16px 0 4px;
+                flex-shrink: 0;
             }
             .pag-btn {
                 font-family: var(--code);
                 font-size: 11px;
                 color: var(--text-dim);
-                background: var(--panel);
+                background: var(--panel2);
                 border: 1px solid var(--border);
                 border-radius: 4px;
-                padding: 6px 14px;
+                padding: 4px 10px;
                 cursor: pointer;
                 transition: all 0.15s;
             }
@@ -447,24 +532,261 @@
             .pag-btn:disabled {
                 color: #333;
                 cursor: default;
-                border-color: rgba(48, 54, 61, 0.5);
+                border-color: rgba(48, 54, 61, 0.4);
             }
             .pag-info {
                 font-family: var(--code);
-                font-size: 11px;
+                font-size: 10px;
                 color: #555;
-                min-width: 90px;
-                text-align: center;
             }
 
-            /* ── Footer ── */
+            /* ═══ CAROUSEL ═══ */
+            .carousel-wrapper {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                min-height: 0;
+                position: relative;
+                padding: 0 8px;
+            }
+
+            .carousel-btn {
+                flex-shrink: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 1px solid var(--border);
+                background: var(--panel);
+                color: var(--text-dim);
+                font-size: 20px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.15s;
+                z-index: 5;
+                user-select: none;
+            }
+            .carousel-btn:hover:not(:disabled) {
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: var(--panel2);
+                box-shadow: 0 0 12px rgba(88, 166, 255, 0.15);
+            }
+            .carousel-btn:disabled {
+                opacity: 0.2;
+                cursor: default;
+            }
+
+            .carousel-track {
+                flex: 1;
+                display: flex;
+                gap: 24px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-behavior: smooth;
+                padding: 24px 20px;
+                min-height: 0;
+                align-items: center;
+                justify-content: center;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .carousel-track::-webkit-scrollbar {
+                display: none;
+            }
+            /* When cards overflow, align to start for scroll */
+            .carousel-track.has-overflow {
+                justify-content: flex-start;
+            }
+
+            /* ═══ GAME / TASK CARD ═══ */
+            .g-card {
+                flex-shrink: 0;
+                width: 280px;
+                height: 370px;
+                background: var(--panel);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                border-radius: 14px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+            .g-card:hover {
+                transform: translateY(-6px) scale(1.02);
+            }
+            .g-card.agi3-card:hover {
+                border-color: rgba(63, 185, 80, 0.5);
+                box-shadow:
+                    0 12px 40px rgba(63, 185, 80, 0.2),
+                    0 0 0 1px rgba(63, 185, 80, 0.12),
+                    0 0 60px rgba(63, 185, 80, 0.06);
+            }
+            .g-card.agi2-card:hover {
+                border-color: rgba(188, 140, 255, 0.5);
+                box-shadow:
+                    0 12px 40px rgba(188, 140, 255, 0.2),
+                    0 0 0 1px rgba(188, 140, 255, 0.12),
+                    0 0 60px rgba(188, 140, 255, 0.06);
+            }
+
+            /* ── Card Preview ── */
+            .g-card-preview {
+                position: relative;
+                width: 100%;
+                flex: 1;
+                min-height: 0;
+                background: #06080c;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            }
+            .g-card-preview img,
+            .g-card-preview canvas {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+            .g-card:hover .g-card-preview img,
+            .g-card:hover .g-card-preview canvas {
+                transform: scale(1.08);
+            }
+            .g-card-preview .loading-text {
+                font-family: var(--code);
+                font-size: 11px;
+                color: #2a2e36;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+            }
+
+            /* Play overlay */
+            .card-overlay {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(6, 8, 12, 0.65);
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            .g-card:hover .card-overlay {
+                opacity: 1;
+            }
+            .play-circle {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                color: #fff;
+                transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+                backdrop-filter: blur(6px);
+            }
+            .agi3-play {
+                background: rgba(63, 185, 80, 0.25);
+                border: 2px solid rgba(63, 185, 80, 0.7);
+                box-shadow:
+                    0 0 24px rgba(63, 185, 80, 0.3),
+                    inset 0 0 12px rgba(63, 185, 80, 0.1);
+            }
+            .agi2-play {
+                background: rgba(188, 140, 255, 0.18);
+                border: 2px solid rgba(188, 140, 255, 0.7);
+                box-shadow:
+                    0 0 24px rgba(188, 140, 255, 0.3),
+                    inset 0 0 12px rgba(188, 140, 255, 0.1);
+            }
+            .g-card:hover .play-circle {
+                transform: scale(1.12);
+            }
+
+            /* ── Card Info ── */
+            .g-card-info {
+                padding: 14px 16px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                background: var(--panel);
+                flex-shrink: 0;
+                min-height: 90px;
+            }
+            .g-card-id {
+                font-family: var(--pixel);
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .agi3-card .g-card-id {
+                color: var(--green);
+            }
+            .agi2-card .g-card-id {
+                color: var(--purple);
+            }
+
+            .g-card-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .g-tag {
+                font-family: var(--code);
+                font-size: 9px;
+                padding: 3px 8px;
+                border-radius: 4px;
+                letter-spacing: 0.3px;
+            }
+            .agi3-card .g-tag {
+                background: rgba(63, 185, 80, 0.08);
+                border: 1px solid rgba(63, 185, 80, 0.18);
+                color: rgba(63, 185, 80, 0.8);
+            }
+            .agi2-card .g-tag {
+                background: rgba(188, 140, 255, 0.08);
+                border: 1px solid rgba(188, 140, 255, 0.18);
+                color: rgba(188, 140, 255, 0.8);
+            }
+
+            /* ── Empty state ── */
+            .empty-msg {
+                flex-shrink: 0;
+                padding: 30px 20px;
+                color: var(--text-dim);
+                font-size: 12px;
+                line-height: 1.6;
+                text-align: center;
+                width: 100%;
+            }
+            .empty-msg code {
+                font-family: var(--code);
+                background: rgba(255, 255, 255, 0.06);
+                padding: 2px 6px;
+                border-radius: 3px;
+            }
+
+            /* ═══ FOOTER ═══ */
             #footer {
-                padding: 8px 24px;
+                padding: 6px 28px;
                 text-align: center;
                 border-top: 1px solid var(--border);
                 font-size: 10px;
                 color: var(--text-dim);
                 flex-shrink: 0;
+                background: var(--panel);
             }
             #footer a {
                 color: var(--accent);
@@ -474,76 +796,123 @@
                 text-decoration: underline;
             }
 
-            /* ═══ MOBILE ═══ */
-            @media (max-width: 900px) {
-                #content {
-                    flex-direction: column;
+            /* ═══ RESPONSIVE ═══ */
+            @media (max-width: 1100px) {
+                .section-desc {
+                    display: none;
                 }
-                .half:first-child {
-                    border-right: none;
-                    border-bottom: 1px solid var(--border);
-                }
-                .half {
-                    flex: 1;
-                    min-height: 0;
-                }
-                .card-grid {
-                    grid-template-columns: repeat(
-                        auto-fill,
-                        minmax(160px, 1fr)
-                    );
-                    gap: 12px;
-                }
-                .section-head {
-                    padding: 14px 16px 12px;
-                }
-                .card-scroll {
-                    padding: 14px 16px 20px;
-                }
-                .cat-tabs {
-                    padding: 0 16px;
+                .section-header {
+                    gap: 14px;
+                    padding: 12px 20px 10px;
                 }
             }
+
+            @media (max-width: 900px) {
+                .section-header {
+                    gap: 10px;
+                    padding: 10px 16px 8px;
+                    flex-wrap: wrap;
+                }
+                .section-badge {
+                    font-size: 10px;
+                    padding: 6px 12px;
+                }
+                .section-title {
+                    font-size: 12px;
+                }
+                .search-box {
+                    width: 150px;
+                }
+                .g-card {
+                    width: 230px;
+                    height: 320px;
+                }
+                .carousel-track {
+                    gap: 18px;
+                    padding: 16px 12px;
+                }
+                .carousel-btn {
+                    width: 34px;
+                    height: 34px;
+                    font-size: 17px;
+                }
+            }
+
             @media (max-width: 600px) {
                 #topbar {
-                    padding: 8px 12px;
+                    padding: 0 14px;
                     gap: 10px;
+                    height: 42px;
                 }
                 .logo {
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                 .tagline {
                     display: none;
                 }
+                .section-header {
+                    padding: 8px 12px 6px;
+                    gap: 8px;
+                }
+                .section-badge {
+                    font-size: 9px;
+                    padding: 5px 10px;
+                }
                 .section-title {
-                    font-size: 11px;
+                    font-size: 10px;
                 }
-                .card-grid {
-                    grid-template-columns: repeat(
-                        auto-fill,
-                        minmax(140px, 1fr)
-                    );
-                    gap: 10px;
+                .section-subtitle {
+                    font-size: 10px;
                 }
-                .section-head {
-                    padding: 12px 12px 10px;
-                }
-                .card-scroll {
-                    padding: 10px 12px 16px;
+                .section-desc {
+                    display: none;
                 }
                 .cat-tabs {
-                    padding: 0 12px;
+                    padding: 2px;
+                }
+                .cat-tab {
+                    font-size: 9px;
+                    padding: 4px 8px;
+                    gap: 4px;
+                }
+                .search-box {
+                    width: 110px;
+                    font-size: 10px;
+                    padding: 5px 8px;
+                }
+                .g-card {
+                    width: 190px;
+                    height: 280px;
+                    border-radius: 10px;
+                }
+                .carousel-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 15px;
+                }
+                .carousel-track {
+                    gap: 12px;
+                    padding: 12px 8px;
                 }
                 .g-card-id {
-                    font-size: 8px;
+                    font-size: 9px;
+                }
+                .g-card-info {
+                    padding: 10px 12px 12px;
+                    gap: 5px;
+                    min-height: 70px;
                 }
                 .g-tag {
                     font-size: 7px;
+                    padding: 2px 5px;
                 }
                 .play-circle {
-                    width: 36px;
-                    height: 36px;
-                    font-size: 14px;
+                    width: 44px;
+                    height: 44px;
+                    font-size: 16px;
+                }
+                .section-divider {
+                    height: 2px;
                 }
             }
         </style>
@@ -554,25 +923,83 @@
             <div id="topbar">
                 <a href="/" class="logo">Ethara AI × ARC</a>
                 <div class="sep"></div>
-                <div class="tagline">Abstraction & Reasoning Corpus</div>
+                <div class="tagline">Abstraction &amp; Reasoning Corpus</div>
                 <div class="spacer"></div>
+                <button
+                    class="top-btn top-btn-admin"
+                    id="btn-admin"
+                    title="Admin Panel"
+                >
+                    🔒 Admin
+                </button>
+                <button
+                    class="top-btn top-btn-logout"
+                    id="btn-logout"
+                    style="display: none"
+                >
+                    Logout
+                </button>
             </div>
 
-            <!-- ═══ SPLIT CONTENT ═══ -->
+            <!-- ═══ ADMIN LOGIN MODAL ═══ -->
+            <div id="admin-modal">
+                <div class="admin-box">
+                    <h2>🔒 ADMIN LOGIN</h2>
+                    <input
+                        type="text"
+                        class="admin-input"
+                        id="admin-user"
+                        placeholder="Username"
+                        autocomplete="off"
+                    />
+                    <input
+                        type="password"
+                        class="admin-input"
+                        id="admin-pass"
+                        placeholder="Password"
+                    />
+                    <button class="admin-submit" id="admin-login-btn">
+                        AUTHENTICATE
+                    </button>
+                    <div class="admin-status" id="admin-status"></div>
+                    <button class="admin-cancel" id="admin-cancel">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ TOAST ═══ -->
+            <div id="toast"></div>
+
+            <!-- ═══ CONTENT ═══ -->
             <div id="content">
-                <!-- ── LEFT: AGI-2 Tasks ── -->
-                <div class="half" id="half-agi2">
-                    <div class="section-head">
-                        <div class="section-title-row">
-                            <span class="section-badge badge-purple"
-                                >AGI-2</span
-                            >
+                <!-- ── TOP: AGI-2 Puzzles ── -->
+                <div class="section-panel" id="panel-agi2">
+                    <div class="section-header">
+                        <span class="section-badge badge-purple">AGI-2</span>
+                        <div class="section-title-group">
                             <span class="section-title">ARC Puzzles</span>
-                            <span class="section-count" id="agi2-count"></span>
+                            <span class="section-subtitle">
+                                <span id="agi2-count"></span>
+                                <span style="color: #333">·</span>
+                                Classic pattern recognition
+                            </span>
                         </div>
-                        <div class="section-desc">
-                            Classic pattern recognition puzzles — view examples,
-                            identify the rule, solve the test.
+                        <div class="cat-tabs" id="agi2-tabs">
+                            <button class="cat-tab active" data-cat="my_tasks">
+                                ★ My Tasks
+                                <span class="ct-count" id="ct-my_tasks">0</span>
+                            </button>
+                            <button class="cat-tab" data-cat="training">
+                                Training
+                                <span class="ct-count" id="ct-training">0</span>
+                            </button>
+                            <button class="cat-tab" data-cat="evaluation">
+                                Evaluation
+                                <span class="ct-count" id="ct-evaluation"
+                                    >0</span
+                                >
+                            </button>
                         </div>
                         <div class="section-controls">
                             <input
@@ -589,52 +1016,60 @@
                                     accept=".json"
                                 />
                             </label>
+                            <div
+                                class="pag-row"
+                                id="agi2-pag"
+                                style="display: none"
+                            >
+                                <button class="pag-btn" id="agi2-prev">
+                                    ←
+                                </button>
+                                <span
+                                    class="pag-info"
+                                    id="agi2-pag-info"
+                                ></span>
+                                <button class="pag-btn" id="agi2-next">
+                                    →
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <!-- Category tabs -->
-                    <div class="cat-tabs" id="agi2-tabs">
-                        <button class="cat-tab active" data-cat="my_tasks">
-                            ★ My Tasks
-                            <span class="ct-count" id="ct-my_tasks">0</span>
-                        </button>
-                        <button class="cat-tab" data-cat="training">
-                            Training
-                            <span class="ct-count" id="ct-training">0</span>
-                        </button>
-                        <button class="cat-tab" data-cat="evaluation">
-                            Evaluation
-                            <span class="ct-count" id="ct-evaluation">0</span>
-                        </button>
-                    </div>
-                    <div class="card-scroll" id="agi2-scroll">
-                        <div class="card-grid" id="agi2-grid"></div>
-                        <div
-                            class="pagination"
-                            id="agi2-pag"
-                            style="display: none"
+                    <div class="carousel-wrapper">
+                        <button
+                            class="carousel-btn"
+                            id="agi2-left"
+                            title="Scroll left"
                         >
-                            <button class="pag-btn" id="agi2-prev">
-                                ← Prev
-                            </button>
-                            <span class="pag-info" id="agi2-pag-info"></span>
-                            <button class="pag-btn" id="agi2-next">
-                                Next →
-                            </button>
-                        </div>
+                            ‹
+                        </button>
+                        <div class="carousel-track" id="agi2-track"></div>
+                        <button
+                            class="carousel-btn"
+                            id="agi2-right"
+                            title="Scroll right"
+                        >
+                            ›
+                        </button>
                     </div>
                 </div>
 
-                <!-- ── RIGHT: AGI-3 Games ── -->
-                <div class="half" id="half-agi3">
-                    <div class="section-head">
-                        <div class="section-title-row">
-                            <span class="section-badge badge-green">AGI-3</span>
+                <!-- ── DIVIDER ── -->
+                <div class="section-divider"></div>
+
+                <!-- ── BOTTOM: AGI-3 Games ── -->
+                <div class="section-panel" id="panel-agi3">
+                    <div class="section-header">
+                        <span class="section-badge badge-green">AGI-3</span>
+                        <div class="section-title-group">
                             <span class="section-title">Interactive Games</span>
-                            <span class="section-count" id="agi3-count"></span>
+                            <span class="section-subtitle">
+                                <span id="agi3-count"></span>
+                                <span style="color: #333">·</span>
+                                Real-time game environments
+                            </span>
                         </div>
                         <div class="section-desc">
-                            Real-time interactive game environments with
-                            multiple levels, keyboard controls, and instant
+                            Keyboard controls, multiple levels, instant
                             feedback.
                         </div>
                         <div class="section-controls">
@@ -655,8 +1090,22 @@
                             </label>
                         </div>
                     </div>
-                    <div class="card-scroll" id="agi3-scroll">
-                        <div class="card-grid" id="agi3-grid"></div>
+                    <div class="carousel-wrapper">
+                        <button
+                            class="carousel-btn"
+                            id="agi3-left"
+                            title="Scroll left"
+                        >
+                            ‹
+                        </button>
+                        <div class="carousel-track" id="agi3-track"></div>
+                        <button
+                            class="carousel-btn"
+                            id="agi3-right"
+                            title="Scroll right"
+                        >
+                            ›
+                        </button>
                     </div>
                 </div>
             </div>
@@ -675,23 +1124,87 @@
 
         <script>
             // ══════════════════════════════════════════════════════════════
-            //  Unified Landing Page — AGI-2 + AGI-3 side-by-side
+            //  Unified Landing Page — AGI-2 (top) + AGI-3 (bottom)
+            //  Horizontal carousel layout, direct game launch on click
             // ══════════════════════════════════════════════════════════════
 
             // ── State ────────────────────────────────────────────────────
-            var agi2Index = null; // {my_tasks:[], training:[], evaluation:[]}
+            var agi2Index = null;
             var agi2Category = "my_tasks";
             var agi2Search = "";
             var agi2Page = 0;
-            var AGI2_PER_PAGE = 18;
+            var AGI2_PER_PAGE = 40;
 
-            var agi3Games = []; // [{game_id, tags, ...}, ...]
+            var agi3Games = [];
             var agi3Search = "";
 
             // ── DOM refs ─────────────────────────────────────────────────
-            var agi2Grid = document.getElementById("agi2-grid");
+            var agi2Track = document.getElementById("agi2-track");
             var agi2Pag = document.getElementById("agi2-pag");
-            var agi3Grid = document.getElementById("agi3-grid");
+            var agi3Track = document.getElementById("agi3-track");
+
+            // ══════════════════════════════════════════════════════════════
+            //  CAROUSEL HELPERS
+            // ══════════════════════════════════════════════════════════════
+
+            function setupCarousel(trackId, leftBtnId, rightBtnId) {
+                var track = document.getElementById(trackId);
+                var leftBtn = document.getElementById(leftBtnId);
+                var rightBtn = document.getElementById(rightBtnId);
+
+                function updateButtons() {
+                    var maxScroll = track.scrollWidth - track.clientWidth;
+                    var overflows = maxScroll > 4;
+
+                    if (overflows) {
+                        track.classList.add("has-overflow");
+                    } else {
+                        track.classList.remove("has-overflow");
+                    }
+
+                    leftBtn.disabled = track.scrollLeft <= 2;
+                    rightBtn.disabled =
+                        !overflows || track.scrollLeft >= maxScroll - 2;
+
+                    // Hide arrows entirely if no overflow
+                    leftBtn.style.visibility = overflows ? "" : "hidden";
+                    rightBtn.style.visibility = overflows ? "" : "hidden";
+                }
+
+                function scrollBy(dir) {
+                    var amount = track.clientWidth * 0.7;
+                    track.scrollBy({
+                        left: dir * amount,
+                        behavior: "smooth",
+                    });
+                }
+
+                leftBtn.addEventListener("click", function () {
+                    scrollBy(-1);
+                });
+                rightBtn.addEventListener("click", function () {
+                    scrollBy(1);
+                });
+
+                track.addEventListener("scroll", updateButtons);
+                window.addEventListener("resize", updateButtons);
+
+                // Initial state
+                setTimeout(updateButtons, 150);
+
+                return { track: track, updateButtons: updateButtons };
+            }
+
+            var agi2Carousel = setupCarousel(
+                "agi2-track",
+                "agi2-left",
+                "agi2-right",
+            );
+            var agi3Carousel = setupCarousel(
+                "agi3-track",
+                "agi3-left",
+                "agi3-right",
+            );
 
             // ══════════════════════════════════════════════════════════════
             //  AGI-3 — Fetch games and render cards
@@ -711,7 +1224,7 @@
                         renderAgi3();
                     })
                     .catch(function (err) {
-                        agi3Grid.innerHTML =
+                        agi3Track.innerHTML =
                             '<div class="empty-msg">Could not load games.<br>' +
                             err +
                             "</div>";
@@ -728,13 +1241,15 @@
                     );
                 });
 
-                agi3Grid.innerHTML = "";
+                agi3Track.innerHTML = "";
+
                 if (filtered.length === 0) {
-                    agi3Grid.innerHTML = q
-                        ? '<div class="empty-msg">No games match "<code>' +
+                    agi3Track.innerHTML = q
+                        ? '<div class="empty-msg">No games match \u201c<code>' +
                           agi3Search +
-                          '</code>"</div>'
+                          "</code>\u201d</div>"
                         : '<div class="empty-msg">No games found.<br>Drop a game into <code>environment_files/</code> or use Upload.</div>';
+                    agi3Carousel.updateButtons();
                     return;
                 }
 
@@ -742,15 +1257,28 @@
                     var card = document.createElement("div");
                     card.className = "g-card agi3-card";
 
+                    // Admin delete button
+                    var delBtn = document.createElement("button");
+                    delBtn.className = "card-delete-btn";
+                    delBtn.textContent = "✕";
+                    delBtn.title = "Delete " + g.game_id;
+                    (function (gid, el) {
+                        delBtn.addEventListener("click", function (e) {
+                            e.stopPropagation();
+                            deleteAgi3Game(gid, el);
+                        });
+                    })(g.game_id, card);
+                    card.appendChild(delBtn);
+
                     var previewDiv = document.createElement("div");
                     previewDiv.className = "g-card-preview";
                     previewDiv.innerHTML =
-                        '<div class="loading-text">LOADING…</div>';
+                        '<div class="loading-text">LOADING\u2026</div>';
 
                     var overlay = document.createElement("div");
                     overlay.className = "card-overlay";
                     overlay.innerHTML =
-                        '<div class="play-circle agi3-play">▶</div>';
+                        '<div class="play-circle agi3-play">\u25B6</div>';
                     previewDiv.appendChild(overlay);
 
                     var img = new Image();
@@ -790,13 +1318,18 @@
                     card.appendChild(previewDiv);
                     card.appendChild(info);
 
+                    // Click → directly open and play the game
                     card.addEventListener("click", function () {
                         window.location.href =
                             "/arc-agi-3/game/" + encodeURIComponent(g.game_id);
                     });
 
-                    agi3Grid.appendChild(card);
+                    agi3Track.appendChild(card);
                 });
+
+                setTimeout(function () {
+                    agi3Carousel.updateButtons();
+                }, 80);
             }
 
             // ── AGI-3 Search ──
@@ -859,7 +1392,7 @@
                         renderAgi2();
                     })
                     .catch(function (err) {
-                        agi2Grid.innerHTML =
+                        agi2Track.innerHTML =
                             '<div class="empty-msg">Could not load task index.<br>' +
                             err +
                             "</div>";
@@ -893,7 +1426,7 @@
             }
 
             function renderAgi2() {
-                agi2Grid.innerHTML = "";
+                agi2Track.innerHTML = "";
 
                 var files = getAgi2Files();
 
@@ -920,12 +1453,13 @@
                 var pageFiles = files.slice(start, end);
 
                 if (files.length === 0) {
-                    agi2Grid.innerHTML = agi2Search
-                        ? '<div class="empty-msg">No tasks match "<code>' +
+                    agi2Track.innerHTML = agi2Search
+                        ? '<div class="empty-msg">No tasks match \u201c<code>' +
                           agi2Search +
-                          '</code>"</div>'
+                          "</code>\u201d</div>"
                         : '<div class="empty-msg">No tasks in this category.</div>';
                     agi2Pag.style.display = "none";
+                    agi2Carousel.updateButtons();
                     return;
                 }
 
@@ -933,7 +1467,7 @@
                 if (totalPages > 1) {
                     agi2Pag.style.display = "flex";
                     document.getElementById("agi2-pag-info").textContent =
-                        "Page " + (agi2Page + 1) + " / " + totalPages;
+                        agi2Page + 1 + "/" + totalPages;
                     document.getElementById("agi2-prev").disabled =
                         agi2Page === 0;
                     document.getElementById("agi2-next").disabled =
@@ -944,8 +1478,14 @@
 
                 pageFiles.forEach(function (filename, i) {
                     var card = buildAgi2Card(filename, start + i);
-                    agi2Grid.appendChild(card);
+                    agi2Track.appendChild(card);
                 });
+
+                // Reset scroll position for new page
+                agi2Track.scrollLeft = 0;
+                setTimeout(function () {
+                    agi2Carousel.updateButtons();
+                }, 80);
             }
 
             function buildAgi2Card(filename, globalIdx) {
@@ -955,15 +1495,28 @@
                 var taskId = filename.replace(".json", "");
 
                 // Preview
+                // Admin delete button
+                var delBtn = document.createElement("button");
+                delBtn.className = "card-delete-btn";
+                delBtn.textContent = "✕";
+                delBtn.title = "Delete " + taskId;
+                (function (cat, fn, el) {
+                    delBtn.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        deleteAgi2Task(cat, fn, el);
+                    });
+                })(agi2Category, filename, card);
+                card.appendChild(delBtn);
+
                 var previewDiv = document.createElement("div");
                 previewDiv.className = "g-card-preview";
                 previewDiv.innerHTML =
-                    '<div class="loading-text">LOADING…</div>';
+                    '<div class="loading-text">LOADING\u2026</div>';
 
                 var overlay = document.createElement("div");
                 overlay.className = "card-overlay";
                 overlay.innerHTML =
-                    '<div class="play-circle agi2-play">▶</div>';
+                    '<div class="play-circle agi2-play">\u25B6</div>';
                 previewDiv.appendChild(overlay);
 
                 var img = new Image();
@@ -1005,7 +1558,7 @@
                 card.appendChild(previewDiv);
                 card.appendChild(info);
 
-                // Click → open AGI-2 with this task
+                // Click → open AGI-2 directly with this task
                 card.addEventListener("click", function () {
                     window.location.href =
                         "/arc-agi-2/?task=" +
@@ -1036,10 +1589,9 @@
                     agi2Category = cat;
                     agi2Page = 0;
                     renderAgi2();
-                    document.getElementById("agi2-scroll").scrollTop = 0;
                 });
 
-            // ── AGI-2 Search ──
+            // ── AGI-2 Search (debounced) ──
             (function () {
                 var timer = null;
                 document
@@ -1062,7 +1614,6 @@
                     if (agi2Page > 0) {
                         agi2Page--;
                         renderAgi2();
-                        document.getElementById("agi2-scroll").scrollTop = 0;
                     }
                 });
             document
@@ -1073,7 +1624,6 @@
                     if (agi2Page < totalPages - 1) {
                         agi2Page++;
                         renderAgi2();
-                        document.getElementById("agi2-scroll").scrollTop = 0;
                     }
                 });
 
@@ -1090,14 +1640,12 @@
                         return;
                     }
 
-                    // Read and validate, then open in AGI-2
                     var reader = new FileReader();
                     reader.onload = function (ev) {
                         try {
                             var data = JSON.parse(ev.target.result);
                             if (!data.train || !data.test)
                                 throw new Error("Missing train/test");
-                            // Store in sessionStorage so AGI-2 page can pick it up
                             sessionStorage.setItem(
                                 "agi2_upload_task",
                                 ev.target.result,
@@ -1114,6 +1662,273 @@
                     reader.readAsText(file);
                     e.target.value = "";
                 });
+
+            // ══════════════════════════════════════════════════════════════
+            //  TOAST
+            // ══════════════════════════════════════════════════════════════
+            var _toastTimer = null;
+            function showToast(msg, type, ms) {
+                ms = ms || 2500;
+                var el = document.getElementById("toast");
+                el.textContent = msg;
+                el.className = "show" + (type ? " toast-" + type : "");
+                clearTimeout(_toastTimer);
+                _toastTimer = setTimeout(function () {
+                    el.className = "";
+                }, ms);
+            }
+
+            // ══════════════════════════════════════════════════════════════
+            //  ADMIN — login, logout, delete
+            // ══════════════════════════════════════════════════════════════
+            var adminCreds = { username: null, password: null };
+            var adminLoggedIn = false;
+
+            var adminModal = document.getElementById("admin-modal");
+            var adminUserEl = document.getElementById("admin-user");
+            var adminPassEl = document.getElementById("admin-pass");
+            var adminStatusEl = document.getElementById("admin-status");
+            var adminLoginBtn = document.getElementById("admin-login-btn");
+            var btnAdmin = document.getElementById("btn-admin");
+            var btnLogout = document.getElementById("btn-logout");
+
+            btnAdmin.addEventListener("click", function () {
+                if (adminLoggedIn) {
+                    // Toggle admin mode off
+                    adminLogout();
+                } else {
+                    adminModal.classList.add("show");
+                    adminUserEl.value = "";
+                    adminPassEl.value = "";
+                    adminStatusEl.textContent = "";
+                    adminUserEl.focus();
+                }
+            });
+
+            document
+                .getElementById("admin-cancel")
+                .addEventListener("click", function () {
+                    adminModal.classList.remove("show");
+                });
+
+            adminModal.addEventListener("click", function (e) {
+                if (e.target === adminModal)
+                    adminModal.classList.remove("show");
+            });
+
+            adminPassEl.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") doAdminLogin();
+            });
+            adminUserEl.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") adminPassEl.focus();
+            });
+            adminLoginBtn.addEventListener("click", doAdminLogin);
+
+            function doAdminLogin() {
+                var user = adminUserEl.value.trim();
+                var pass = adminPassEl.value;
+                if (!user || !pass) {
+                    adminStatusEl.textContent = "Enter username and password";
+                    adminStatusEl.className = "admin-status err";
+                    return;
+                }
+                adminLoginBtn.disabled = true;
+                adminStatusEl.textContent = "Authenticating…";
+                adminStatusEl.className = "admin-status";
+
+                fetch("/api/admin/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: user, password: pass }),
+                })
+                    .then(function (r) {
+                        return r.json().then(function (d) {
+                            return { ok: r.ok, data: d };
+                        });
+                    })
+                    .then(function (res) {
+                        adminLoginBtn.disabled = false;
+                        if (res.ok) {
+                            adminCreds = { username: user, password: pass };
+                            adminLoggedIn = true;
+                            adminModal.classList.remove("show");
+                            document.body.classList.add("admin-mode");
+                            btnAdmin.classList.add("active");
+                            btnAdmin.textContent = "🔓 Admin ON";
+                            btnLogout.style.display = "";
+                            showToast(
+                                "Admin mode enabled — click ✕ on any card to delete",
+                                "ok",
+                                3500,
+                            );
+                        } else {
+                            adminStatusEl.textContent =
+                                "✗ " + (res.data.error || "Login failed");
+                            adminStatusEl.className = "admin-status err";
+                        }
+                    })
+                    .catch(function (e) {
+                        adminLoginBtn.disabled = false;
+                        adminStatusEl.textContent = "✗ " + e.message;
+                        adminStatusEl.className = "admin-status err";
+                    });
+            }
+
+            btnLogout.addEventListener("click", adminLogout);
+
+            function adminLogout() {
+                adminCreds = { username: null, password: null };
+                adminLoggedIn = false;
+                document.body.classList.remove("admin-mode");
+                btnAdmin.classList.remove("active");
+                btnAdmin.textContent = "🔒 Admin";
+                btnLogout.style.display = "none";
+                showToast("Admin mode disabled", "", 1500);
+            }
+
+            // ── Delete AGI-3 game ──
+            function deleteAgi3Game(gameId, cardEl) {
+                if (
+                    !confirm(
+                        'Delete game "' + gameId + '"?\nThis cannot be undone.',
+                    )
+                )
+                    return;
+                var delBtn = cardEl.querySelector(".card-delete-btn");
+                if (delBtn) {
+                    delBtn.textContent = "…";
+                    delBtn.style.pointerEvents = "none";
+                }
+
+                fetch("/api/admin/games/" + encodeURIComponent(gameId), {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        username: adminCreds.username,
+                        password: adminCreds.password,
+                    }),
+                })
+                    .then(function (r) {
+                        return r.json().then(function (d) {
+                            return { ok: r.ok, data: d };
+                        });
+                    })
+                    .then(function (res) {
+                        if (res.ok) {
+                            cardEl.style.transition = "all 0.3s";
+                            cardEl.style.opacity = "0";
+                            cardEl.style.transform = "scale(0.8)";
+                            setTimeout(function () {
+                                cardEl.remove();
+                                agi3Carousel.updateButtons();
+                            }, 300);
+                            showToast("Deleted game: " + gameId, "ok");
+                            // Refresh game list
+                            fetchAgi3Games();
+                        } else {
+                            showToast(
+                                "Error: " + (res.data.error || "Delete failed"),
+                                "err",
+                                4000,
+                            );
+                            if (delBtn) {
+                                delBtn.textContent = "✕";
+                                delBtn.style.pointerEvents = "";
+                            }
+                        }
+                    })
+                    .catch(function (e) {
+                        showToast("Error: " + e.message, "err", 4000);
+                        if (delBtn) {
+                            delBtn.textContent = "✕";
+                            delBtn.style.pointerEvents = "";
+                        }
+                    });
+            }
+
+            // ── Delete AGI-2 task ──
+            function deleteAgi2Task(category, filename, cardEl) {
+                if (
+                    !confirm(
+                        'Delete task "' +
+                            filename.replace(".json", "") +
+                            '" from ' +
+                            category +
+                            "?\nThis cannot be undone.",
+                    )
+                )
+                    return;
+                var delBtn = cardEl.querySelector(".card-delete-btn");
+                if (delBtn) {
+                    delBtn.textContent = "…";
+                    delBtn.style.pointerEvents = "none";
+                }
+
+                fetch(
+                    "/api/admin/agi2/tasks/" +
+                        encodeURIComponent(category) +
+                        "/" +
+                        encodeURIComponent(filename),
+                    {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            username: adminCreds.username,
+                            password: adminCreds.password,
+                        }),
+                    },
+                )
+                    .then(function (r) {
+                        return r.json().then(function (d) {
+                            return { ok: r.ok, data: d };
+                        });
+                    })
+                    .then(function (res) {
+                        if (res.ok) {
+                            cardEl.style.transition = "all 0.3s";
+                            cardEl.style.opacity = "0";
+                            cardEl.style.transform = "scale(0.8)";
+                            setTimeout(function () {
+                                cardEl.remove();
+                                agi2Carousel.updateButtons();
+                            }, 300);
+                            showToast(
+                                "Deleted task: " +
+                                    filename.replace(".json", ""),
+                                "ok",
+                            );
+                            // Refresh task index
+                            fetchAgi2Index();
+                        } else {
+                            showToast(
+                                "Error: " + (res.data.error || "Delete failed"),
+                                "err",
+                                4000,
+                            );
+                            if (delBtn) {
+                                delBtn.textContent = "✕";
+                                delBtn.style.pointerEvents = "";
+                            }
+                        }
+                    })
+                    .catch(function (e) {
+                        showToast("Error: " + e.message, "err", 4000);
+                        if (delBtn) {
+                            delBtn.textContent = "✕";
+                            delBtn.style.pointerEvents = "";
+                        }
+                    });
+            }
+
+            // ── Keyboard shortcuts ──
+            document.addEventListener("keydown", function (e) {
+                // ESC — close admin modal
+                if (e.key === "Escape") {
+                    if (adminModal.classList.contains("show")) {
+                        adminModal.classList.remove("show");
+                    }
+                }
+            });
 
             // ══════════════════════════════════════════════════════════════
             //  INIT

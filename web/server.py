@@ -581,6 +581,62 @@ def api_agi2_task_preview(category, filename):
         return jsonify({"error": str(e)}), 500
 
 
+def _rebuild_agi2_task_index():
+    """Scan the AGI-2 data directories and regenerate task_index.json."""
+    data_dir = Path(ARC_AGI_2_DATA_DIR)
+    index = {}
+    for category in ("my_tasks", "training", "evaluation"):
+        cat_dir = data_dir / category
+        if cat_dir.is_dir():
+            files = sorted(f.name for f in cat_dir.iterdir() if f.suffix == ".json")
+        else:
+            files = []
+        index[category] = files
+
+    index_path = Path(ARC_AGI_2_DIR) / "task_index.json"
+    with open(index_path, "w") as f:
+        json.dump(index, f, indent=2)
+    logger.info(f"Rebuilt AGI-2 task index: {sum(len(v) for v in index.values())} tasks")
+    return index
+
+
+@app.route("/api/admin/agi2/tasks/<category>/<filename>", methods=["DELETE"])
+@require_admin
+def admin_delete_agi2_task(category, filename):
+    """Delete an AGI-2 task JSON file and rebuild the task index."""
+    if category not in ("my_tasks", "training", "evaluation"):
+        return jsonify({"error": "Invalid category"}), 400
+
+    # Sanitize filename
+    if "/" in filename or "\\" in filename or ".." in filename:
+        return jsonify({"error": "Invalid filename"}), 400
+
+    task_path = Path(ARC_AGI_2_DATA_DIR) / category / filename
+    if not task_path.is_file():
+        return jsonify({"error": f"Task '{filename}' not found in {category}"}), 404
+
+    try:
+        task_path.unlink()
+        logger.info(f"Deleted AGI-2 task: {category}/{filename}")
+
+        # Clear preview cache for this task
+        cache_key = f"{category}/{filename}"
+        _agi2_preview_cache.pop(cache_key, None)
+
+        # Rebuild task index
+        new_index = _rebuild_agi2_task_index()
+
+        return jsonify({
+            "status": "ok",
+            "deleted": f"{category}/{filename}",
+            "remaining": {k: len(v) for k, v in new_index.items()},
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error deleting AGI-2 task {category}/{filename}: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/health")
 def health():
     return jsonify({
