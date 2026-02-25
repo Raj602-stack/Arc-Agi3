@@ -915,6 +915,178 @@
                     height: 2px;
                 }
             }
+
+            /* ═══ CARD ENTRANCE ANIMATION ═══ */
+            @keyframes cardFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(18px) scale(0.96);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+            .g-card.card-enter {
+                animation: cardFadeIn 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
+            }
+
+            /* ═══ RANDOM BUTTON ═══ */
+            .random-btn {
+                font-size: 16px;
+                width: 34px;
+                height: 34px;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+                background: transparent;
+                color: var(--text-dim);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+                flex-shrink: 0;
+                position: relative;
+            }
+            .random-btn:hover {
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: rgba(88, 166, 255, 0.08);
+                transform: rotate(15deg) scale(1.1);
+            }
+            .random-btn:active {
+                transform: rotate(360deg) scale(0.95);
+                transition: transform 0.4s;
+            }
+            .random-btn .random-tooltip {
+                display: none;
+                position: absolute;
+                bottom: calc(100% + 6px);
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: var(--code);
+                font-size: 9px;
+                white-space: nowrap;
+                background: var(--panel2);
+                color: var(--text);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                padding: 3px 8px;
+                pointer-events: none;
+            }
+            .random-btn:hover .random-tooltip {
+                display: block;
+            }
+
+            /* ═══ KEYBOARD HELP ═══ */
+            .kb-help-btn {
+                font-family: var(--code);
+                font-size: 10px;
+                padding: 6px 10px;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                background: transparent;
+                color: var(--text-dim);
+                cursor: pointer;
+                transition: all 0.15s;
+                white-space: nowrap;
+            }
+            .kb-help-btn:hover {
+                border-color: var(--accent);
+                color: var(--text-bright);
+                background: rgba(88, 166, 255, 0.06);
+            }
+            #kb-panel {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 900;
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(4px);
+                align-items: center;
+                justify-content: center;
+            }
+            #kb-panel.show {
+                display: flex;
+            }
+            .kb-box {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 28px 32px;
+                width: 420px;
+                max-width: 90vw;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+            .kb-box h2 {
+                font-family: var(--pixel);
+                font-size: 12px;
+                color: var(--accent);
+                text-align: center;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+            }
+            .kb-grid {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 8px 16px;
+                align-items: center;
+            }
+            .kb-key {
+                font-family: var(--code);
+                font-size: 10px;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                padding: 3px 8px;
+                color: var(--text-bright);
+                text-align: center;
+                white-space: nowrap;
+            }
+            .kb-desc {
+                font-family: var(--code);
+                font-size: 10px;
+                color: var(--text-dim);
+            }
+            .kb-section-title {
+                grid-column: 1 / -1;
+                font-family: var(--code);
+                font-size: 9px;
+                color: var(--purple);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-top: 10px;
+                padding-bottom: 4px;
+                border-bottom: 1px solid rgba(188, 140, 255, 0.15);
+            }
+            .kb-section-title:first-child {
+                margin-top: 0;
+            }
+            .kb-close {
+                display: block;
+                margin: 20px auto 0;
+                font-family: var(--code);
+                font-size: 10px;
+                color: var(--text-dim);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 6px 16px;
+            }
+            .kb-close:hover {
+                color: var(--text-bright);
+            }
+
+            @media (max-width: 600px) {
+                .random-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 14px;
+                }
+                .kb-help-btn {
+                    display: none;
+                }
+            }
         </style>
     </head>
     <body>
@@ -925,6 +1097,13 @@
                 <div class="sep"></div>
                 <div class="tagline">Abstraction &amp; Reasoning Corpus</div>
                 <div class="spacer"></div>
+                <button
+                    class="kb-help-btn"
+                    id="btn-kb-help"
+                    title="Keyboard Shortcuts"
+                >
+                    ⌨ Shortcuts
+                </button>
                 <button
                     class="top-btn top-btn-admin"
                     id="btn-admin"
@@ -964,6 +1143,42 @@
                     <div class="admin-status" id="admin-status"></div>
                     <button class="admin-cancel" id="admin-cancel">
                         Cancel
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══ KEYBOARD HELP PANEL ═══ -->
+            <div id="kb-panel">
+                <div class="kb-box">
+                    <h2>⌨ KEYBOARD SHORTCUTS</h2>
+                    <div class="kb-grid">
+                        <div class="kb-section-title">Navigation</div>
+                        <span class="kb-key">← →</span>
+                        <span class="kb-desc"
+                            >Scroll carousel left / right</span
+                        >
+                        <span class="kb-key">[ ]</span>
+                        <span class="kb-desc"
+                            >Previous / Next page (AGI-2)</span
+                        >
+                        <span class="kb-key">1 2 3</span>
+                        <span class="kb-desc"
+                            >Switch AGI-2 tab (My Tasks / Training / Eval)</span
+                        >
+                        <div class="kb-section-title">Actions</div>
+                        <span class="kb-key">R</span>
+                        <span class="kb-desc">Open random task or game</span>
+                        <span class="kb-key">/</span>
+                        <span class="kb-desc">Focus search box</span>
+                        <div class="kb-section-title">Interface</div>
+                        <span class="kb-key">?</span>
+                        <span class="kb-desc">Toggle this help panel</span>
+                        <span class="kb-key">Esc</span>
+                        <span class="kb-desc">Close modal / panel</span>
+                    </div>
+                    <button class="kb-close" id="kb-close">
+                        Press <strong>?</strong> or <strong>Esc</strong> to
+                        close
                     </button>
                 </div>
             </div>
@@ -1008,6 +1223,16 @@
                                 id="agi2-search"
                                 placeholder="Search task ID…"
                             />
+                            <button
+                                class="random-btn"
+                                id="agi2-random"
+                                title="Random puzzle"
+                            >
+                                🎲
+                                <span class="random-tooltip"
+                                    >Random puzzle (R)</span
+                                >
+                            </button>
                             <label class="upload-btn" for="agi2-upload">
                                 ↑ Upload .json
                                 <input
@@ -1079,6 +1304,16 @@
                                 id="agi3-search"
                                 placeholder="Search game ID…"
                             />
+                            <button
+                                class="random-btn"
+                                id="agi3-random"
+                                title="Random game"
+                            >
+                                🎲
+                                <span class="random-tooltip"
+                                    >Random game (R)</span
+                                >
+                            </button>
                             <label class="upload-btn" for="agi3-upload">
                                 ↑ Upload game
                                 <input
@@ -1119,6 +1354,20 @@
                     target="_blank"
                     >GitHub</a
                 >
+                · Press
+                <kbd
+                    style="
+                        font-family: var(--code);
+                        font-size: 9px;
+                        background: var(--bg);
+                        border: 1px solid var(--border);
+                        border-radius: 3px;
+                        padding: 1px 5px;
+                        color: var(--text);
+                    "
+                    >?</kbd
+                >
+                for shortcuts
             </div>
         </div>
 
@@ -1253,9 +1502,10 @@
                     return;
                 }
 
-                filtered.forEach(function (g) {
+                filtered.forEach(function (g, _idx) {
                     var card = document.createElement("div");
-                    card.className = "g-card agi3-card";
+                    card.className = "g-card agi3-card card-enter";
+                    card.style.animationDelay = _idx * 0.04 + "s";
 
                     // Admin delete button
                     var delBtn = document.createElement("button");
@@ -1478,6 +1728,8 @@
 
                 pageFiles.forEach(function (filename, i) {
                     var card = buildAgi2Card(filename, start + i);
+                    card.classList.add("card-enter");
+                    card.style.animationDelay = i * 0.04 + "s";
                     agi2Track.appendChild(card);
                 });
 
@@ -1751,6 +2003,12 @@
                         if (res.ok) {
                             adminCreds = { username: user, password: pass };
                             adminLoggedIn = true;
+                            try {
+                                localStorage.setItem(
+                                    "arc_admin",
+                                    JSON.stringify(adminCreds),
+                                );
+                            } catch (e) {}
                             adminModal.classList.remove("show");
                             document.body.classList.add("admin-mode");
                             btnAdmin.classList.add("active");
@@ -1779,6 +2037,9 @@
             function adminLogout() {
                 adminCreds = { username: null, password: null };
                 adminLoggedIn = false;
+                try {
+                    localStorage.removeItem("arc_admin");
+                } catch (e) {}
                 document.body.classList.remove("admin-mode");
                 btnAdmin.classList.remove("active");
                 btnAdmin.textContent = "🔒 Admin";
@@ -1920,21 +2181,224 @@
                     });
             }
 
-            // ── Keyboard shortcuts ──
+            // ══════════════════════════════════════════════════════════════
+            //  RANDOM TASK / GAME
+            // ══════════════════════════════════════════════════════════════
+
+            function randomAgi2Task() {
+                if (!agi2Index) {
+                    showToast("Tasks not loaded yet", "err");
+                    return;
+                }
+                var cats = ["my_tasks", "training", "evaluation"];
+                var allFiles = [];
+                cats.forEach(function (c) {
+                    (agi2Index[c] || []).forEach(function (f) {
+                        allFiles.push({ cat: c, file: f });
+                    });
+                });
+                if (allFiles.length === 0) {
+                    showToast("No tasks available", "err");
+                    return;
+                }
+                var pick =
+                    allFiles[Math.floor(Math.random() * allFiles.length)];
+                showToast(
+                    "\uD83C\uDFB2 Random: " + pick.file.replace(".json", ""),
+                    "ok",
+                    1500,
+                );
+                setTimeout(function () {
+                    window.location.href =
+                        "/arc-agi-2/?task=" +
+                        encodeURIComponent(pick.cat) +
+                        "/" +
+                        encodeURIComponent(pick.file);
+                }, 400);
+            }
+
+            function randomAgi3Game() {
+                if (agi3Games.length === 0) {
+                    showToast("No games available", "err");
+                    return;
+                }
+                var pick =
+                    agi3Games[Math.floor(Math.random() * agi3Games.length)];
+                showToast("\uD83C\uDFB2 Random: " + pick.game_id, "ok", 1500);
+                setTimeout(function () {
+                    window.location.href =
+                        "/arc-agi-3/game/" + encodeURIComponent(pick.game_id);
+                }, 400);
+            }
+
+            document
+                .getElementById("agi2-random")
+                .addEventListener("click", randomAgi2Task);
+            document
+                .getElementById("agi3-random")
+                .addEventListener("click", randomAgi3Game);
+
+            // ══════════════════════════════════════════════════════════════
+            //  KEYBOARD HELP PANEL
+            // ══════════════════════════════════════════════════════════════
+
+            var kbPanel = document.getElementById("kb-panel");
+
+            document
+                .getElementById("btn-kb-help")
+                .addEventListener("click", function () {
+                    kbPanel.classList.toggle("show");
+                });
+            document
+                .getElementById("kb-close")
+                .addEventListener("click", function () {
+                    kbPanel.classList.remove("show");
+                });
+            kbPanel.addEventListener("click", function (e) {
+                if (e.target === kbPanel) kbPanel.classList.remove("show");
+            });
+
+            // ══════════════════════════════════════════════════════════════
+            //  KEYBOARD SHORTCUTS
+            // ══════════════════════════════════════════════════════════════
+
             document.addEventListener("keydown", function (e) {
-                // ESC — close admin modal
+                var tag = (e.target.tagName || "").toLowerCase();
+                var inInput =
+                    tag === "input" || tag === "textarea" || tag === "select";
+
+                // ESC — close any modal/panel
                 if (e.key === "Escape") {
+                    if (kbPanel.classList.contains("show")) {
+                        kbPanel.classList.remove("show");
+                        return;
+                    }
                     if (adminModal.classList.contains("show")) {
                         adminModal.classList.remove("show");
+                        return;
                     }
+                    return;
+                }
+
+                // Skip other shortcuts if typing in an input
+                if (inInput) return;
+
+                // ? — toggle keyboard help
+                if (e.key === "?") {
+                    e.preventDefault();
+                    kbPanel.classList.toggle("show");
+                    return;
+                }
+
+                // / — focus search (AGI-2 by default)
+                if (e.key === "/") {
+                    e.preventDefault();
+                    document.getElementById("agi2-search").focus();
+                    return;
+                }
+
+                // R — random task or game
+                if (e.key === "r" || e.key === "R") {
+                    if (Math.random() < 0.5 && agi3Games.length > 0) {
+                        randomAgi3Game();
+                    } else {
+                        randomAgi2Task();
+                    }
+                    return;
+                }
+
+                // Arrow keys — scroll both carousels
+                if (e.key === "ArrowLeft") {
+                    e.preventDefault();
+                    document.getElementById("agi2-left").click();
+                    document.getElementById("agi3-left").click();
+                    return;
+                }
+                if (e.key === "ArrowRight") {
+                    e.preventDefault();
+                    document.getElementById("agi2-right").click();
+                    document.getElementById("agi3-right").click();
+                    return;
+                }
+
+                // [ ] — AGI-2 pagination
+                if (e.key === "[") {
+                    e.preventDefault();
+                    document.getElementById("agi2-prev").click();
+                    return;
+                }
+                if (e.key === "]") {
+                    e.preventDefault();
+                    document.getElementById("agi2-next").click();
+                    return;
+                }
+
+                // 1, 2, 3 — switch AGI-2 category tabs
+                if (e.key === "1") {
+                    var t1 = document.querySelectorAll("#agi2-tabs .cat-tab");
+                    if (t1[0]) t1[0].click();
+                    return;
+                }
+                if (e.key === "2") {
+                    var t2 = document.querySelectorAll("#agi2-tabs .cat-tab");
+                    if (t2[1]) t2[1].click();
+                    return;
+                }
+                if (e.key === "3") {
+                    var t3 = document.querySelectorAll("#agi2-tabs .cat-tab");
+                    if (t3[2]) t3[2].click();
+                    return;
                 }
             });
+
+            // ══════════════════════════════════════════════════════════════
+            //  PERSISTENT ADMIN SESSION (localStorage)
+            // ══════════════════════════════════════════════════════════════
+
+            function restoreAdminSession() {
+                try {
+                    var saved = localStorage.getItem("arc_admin");
+                    if (!saved) return;
+                    var creds = JSON.parse(saved);
+                    if (!creds.username || !creds.password) return;
+
+                    // Verify credentials are still valid
+                    fetch("/api/admin/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(creds),
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (d) {
+                                return { ok: r.ok, data: d };
+                            });
+                        })
+                        .then(function (res) {
+                            if (res.ok) {
+                                adminCreds = creds;
+                                adminLoggedIn = true;
+                                document.body.classList.add("admin-mode");
+                                btnAdmin.classList.add("active");
+                                btnAdmin.textContent = "\uD83D\uDD13 Admin ON";
+                                btnLogout.style.display = "";
+                            } else {
+                                localStorage.removeItem("arc_admin");
+                            }
+                        })
+                        .catch(function () {
+                            // Silently fail on network error
+                        });
+                } catch (e) {
+                    // localStorage not available
+                }
+            }
 
             // ══════════════════════════════════════════════════════════════
             //  INIT
             // ══════════════════════════════════════════════════════════════
             fetchAgi3Games();
             fetchAgi2Index();
+            restoreAdminSession();
         </script>
     </body>
 </html>
