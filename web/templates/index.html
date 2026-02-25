@@ -1520,17 +1520,6 @@
             <a href="/" class="top-btn" style="text-decoration: none">
                 🏠 HOME
             </a>
-            <button class="top-btn" id="btn-lobby" style="display: none">
-                ← GAMES
-            </button>
-            <button
-                class="top-btn"
-                id="btn-admin"
-                style="color: var(--orange); border-color: var(--orange)"
-            >
-                🔒 ADMIN
-            </button>
-            <button class="top-btn" id="btn-upload">UPLOAD GAME</button>
         </div>
 
         <!-- ═══════════ MAIN ═══════════ -->
@@ -1803,7 +1792,7 @@
                     lobby.classList.remove("hidden");
                     gameView.classList.remove("show");
                     victoryOverlay.classList.remove("show");
-                    $("btn-lobby").style.display = "none";
+                    if ($("btn-lobby")) $("btn-lobby").style.display = "none";
                     uploadPanel.classList.remove("show");
                     $("admin-panel").classList.remove("show");
                     gameListEl.style.display = "";
@@ -2008,7 +1997,7 @@
                     document.documentElement.classList.remove("direct-game");
                     lobby.classList.add("hidden");
                     gameView.classList.add("show");
-                    $("btn-lobby").style.display = "";
+                    if ($("btn-lobby")) $("btn-lobby").style.display = "";
                     setupCanvasClick();
                 }
 
@@ -2521,11 +2510,13 @@
                 });
 
                 // ── Button wiring ──
-                $("btn-lobby").addEventListener("click", () => {
-                    sessionId = null;
-                    showLobby();
-                });
-                $("btn-upload").addEventListener("click", showUpload);
+                if ($("btn-lobby"))
+                    $("btn-lobby").addEventListener("click", () => {
+                        sessionId = null;
+                        showLobby();
+                    });
+                if ($("btn-upload"))
+                    $("btn-upload").addEventListener("click", showUpload);
                 $("btn-logo").addEventListener("click", () => {
                     sessionId = null;
                     showLobby();
@@ -2541,7 +2532,8 @@
                         showLobby();
                     }
                 });
-                $("btn-admin").addEventListener("click", showAdmin);
+                if ($("btn-admin"))
+                    $("btn-admin").addEventListener("click", showAdmin);
                 $("btn-admin-login").addEventListener("click", adminLogin);
                 $("btn-admin-back").addEventListener("click", showLobby);
                 $("btn-admin-logout").addEventListener("click", adminLogout);
