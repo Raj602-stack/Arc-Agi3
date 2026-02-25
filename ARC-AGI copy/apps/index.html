@@ -136,8 +136,9 @@
             .task_cards_container {
                 padding: 32px 32px 40px;
                 display: flex;
-                flex-direction: column;
-                gap: 32px;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
             }
 
             /* ── Category Tabs ─────────────────────────────────────── */
@@ -293,224 +294,119 @@
                 text-align: center;
             }
 
-            /* ── Individual Task Card ──────────────────────────────── */
+            /* ── Individual Task Card (AGI-3 style: vertical, preview on top) ── */
             .task_card {
-                display: grid;
-                grid-template-columns: 1fr 1.3fr;
-                gap: 0;
-                border: 1px solid #1a1a1a;
-                border-radius: 16px;
-                background: #0a0a0a;
-                overflow: hidden;
-                transition:
-                    border-color 0.3s ease,
-                    box-shadow 0.3s ease;
+                background: #111318;
+                border: 1px solid #21262d;
+                width: 280px;
+                cursor: pointer;
+                transition: all 0.2s ease;
                 position: relative;
-            }
-
-            .task_card::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                border-radius: 16px;
-                background: linear-gradient(
-                    135deg,
-                    rgba(30, 147, 255, 0.03),
-                    transparent 60%
-                );
-                pointer-events: none;
-                z-index: 0;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                border-radius: 0;
             }
 
             .task_card:hover {
-                border-color: #2a2a2a;
-                box-shadow:
-                    0 0 40px rgba(30, 147, 255, 0.05),
-                    0 20px 60px rgba(0, 0, 0, 0.4);
+                border-color: #58a6ff;
+                box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+                transform: translateY(-3px);
             }
 
-            /* ── Card Left: Info ───────────────────────────────────── */
+            /* ── Card Top: Preview ─────────────────────────────────── */
+            .task_card_preview {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 1;
+                background: #0a0d12;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .task_card_preview canvas {
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                transition: transform 0.3s ease;
+            }
+
+            .task_card:hover .task_card_preview canvas {
+                transform: scale(1.05);
+            }
+
+            /* Play overlay on hover */
+            .task_card_overlay {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(14, 17, 23, 0.6);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .task_card:hover .task_card_overlay {
+                opacity: 1;
+            }
+
+            .task_card_play_icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                background: rgba(30, 147, 255, 0.15);
+                border: 2px solid #1e93ff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                color: #fff;
+                transition: transform 0.15s ease;
+            }
+
+            .task_card:hover .task_card_play_icon {
+                transform: scale(1.1);
+            }
+
+            .task_card_preview_loading {
+                color: #555;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+
+            /* ── Card Bottom: Info ─────────────────────────────────── */
             .task_card_info {
-                padding: 36px 32px;
+                padding: 12px 14px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                gap: 6px;
                 position: relative;
                 z-index: 1;
-                border-right: 1px solid #141414;
-            }
-
-            .task_card_label {
-                font-family: "JetBrains Mono", monospace;
-                font-size: 10px;
-                font-weight: 600;
-                letter-spacing: 1.8px;
-                text-transform: uppercase;
-                color: #1e93ff;
-                margin-bottom: 12px;
             }
 
             .task_card_id {
                 font-family: "JetBrains Mono", monospace;
-                font-size: 18px;
+                font-size: 10px;
                 font-weight: 600;
-                color: #fff;
-                letter-spacing: -0.3px;
-                margin-bottom: 16px;
-                word-break: break-all;
+                color: #58a6ff;
+                letter-spacing: 0.5px;
             }
 
-            .task_card_desc {
-                font-family: "Inter", sans-serif;
-                font-size: 14px;
-                color: #666;
-                line-height: 1.6;
-                margin-bottom: 10px;
-            }
-
-            .task_card_meta {
-                font-family: "JetBrains Mono", monospace;
-                font-size: 11px;
-                color: #444;
-                margin-bottom: 24px;
+            .task_card_tags {
                 display: flex;
-                gap: 16px;
                 flex-wrap: wrap;
-            }
-
-            .task_card_meta span {
-                display: inline-flex;
-                align-items: center;
                 gap: 4px;
             }
 
-            .meta_dot {
-                display: inline-block;
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: #333;
-            }
-
-            .task_card_btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 12px 28px;
-                font-family: "JetBrains Mono", monospace;
-                font-size: 11px;
-                font-weight: 600;
-                letter-spacing: 1.5px;
-                text-transform: uppercase;
-                color: #fff;
-                background: #1e93ff;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                align-self: flex-start;
-            }
-
-            .task_card_btn:hover {
-                background: #0b7fe6;
-                box-shadow: 0 4px 20px rgba(30, 147, 255, 0.3);
-                transform: translateY(-1px);
-            }
-
-            .task_card_btn:active {
-                background: #0a6ec7;
-                transform: translateY(0);
-                box-shadow: none;
-            }
-
-            /* ── Card Right: Preview Grids ─────────────────────────── */
-            .task_card_preview {
-                padding: 24px 28px;
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                position: relative;
-                z-index: 1;
-                background: rgba(255, 255, 255, 0.01);
-                justify-content: center;
-            }
-
-            .preview_pair {
-                display: flex;
-                align-items: center;
-                gap: 0;
-                justify-content: center;
-            }
-
-            .preview_grid_wrap {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                flex: 1;
-                min-width: 0;
-            }
-
-            .preview_grid_label {
+            .task_card_tag {
                 font-family: "JetBrains Mono", monospace;
                 font-size: 9px;
-                font-weight: 500;
-                color: #444;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                margin-bottom: 6px;
-            }
-
-            .preview_canvas {
-                border-radius: 4px;
-                display: block;
-                image-rendering: pixelated;
-                image-rendering: crisp-edges;
-            }
-
-            .preview_arrow {
-                font-size: 18px;
-                color: #444;
-                padding: 0 12px;
-                flex-shrink: 0;
-                user-select: none;
-                margin-top: 14px;
-            }
-
-            .preview_test_output_placeholder {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #111;
-                border: 1px dashed #2a2a2a;
-                border-radius: 4px;
-                color: #333;
-                font-size: 24px;
-            }
-
-            /* ── Loading Spinner ────────────────────────────────────── */
-            .task_card_loading {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 60px 20px;
-                color: #333;
-                font-family: "Inter", sans-serif;
-                font-size: 13px;
-                gap: 10px;
-            }
-
-            .spinner {
-                width: 18px;
-                height: 18px;
-                border: 2px solid #222;
-                border-top-color: #1e93ff;
-                border-radius: 50%;
-                animation: spin 0.8s linear infinite;
-            }
-
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
+                padding: 2px 6px;
+                background: rgba(88, 166, 255, 0.1);
+                border: 1px solid rgba(88,transform: rotate(360deg);
                 }
             }
 

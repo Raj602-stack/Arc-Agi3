@@ -502,6 +502,85 @@ def arc_agi_2_data(filename):
     return send_from_directory(ARC_AGI_2_DATA_DIR, filename)
 
 
+# ---------------------------------------------------------------------------
+# AGI-2 API endpoints (used by the unified landing page)
+# ---------------------------------------------------------------------------
+@app.route("/api/agi2/tasks")
+def api_agi2_tasks():
+    """Return the AGI-2 task index JSON (my_tasks, training, evaluation lists)."""
+    return send_from_directory(ARC_AGI_2_DIR, "task_index.json")
+
+
+_agi2_preview_cache: dict[str, bytes] = {}
+
+@app.route("/api/agi2/task-preview/<category>/<filename>")
+def api_agi2_task_preview(category, filename):
+    """Return a PNG thumbnail of the first training-input grid for an AGI-2 task."""
+    if category not in ("my_tasks", "training", "evaluation"):
+        return jsonify({"error": "Invalid category"}), 400
+
+    cache_key = f"{category}/{filename}"
+    if cache_key in _agi2_preview_cache:
+        return app.response_class(
+            _agi2_preview_cache[cache_key],
+            mimetype="image/png",
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+
+    json_path = Path(ARC_AGI_2_DATA_DIR) / category / filename
+    if not json_path.is_file():
+        return jsonify({"error": "Task not found"}), 404
+
+    try:
+        from PIL import Image
+
+        with open(json_path) as f:
+            task = json.load(f)
+
+        grid = task["train"][0]["input"]
+        rows = len(grid)
+        cols = len(grid[0]) if rows else 0
+
+        # ARC-AGI 10-color palette
+        ARC_10 = {
+            0: (17, 17, 17),       # black
+            1: (30, 147, 255),     # blue
+            2: (249, 60, 49),      # red
+            3: (79, 220, 74),      # green
+            4: (255, 220, 0),      # yellow
+            5: (153, 153, 153),    # grey
+            6: (229, 58, 163),     # magenta
+            7: (255, 133, 27),     # orange
+            8: (135, 216, 241),    # cyan
+            9: (146, 18, 49),      # maroon
+        }
+
+        rgb = np.zeros((rows, cols, 3), dtype=np.uint8)
+        for r in range(rows):
+            for c in range(cols):
+                val = grid[r][c]
+                rgb[r, c] = ARC_10.get(val, (17, 17, 17))
+
+        img = Image.fromarray(rgb, "RGB")
+        scale = max(1, 256 // max(cols, rows, 1))
+        img = img.resize((cols * scale, rows * scale), Image.NEAREST)
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG", optimize=False)
+        png_bytes = buf.getvalue()
+
+        _agi2_preview_cache[cache_key] = png_bytes
+
+        return app.response_class(
+            png_bytes,
+            mimetype="image/png",
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+    except Exception as e:
+        logger.error(f"AGI-2 preview error for {cache_key}: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/health")
 def health():
     return jsonify({
