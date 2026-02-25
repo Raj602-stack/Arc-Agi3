@@ -563,6 +563,47 @@
                 border-top: 1px solid var(--border);
             }
 
+            /* ── Loading overlay ── */
+            #loading-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 300;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 20px;
+                background: rgba(14, 17, 23, 0.92);
+                backdrop-filter: blur(8px);
+            }
+            #loading-overlay.show {
+                display: flex;
+            }
+            .loader-spinner {
+                width: 48px;
+                height: 48px;
+                border: 3px solid var(--border);
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            .loader-text {
+                font-family: var(--mono);
+                font-size: 14px;
+                color: var(--text-dim);
+                letter-spacing: 2px;
+            }
+            .loader-game-id {
+                font-family: var(--pixel);
+                font-size: 11px;
+                color: var(--accent);
+            }
+
             /* ── Victory overlay ── */
             #victory-overlay {
                 position: fixed;
@@ -927,6 +968,13 @@
             </div>
         </div>
 
+        <!-- ═══════════ LOADING ═══════════ -->
+        <div id="loading-overlay">
+            <div class="loader-spinner"></div>
+            <div class="loader-game-id" id="loader-game-id"></div>
+            <div class="loader-text">LOADING GAME…</div>
+        </div>
+
         <!-- ═══════════ TOAST ═══════════ -->
         <div id="toast"></div>
 
@@ -1003,6 +1051,15 @@
                     fetchGames();
                 }
 
+                function showLoading(gameId) {
+                    $("loader-game-id").textContent = gameId || "";
+                    $("loading-overlay").classList.add("show");
+                }
+
+                function hideLoading() {
+                    $("loading-overlay").classList.remove("show");
+                }
+
                 function launchGame(gameId) {
                     selectedGameId = gameId;
                     history.pushState(
@@ -1010,6 +1067,7 @@
                         "",
                         "/game/" + encodeURIComponent(gameId),
                     );
+                    showLoading(gameId);
                     startGame();
                 }
 
@@ -1463,6 +1521,7 @@
                         sessionId = state.session_id;
                         prevLevels = 0;
                         localStorage.setItem("arc_session", sessionId);
+                        hideLoading();
                         showGame();
                         updateUI(state);
                         showToast("Game started");
@@ -1471,6 +1530,7 @@
                     socket.on("game_joined", (state) => {
                         sessionId = state.session_id;
                         prevLevels = state.levels_completed || 0;
+                        hideLoading();
                         showGame();
                         updateUI(state);
                         showToast("Reconnected");
@@ -1516,6 +1576,7 @@
                     });
 
                     socket.on("error", (data) => {
+                        hideLoading();
                         showToast("Error: " + (data.message || "?"), 4000);
                     });
                 }
@@ -1544,6 +1605,7 @@
 
                 function startGame() {
                     if (!selectedGameId) return;
+                    showLoading(selectedGameId);
                     const name = "PLAYER 1";
                     const seed = 0;
 
@@ -1563,6 +1625,7 @@
                         }
                         if (tries > 50) {
                             clearInterval(iv);
+                            hideLoading();
                             showToast("Connection failed", 3000);
                         }
                     }, 100);
