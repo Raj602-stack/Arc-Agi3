@@ -1557,14 +1557,9 @@
     <body>
         <!-- ═══════════ TOP BAR ═══════════ -->
         <div id="topbar">
-            <a
-                href="/"
-                class="logo"
-                id="btn-logo"
-                style="cursor: pointer; text-decoration: none; color: inherit"
-            >
+            <div class="logo" id="btn-logo" style="cursor: pointer">
                 Ethara AI × ARC AGI-3
-            </a>
+            </div>
             <div class="sep"></div>
             <div class="status disconnected" id="conn-status">
                 ● DISCONNECTED
@@ -1573,6 +1568,28 @@
             <a href="/" class="top-btn" style="text-decoration: none">
                 🏠 HOME
             </a>
+            <a
+                href="/arc-agi-2"
+                class="top-btn"
+                style="
+                    text-decoration: none;
+                    color: var(--purple);
+                    border-color: var(--purple);
+                "
+            >
+                AGI-2
+            </a>
+            <button class="top-btn" id="btn-lobby" style="display: none">
+                ← GAMES
+            </button>
+            <button
+                class="top-btn"
+                id="btn-admin"
+                style="color: var(--orange); border-color: var(--orange)"
+            >
+                🔒 ADMIN
+            </button>
+            <button class="top-btn" id="btn-upload">UPLOAD GAME</button>
         </div>
 
         <!-- ═══════════ MAIN ═══════════ -->
@@ -1855,7 +1872,7 @@
                     lobby.classList.remove("hidden");
                     gameView.classList.remove("show");
                     victoryOverlay.classList.remove("show");
-                    if ($("btn-lobby")) $("btn-lobby").style.display = "none";
+                    $("btn-lobby").style.display = "none";
                     uploadPanel.classList.remove("show");
                     $("admin-panel").classList.remove("show");
                     gameListEl.style.display = "";
@@ -2060,7 +2077,7 @@
                     document.documentElement.classList.remove("direct-game");
                     lobby.classList.add("hidden");
                     gameView.classList.add("show");
-                    if ($("btn-lobby")) $("btn-lobby").style.display = "";
+                    $("btn-lobby").style.display = "";
                     setupCanvasClick();
                 }
 
@@ -2600,16 +2617,14 @@
                 });
 
                 // ── Button wiring ──
-                if ($("btn-lobby"))
-                    $("btn-lobby").addEventListener("click", () => {
-                        sessionId = null;
-                        showLobby();
-                    });
-                if ($("btn-upload"))
-                    $("btn-upload").addEventListener("click", showUpload);
-                $("btn-logo").addEventListener("click", (e) => {
-                    e.preventDefault();
-                    window.location.href = "/";
+                $("btn-lobby").addEventListener("click", () => {
+                    sessionId = null;
+                    showLobby();
+                });
+                $("btn-upload").addEventListener("click", showUpload);
+                $("btn-logo").addEventListener("click", () => {
+                    sessionId = null;
+                    showLobby();
                 });
                 window.addEventListener("popstate", () => {
                     var path = window.location.pathname;
@@ -2622,8 +2637,7 @@
                         showLobby();
                     }
                 });
-                if ($("btn-admin"))
-                    $("btn-admin").addEventListener("click", showAdmin);
+                $("btn-admin").addEventListener("click", showAdmin);
                 $("btn-admin-login").addEventListener("click", adminLogin);
                 $("btn-admin-back").addEventListener("click", showLobby);
                 $("btn-admin-logout").addEventListener("click", adminLogout);
