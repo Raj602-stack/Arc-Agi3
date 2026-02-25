@@ -700,11 +700,11 @@
             .carousel-track {
                 flex: 1;
                 display: flex;
-                gap: 24px;
+                gap: 18px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 scroll-behavior: smooth;
-                padding: 24px 20px;
+                padding: 20px 16px;
                 min-height: 0;
                 align-items: center;
                 justify-content: center;
@@ -722,36 +722,33 @@
             /* ═══ GAME / TASK CARD ═══ */
             .g-card {
                 flex-shrink: 0;
-                width: 280px;
-                height: 370px;
-                background: rgba(22, 27, 34, 0.75);
-                backdrop-filter: blur(8px);
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                width: 230px;
+                height: 300px;
+                background: rgba(22, 27, 34, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.07);
                 cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                transition: all 0.2s ease;
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 position: relative;
-                border-radius: 14px;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+                border-radius: 6px;
+                box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
             }
             .g-card:hover {
-                transform: translateY(-6px) scale(1.02);
+                transform: translateY(-3px);
             }
             .g-card.agi3-card:hover {
-                border-color: rgba(63, 185, 80, 0.5);
+                border-color: rgba(63, 185, 80, 0.45);
                 box-shadow:
-                    0 12px 40px rgba(63, 185, 80, 0.2),
-                    0 0 0 1px rgba(63, 185, 80, 0.12),
-                    0 0 60px rgba(63, 185, 80, 0.06);
+                    0 6px 24px rgba(63, 185, 80, 0.15),
+                    0 0 0 1px rgba(63, 185, 80, 0.1);
             }
             .g-card.agi2-card:hover {
-                border-color: rgba(188, 140, 255, 0.5);
+                border-color: rgba(188, 140, 255, 0.45);
                 box-shadow:
-                    0 12px 40px rgba(188, 140, 255, 0.2),
-                    0 0 0 1px rgba(188, 140, 255, 0.12),
-                    0 0 60px rgba(188, 140, 255, 0.06);
+                    0 6px 24px rgba(188, 140, 255, 0.15),
+                    0 0 0 1px rgba(188, 140, 255, 0.1);
             }
 
             /* ── Card Preview ── */
@@ -760,12 +757,12 @@
                 width: 100%;
                 flex: 1;
                 min-height: 0;
-                background: #06080c;
+                background: #080b10;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             }
             .g-card-preview img,
             .g-card-preview canvas {
@@ -774,11 +771,11 @@
                 object-fit: contain;
                 image-rendering: pixelated;
                 image-rendering: crisp-edges;
-                transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                transition: transform 0.3s ease;
             }
             .g-card:hover .g-card-preview img,
             .g-card:hover .g-card-preview canvas {
-                transform: scale(1.08);
+                transform: scale(1.04);
             }
             .g-card-preview .loading-text {
                 font-family: var(--code);
@@ -795,56 +792,51 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: rgba(6, 8, 12, 0.65);
+                background: rgba(6, 8, 12, 0.55);
                 opacity: 0;
-                transition: opacity 0.3s;
+                transition: opacity 0.2s ease;
             }
             .g-card:hover .card-overlay {
                 opacity: 1;
             }
             .play-circle {
-                width: 60px;
-                height: 60px;
+                width: 48px;
+                height: 48px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 22px;
+                font-size: 18px;
                 color: #fff;
-                transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-                backdrop-filter: blur(6px);
+                transition: transform 0.2s ease;
             }
             .agi3-play {
-                background: rgba(63, 185, 80, 0.25);
-                border: 2px solid rgba(63, 185, 80, 0.7);
-                box-shadow:
-                    0 0 24px rgba(63, 185, 80, 0.3),
-                    inset 0 0 12px rgba(63, 185, 80, 0.1);
+                background: rgba(63, 185, 80, 0.2);
+                border: 2px solid rgba(63, 185, 80, 0.6);
+                box-shadow: 0 0 16px rgba(63, 185, 80, 0.2);
             }
             .agi2-play {
-                background: rgba(188, 140, 255, 0.18);
-                border: 2px solid rgba(188, 140, 255, 0.7);
-                box-shadow:
-                    0 0 24px rgba(188, 140, 255, 0.3),
-                    inset 0 0 12px rgba(188, 140, 255, 0.1);
+                background: rgba(188, 140, 255, 0.15);
+                border: 2px solid rgba(188, 140, 255, 0.6);
+                box-shadow: 0 0 16px rgba(188, 140, 255, 0.2);
             }
             .g-card:hover .play-circle {
-                transform: scale(1.12);
+                transform: scale(1.08);
             }
 
             /* ── Card Info ── */
             .g-card-info {
-                padding: 14px 16px;
+                padding: 10px 12px;
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
-                background: rgba(22, 27, 34, 0.6);
+                gap: 6px;
+                background: rgba(22, 27, 34, 0.7);
                 flex-shrink: 0;
-                min-height: 86px;
+                min-height: 70px;
             }
             .g-card-id {
                 font-family: var(--pixel);
-                font-size: 11px;
+                font-size: 10px;
                 letter-spacing: 0.5px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -865,8 +857,8 @@
             .g-tag {
                 font-family: var(--code);
                 font-size: 9px;
-                padding: 3px 8px;
-                border-radius: 4px;
+                padding: 2px 6px;
+                border-radius: 3px;
                 letter-spacing: 0.3px;
             }
             .agi3-card .g-tag {
@@ -934,12 +926,12 @@
             /* ── Large desktop tweaks (>1400) — make cards wider ── */
             @media (min-width: 1400px) {
                 .g-card {
-                    width: 300px;
-                    height: 390px;
+                    width: 250px;
+                    height: 325px;
                 }
                 .carousel-track {
-                    gap: 28px;
-                    padding: 28px 24px;
+                    gap: 22px;
+                    padding: 22px 20px;
                 }
             }
 
@@ -960,12 +952,12 @@
                     padding: 12px 20px 10px;
                 }
                 .g-card {
-                    width: 250px;
-                    height: 340px;
+                    width: 210px;
+                    height: 275px;
                 }
                 .carousel-track {
-                    gap: 22px;
-                    padding: 22px 18px;
+                    gap: 16px;
+                    padding: 16px 14px;
                 }
             }
 
@@ -1010,12 +1002,12 @@
                     width: auto;
                 }
                 .g-card {
-                    width: 220px;
-                    height: 305px;
+                    width: 190px;
+                    height: 250px;
                 }
                 .carousel-track {
-                    gap: 18px;
-                    padding: 18px 14px;
+                    gap: 14px;
+                    padding: 14px 12px;
                 }
                 .carousel-btn {
                     width: 34px;
@@ -1023,8 +1015,8 @@
                     font-size: 17px;
                 }
                 .g-card-info {
-                    padding: 12px 14px;
-                    min-height: 80px;
+                    padding: 9px 10px;
+                    min-height: 64px;
                 }
                 #footer {
                     padding: 6px 16px;
@@ -1119,18 +1111,18 @@
                     padding: 6px 10px;
                 }
                 .g-card {
-                    width: 200px;
-                    height: 280px;
-                    border-radius: 12px;
+                    width: 170px;
+                    height: 225px;
+                    border-radius: 5px;
                 }
                 .g-card-preview .loading-text {
                     font-size: 9px;
                     letter-spacing: 2px;
                 }
                 .g-card-info {
-                    padding: 10px 12px;
-                    gap: 6px;
-                    min-height: 72px;
+                    padding: 8px 10px;
+                    gap: 5px;
+                    min-height: 58px;
                 }
                 .g-card-id {
                     font-size: 10px;
@@ -1140,13 +1132,13 @@
                     padding: 2px 6px;
                 }
                 .play-circle {
-                    width: 50px;
-                    height: 50px;
-                    font-size: 18px;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 16px;
                 }
                 .carousel-track {
-                    gap: 14px;
-                    padding: 14px 10px;
+                    gap: 12px;
+                    padding: 12px 10px;
                 }
                 .carousel-btn {
                     width: 30px;
@@ -1285,14 +1277,14 @@
                     padding: 5px 8px;
                 }
                 .g-card {
-                    width: 170px;
-                    height: 250px;
-                    border-radius: 10px;
+                    width: 150px;
+                    height: 200px;
+                    border-radius: 5px;
                 }
                 .g-card-info {
-                    padding: 8px 10px;
-                    gap: 5px;
-                    min-height: 64px;
+                    padding: 7px 8px;
+                    gap: 4px;
+                    min-height: 52px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1302,13 +1294,13 @@
                     padding: 2px 5px;
                 }
                 .play-circle {
-                    width: 42px;
-                    height: 42px;
-                    font-size: 16px;
+                    width: 36px;
+                    height: 36px;
+                    font-size: 14px;
                 }
                 .carousel-track {
-                    gap: 12px;
-                    padding: 12px 8px;
+                    gap: 10px;
+                    padding: 10px 6px;
                 }
                 .carousel-btn {
                     width: 26px;
@@ -1393,14 +1385,14 @@
                     font-size: 9px;
                 }
                 .g-card {
-                    width: 152px;
-                    height: 228px;
-                    border-radius: 10px;
+                    width: 136px;
+                    height: 182px;
+                    border-radius: 4px;
                 }
                 .g-card-info {
-                    padding: 8px;
-                    gap: 4px;
-                    min-height: 58px;
+                    padding: 6px 7px;
+                    gap: 3px;
+                    min-height: 48px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1414,9 +1406,9 @@
                     border-radius: 3px;
                 }
                 .play-circle {
-                    width: 36px;
-                    height: 36px;
-                    font-size: 14px;
+                    width: 32px;
+                    height: 32px;
+                    font-size: 13px;
                 }
                 .carousel-btn {
                     width: 24px;
@@ -1424,8 +1416,8 @@
                     font-size: 12px;
                 }
                 .carousel-track {
-                    gap: 10px;
-                    padding: 10px 6px;
+                    gap: 8px;
+                    padding: 8px 4px;
                 }
                 .carousel-wrapper {
                     padding: 0 2px;
@@ -1539,13 +1531,13 @@
                     padding: 3px 4px;
                 }
                 .g-card {
-                    width: 138px;
-                    height: 210px;
-                    border-radius: 8px;
+                    width: 120px;
+                    height: 165px;
+                    border-radius: 4px;
                 }
                 .g-card-info {
-                    padding: 6px 8px;
-                    min-height: 52px;
+                    padding: 5px 6px;
+                    min-height: 44px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1555,9 +1547,9 @@
                     padding: 1px 4px;
                 }
                 .play-circle {
-                    width: 32px;
-                    height: 32px;
-                    font-size: 12px;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 11px;
                 }
                 .carousel-btn {
                     width: 22px;
@@ -1637,7 +1629,7 @@
                 }
             }
             .g-card.card-enter {
-                animation: cardFadeIn 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
+                animation: cardFadeIn 0.25s ease both;
             }
 
             /* ═══ RANDOM BUTTON ═══ */
