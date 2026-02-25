@@ -1,5 +1,10 @@
 var TASK_INDEX_DATA = {
-  my_tasks: [],
+  my_tasks: [
+    "task_001.json",
+    "task_002.json",
+    "task_003.json",
+    "task_004.json",
+  ],
   evaluation: [
     "00576224.json",
     "009d5c81.json",
