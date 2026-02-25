@@ -2321,7 +2321,7 @@
                         </div>
                         <div class="cat-tabs" id="agi2-tabs">
                             <button class="cat-tab active" data-cat="my_tasks">
-                                ★ My Tasks
+                                Arc Arena
                                 <span class="ct-count" id="ct-my_tasks">0</span>
                             </button>
                             <button class="cat-tab" data-cat="training">
@@ -2336,16 +2336,6 @@
                             </button>
                         </div>
                         <div class="section-controls">
-                            <button
-                                class="random-btn"
-                                id="agi2-random"
-                                title="Random puzzle"
-                            >
-                                🎲
-                                <span class="random-tooltip"
-                                    >Random puzzle (R)</span
-                                >
-                            </button>
                             <label class="upload-btn" for="agi2-upload">
                                 ↑ Upload .json
                                 <input
@@ -2411,16 +2401,6 @@
                             feedback.
                         </div>
                         <div class="section-controls">
-                            <button
-                                class="random-btn"
-                                id="agi3-random"
-                                title="Random game"
-                            >
-                                🎲
-                                <span class="random-tooltip"
-                                    >Random game (R)</span
-                                >
-                            </button>
                             <button class="upload-btn" id="agi3-upload-btn">
                                 ↑ Upload game
                             </button>
@@ -2654,17 +2634,7 @@
                     idEl.className = "g-card-id";
                     idEl.textContent = g.game_id;
 
-                    var tagsEl = document.createElement("div");
-                    tagsEl.className = "g-card-tags";
-                    (g.tags || []).forEach(function (t) {
-                        var tag = document.createElement("span");
-                        tag.className = "g-tag";
-                        tag.textContent = t;
-                        tagsEl.appendChild(tag);
-                    });
-
                     info.appendChild(idEl);
-                    if ((g.tags || []).length) info.appendChild(tagsEl);
 
                     card.appendChild(previewDiv);
                     card.appendChild(info);
@@ -3127,17 +3097,7 @@
                 idEl.className = "g-card-id";
                 idEl.textContent = taskId;
 
-                var tagsEl = document.createElement("div");
-                tagsEl.className = "g-card-tags";
-
-                var catTag = document.createElement("span");
-                catTag.className = "g-tag";
-                catTag.textContent =
-                    agi2Category === "my_tasks" ? "my task" : agi2Category;
-                tagsEl.appendChild(catTag);
-
                 info.appendChild(idEl);
-                info.appendChild(tagsEl);
 
                 card.appendChild(previewDiv);
                 card.appendChild(info);
@@ -3564,12 +3524,12 @@
                 }, 400);
             }
 
-            document
-                .getElementById("agi2-random")
-                .addEventListener("click", randomAgi2Task);
-            document
-                .getElementById("agi3-random")
-                .addEventListener("click", randomAgi3Game);
+            var _agi2Random = document.getElementById("agi2-random");
+            if (_agi2Random)
+                _agi2Random.addEventListener("click", randomAgi2Task);
+            var _agi3Random = document.getElementById("agi3-random");
+            if (_agi3Random)
+                _agi3Random.addEventListener("click", randomAgi3Game);
 
             // ══════════════════════════════════════════════════════════════
             //  KEYBOARD HELP PANEL
