@@ -131,47 +131,107 @@
             .game-list {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 16px;
+                gap: 20px;
                 justify-content: center;
-                max-width: 800px;
+                max-width: 900px;
             }
             .game-card {
                 background: var(--panel);
                 border: 1px solid var(--border);
-                padding: 20px;
-                width: 340px;
+                width: 260px;
                 cursor: pointer;
-                transition: all 0.15s;
+                transition: all 0.2s;
                 position: relative;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
             }
             .game-card:hover {
                 border-color: var(--accent);
-                box-shadow: 0 0 16px rgba(88, 166, 255, 0.15);
-                transform: translateY(-2px);
+                box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+                transform: translateY(-3px);
+            }
+            .game-card .card-preview {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 1;
+                background: #0a0d12;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .game-card .card-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                transition: transform 0.3s;
+            }
+            .game-card:hover .card-preview img {
+                transform: scale(1.05);
+            }
+            .game-card .card-preview .preview-loading {
+                color: var(--text-dim);
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+            .game-card .play-overlay {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(14, 17, 23, 0.6);
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+            .game-card:hover .play-overlay {
+                opacity: 1;
+            }
+            .play-overlay .play-icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                background: var(--green-dim);
+                border: 2px solid var(--green);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                color: #fff;
+                transition: transform 0.15s;
+            }
+            .game-card:hover .play-overlay .play-icon {
+                transform: scale(1.1);
+            }
+            .game-card .card-info {
+                padding: 12px 14px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
             }
             .game-card .gid {
                 font-family: var(--pixel);
-                font-size: 11px;
+                font-size: 10px;
                 color: var(--accent);
-                margin-bottom: 8px;
             }
             .game-card .tags {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 4px;
-                margin-top: 8px;
             }
             .tag {
-                font-size: 10px;
-                padding: 2px 8px;
+                font-size: 9px;
+                padding: 2px 6px;
                 background: rgba(88, 166, 255, 0.1);
                 border: 1px solid rgba(88, 166, 255, 0.2);
                 color: var(--accent);
             }
             .game-card .meta {
-                font-size: 11px;
+                font-size: 10px;
                 color: var(--text-dim);
-                margin-top: 6px;
             }
 
             .no-games {
@@ -740,7 +800,8 @@
                     font-size: 14px;
                 }
                 .game-card {
-                    width: 100%;
+                    width: calc(50% - 10px);
+                    min-width: 140px;
                 }
                 .dpad-btn {
                     width: 44px;
@@ -1319,14 +1380,46 @@
                     games.forEach((g) => {
                         const card = document.createElement("div");
                         card.className = "game-card";
-                        card.innerHTML = `
-        <div class="gid">${g.game_id}</div>
-        <div class="tags">${(g.tags || []).map((t) => `<span class="tag">${t}</span>`).join("")}</div>
-        <div class="meta">FPS: ${g.default_fps || "?"} · Baseline: [${(g.baseline_actions || []).join(", ")}]</div>
-      `;
-                        card.addEventListener("click", () =>
-                            launchGame(g.game_id),
-                        );
+                        card.innerHTML =
+                            '<div class="card-preview">' +
+                            '<div class="preview-loading">LOADING…</div>' +
+                            '<div class="play-overlay"><div class="play-icon">▶</div></div>' +
+                            "</div>" +
+                            '<div class="card-info">' +
+                            '<div class="gid">' +
+                            g.game_id +
+                            "</div>" +
+                            '<div class="tags">' +
+                            (g.tags || [])
+                                .map(function (t) {
+                                    return '<span class="tag">' + t + "</span>";
+                                })
+                                .join("") +
+                            "</div>" +
+                            "</div>";
+
+                        // Load preview image
+                        var previewDiv = card.querySelector(".card-preview");
+                        var img = new Image();
+                        img.onload = function () {
+                            var loadingEl =
+                                previewDiv.querySelector(".preview-loading");
+                            if (loadingEl) loadingEl.remove();
+                            previewDiv.insertBefore(img, previewDiv.firstChild);
+                        };
+                        img.onerror = function () {
+                            var loadingEl =
+                                previewDiv.querySelector(".preview-loading");
+                            if (loadingEl) loadingEl.textContent = "NO PREVIEW";
+                        };
+                        img.src =
+                            "/api/games/" +
+                            encodeURIComponent(g.game_id) +
+                            "/preview";
+
+                        card.addEventListener("click", function () {
+                            launchGame(g.game_id);
+                        });
                         gameListEl.appendChild(card);
                     });
                 }

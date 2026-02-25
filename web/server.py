@@ -471,6 +471,66 @@ def api_game_metadata(game_id):
     return jsonify(info["metadata"])
 
 
+# Cache preview images in memory so we don't spin up a game every request
+_preview_cache: dict[str, bytes] = {}
+
+
+@app.route("/api/games/<game_id>/preview")
+def api_game_preview(game_id):
+    """Return a PNG thumbnail of the game's initial frame."""
+    if game_id not in GAME_INDEX:
+        return jsonify({"error": "Game not found"}), 404
+
+    # Return cached version if available
+    if game_id in _preview_cache:
+        return app.response_class(
+            _preview_cache[game_id],
+            mimetype="image/png",
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+
+    try:
+        from PIL import Image
+
+        arc = arc_agi.Arcade(environments_dir=ENVIRONMENTS_DIR)
+        env = arc.make(game_id, seed=0)
+        if env is None:
+            return jsonify({"error": "Could not create environment"}), 500
+
+        frame_data = env.reset()
+        if frame_data is None or frame_data.frame is None or len(frame_data.frame) == 0:
+            return jsonify({"error": "No frame data"}), 500
+
+        frame = frame_data.frame[0]
+        h, w = frame.shape
+        rgb = np.zeros((h, w, 3), dtype=np.uint8)
+        for val, col in ARC_PALETTE.items():
+            mask = frame == val
+            rgb[mask] = col
+
+        img = Image.fromarray(rgb, "RGB")
+        # Scale up for a crisp preview thumbnail
+        scale = max(1, 256 // max(w, h))
+        img = img.resize((w * scale, h * scale), Image.NEAREST)
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG", optimize=False)
+        png_bytes = buf.getvalue()
+
+        # Cache it
+        _preview_cache[game_id] = png_bytes
+
+        return app.response_class(
+            png_bytes,
+            mimetype="image/png",
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+
+    except Exception as e:
+        logger.error(f"Preview error for {game_id}: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/sessions")
 def api_sessions():
     """List active sessions (debug / admin)."""
