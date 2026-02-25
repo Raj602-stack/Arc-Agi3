@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -134,7 +134,11 @@
 
             .card-header {
                 padding: 24px;
-                background: linear-gradient(135deg, rgba(88, 166, 255, 0.08) 0%, transparent 60%);
+                background: linear-gradient(
+                    135deg,
+                    rgba(88, 166, 255, 0.08) 0%,
+                    transparent 60%
+                );
                 border-bottom: 1px solid var(--border);
             }
 
@@ -215,7 +219,9 @@
             .card-arrow {
                 font-size: 18px;
                 color: var(--text-dim);
-                transition: transform 0.2s, color 0.2s;
+                transition:
+                    transform 0.2s,
+                    color 0.2s;
             }
 
             .card:hover .card-arrow {
@@ -225,7 +231,11 @@
 
             /* ARC AGI-2 specific */
             .card.agi2 .card-header {
-                background: linear-gradient(135deg, rgba(188, 140, 255, 0.1) 0%, transparent 60%);
+                background: linear-gradient(
+                    135deg,
+                    rgba(188, 140, 255, 0.1) 0%,
+                    transparent 60%
+                );
             }
 
             .card.agi2 .card-version {
@@ -243,7 +253,11 @@
 
             /* ARC AGI-3 specific */
             .card.agi3 .card-header {
-                background: linear-gradient(135deg, rgba(63, 185, 80, 0.1) 0%, transparent 60%);
+                background: linear-gradient(
+                    135deg,
+                    rgba(63, 185, 80, 0.1) 0%,
+                    transparent 60%
+                );
             }
 
             .card.agi3 .card-version {
@@ -301,9 +315,47 @@
     </head>
     <body>
         <div id="topbar">
-            <div class="logo">Ethara AI × ARC</div>
+            <a
+                href="/"
+                class="logo"
+                style="text-decoration: none; color: var(--accent)"
+                >Ethara AI × ARC</a
+            >
             <div class="sep"></div>
             <div class="tagline">Abstraction and Reasoning Corpus</div>
+            <div style="flex: 1"></div>
+            <a
+                href="/arc-agi-2"
+                style="
+                    font-family: var(--mono);
+                    font-size: 12px;
+                    color: var(--purple);
+                    text-decoration: none;
+                    padding: 6px 14px;
+                    border: 1px solid var(--purple);
+                    transition: all 0.15s;
+                    border-radius: 2px;
+                "
+                onmouseover="this.style.background = 'rgba(188,140,255,0.1)'"
+                onmouseout="this.style.background = 'transparent'"
+                >AGI-2</a
+            >
+            <a
+                href="/arc-agi-3"
+                style="
+                    font-family: var(--mono);
+                    font-size: 12px;
+                    color: var(--green);
+                    text-decoration: none;
+                    padding: 6px 14px;
+                    border: 1px solid var(--green);
+                    transition: all 0.15s;
+                    border-radius: 2px;
+                "
+                onmouseover="this.style.background = 'rgba(63,185,80,0.1)'"
+                onmouseout="this.style.background = 'transparent'"
+                >AGI-3</a
+            >
         </div>
 
         <div id="main">
@@ -387,9 +439,7 @@
         <div id="footer">
             Powered by <a href="https://ethara.ai" target="_blank">Ethara AI</a>
             ·
-            <a
-                href="https://github.com/Raj602-stack/Arc-Agi3"
-                target="_blank"
+            <a href="https://github.com/Raj602-stack/Arc-Agi3" target="_blank"
                 >GitHub</a
             >
         </div>
