@@ -987,25 +987,7 @@
                 color: #f0f6fc;
                 background: #21262d;
             }
-            #site_nav .nav-active {
-                color: #bc8cff;
-                padding: 4px 10px;
-                border: 1px solid #bc8cff;
-                border-radius: 3px;
-                background: rgba(188, 140, 255, 0.1);
-            }
-            #site_nav a.nav-link-agi3 {
-                color: #3fb950;
-                text-decoration: none;
-                padding: 4px 10px;
-                border: 1px solid transparent;
-                border-radius: 3px;
-                transition: all 0.15s;
-            }
-            #site_nav a.nav-link-agi3:hover {
-                border-color: #3fb950;
-                background: rgba(63, 185, 80, 0.1);
-            }
+
             /* Push everything below the fixed nav */
             body {
                 padding-top: 40px !important;
@@ -1031,9 +1013,7 @@
                 #site_nav a.nav-logo {
                     font-size: 11px;
                 }
-                #site_nav a.nav-link,
-                #site_nav .nav-active,
-                #site_nav a.nav-link-agi3 {
+                #site_nav a.nav-link {
                     padding: 3px 8px;
                     font-size: 11px;
                 }
@@ -1062,9 +1042,7 @@
                 #site_nav .nav-sep {
                     display: none;
                 }
-                #site_nav a.nav-link,
-                #site_nav .nav-active,
-                #site_nav a.nav-link-agi3 {
+                #site_nav a.nav-link {
                     padding: 2px 6px;
                     font-size: 10px;
                 }
@@ -1090,9 +1068,7 @@
                     font-size: 9px;
                     letter-spacing: 0;
                 }
-                #site_nav a.nav-link,
-                #site_nav .nav-active,
-                #site_nav a.nav-link-agi3 {
+                #site_nav a.nav-link {
                     padding: 2px 5px;
                     font-size: 9px;
                     border-radius: 2px;
@@ -1118,9 +1094,7 @@
                 #site_nav a.nav-logo {
                     font-size: 9px;
                 }
-                #site_nav a.nav-link,
-                #site_nav .nav-active,
-                #site_nav a.nav-link-agi3 {
+                #site_nav a.nav-link {
                     padding: 1px 4px;
                     font-size: 9px;
                 }
@@ -1145,9 +1119,7 @@
                 #site_nav a.nav-logo {
                     font-size: 9px;
                 }
-                #site_nav a.nav-link,
-                #site_nav .nav-active,
-                #site_nav a.nav-link-agi3 {
+                #site_nav a.nav-link {
                     padding: 1px 3px;
                     font-size: 9px;
                 }
@@ -1167,8 +1139,6 @@
             <a href="/" class="nav-logo">Ethara AI × ARC</a>
             <span class="nav-sep"></span>
             <a href="/" class="nav-link">🏠 Home</a>
-            <span class="nav-active">AGI-2</span>
-            <a href="/arc-agi-3" class="nav-link-agi3">AGI-3 →</a>
         </div>
 
         <!-- ── Modal (ARC-AGI-2 Task Browser) ────────────────────── -->
@@ -1294,13 +1264,6 @@
                 <span id="task_name" class="puzzle_id">Puzzle ID: —</span>
             </div>
             <div id="top_bar_right">
-                <button
-                    class="btn btn-outline"
-                    id="top_load_btn"
-                    onclick="openTaskBrowser()"
-                >
-                    Choose task
-                </button>
                 <label
                     class="btn btn-outline btn-upload-custom"
                     for="custom_file_input"
