@@ -430,16 +430,55 @@ ACTION_MAP = {
 #  HTTP ROUTES
 # ═══════════════════════════════════════════════════════════════════════════
 
+# ---------------------------------------------------------------------------
+# Landing page
+# ---------------------------------------------------------------------------
 @app.route("/")
-def index():
-    """Main page — game picker + player."""
+def landing():
+    """Landing page — choose between ARC AGI-2 and ARC AGI-3."""
+    return render_template("landing.html")
+
+
+# ---------------------------------------------------------------------------
+# ARC AGI-3 (current game browser)
+# ---------------------------------------------------------------------------
+@app.route("/arc-agi-3")
+def arc_agi_3():
+    """ARC AGI-3 game browser."""
     return render_template("index.html")
 
 
+@app.route("/arc-agi-3/game/<game_id>")
+def arc_agi_3_game(game_id):
+    """Direct link to a specific ARC AGI-3 game."""
+    return render_template("index.html")
+
+
+# Legacy routes (redirect to new paths)
 @app.route("/game/<game_id>")
-def game_direct(game_id):
-    """Direct link to a specific game — serves the same SPA, JS reads the URL."""
-    return render_template("index.html")
+def game_direct_legacy(game_id):
+    """Legacy direct link — redirect to new path."""
+    from flask import redirect
+    return redirect(f"/arc-agi-3/game/{game_id}")
+
+
+# ---------------------------------------------------------------------------
+# ARC AGI-2 (static HTML/CSS/JS from ARC-AGI-main/apps)
+# ---------------------------------------------------------------------------
+ARC_AGI_2_DIR = str(PROJECT_ROOT / "ARC-AGI-main" / "apps")
+
+
+@app.route("/arc-agi-2")
+@app.route("/arc-agi-2/")
+def arc_agi_2_index():
+    """Serve ARC AGI-2 index.html."""
+    return send_from_directory(ARC_AGI_2_DIR, "index.html")
+
+
+@app.route("/arc-agi-2/<path:filename>")
+def arc_agi_2_static(filename):
+    """Serve ARC AGI-2 static files (JS, CSS, images)."""
+    return send_from_directory(ARC_AGI_2_DIR, filename)
 
 
 @app.route("/health")

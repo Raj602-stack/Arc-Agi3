@@ -822,6 +822,9 @@
                 ● DISCONNECTED
             </div>
             <div class="spacer"></div>
+            <a href="/" class="top-btn" style="text-decoration: none">
+                🏠 HOME
+            </a>
             <button class="top-btn" id="btn-lobby" style="display: none">
                 ← GAMES
             </button>
@@ -1108,7 +1111,7 @@
                     uploadPanel.classList.remove("show");
                     $("admin-panel").classList.remove("show");
                     gameListEl.style.display = "";
-                    history.pushState(null, "", "/");
+                    history.pushState(null, "", "/arc-agi-3");
                     fetchGames();
                 }
 
@@ -1126,7 +1129,7 @@
                     history.pushState(
                         null,
                         "",
-                        "/game/" + encodeURIComponent(gameId),
+                        "/arc-agi-3/game/" + encodeURIComponent(gameId),
                     );
                     showLoading(gameId);
                     startGame();
@@ -1813,7 +1816,7 @@
                 });
                 window.addEventListener("popstate", () => {
                     var path = window.location.pathname;
-                    var match = path.match(/^\/game\/(.+)$/);
+                    var match = path.match(/^\/arc-agi-3\/game\/(.+)$/);
                     if (match) {
                         selectedGameId = decodeURIComponent(match[1]);
                         startGame();
@@ -1885,10 +1888,10 @@
                 // ── Init ──
                 connectSocket();
 
-                // Check URL for direct game link: /game/<game_id>
+                // Check URL for direct game link: /arc-agi-3/game/<game_id>
                 (function checkRoute() {
                     var path = window.location.pathname;
-                    var match = path.match(/^\/game\/(.+)$/);
+                    var match = path.match(/^\/arc-agi-3\/game\/(.+)$/);
                     if (match) {
                         selectedGameId = decodeURIComponent(match[1]);
                         startGame();
