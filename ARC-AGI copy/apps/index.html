@@ -634,85 +634,85 @@
     </head>
     <body>
         <!-- ── Site Navigation Bar ───────────────────────────────── -->
-        <div
-            id="site_nav"
-            style="
+        <style>
+            #site_nav {
                 display: flex;
                 align-items: center;
                 gap: 16px;
                 padding: 10px 20px;
                 background: #0e1117;
                 border-bottom: 1px solid #30363d;
-                font-family:
-                    &quot;JetBrains Mono&quot;, &quot;Courier New&quot;,
-                    monospace;
+                font-family: "JetBrains Mono", "Courier New", monospace;
                 font-size: 12px;
-                position: sticky;
+                position: fixed;
                 top: 0;
-                z-index: 200;
-            "
-        >
-            <a
-                href="/"
-                style="
-                    color: #58a6ff;
-                    text-decoration: none;
-                    font-weight: 600;
-                    font-size: 13px;
-                    letter-spacing: 0.5px;
-                "
-                >Ethara AI × ARC</a
-            >
-            <span style="width: 1px; height: 18px; background: #30363d"></span>
-            <a
-                href="/"
-                style="
-                    color: #8b949e;
-                    text-decoration: none;
-                    padding: 4px 10px;
-                    border-radius: 3px;
-                    transition: all 0.15s;
-                "
-                onmouseover="
-                    this.style.color = '#f0f6fc';
-                    this.style.background = '#21262d';
-                "
-                onmouseout="
-                    this.style.color = '#8b949e';
-                    this.style.background = 'transparent';
-                "
-                >🏠 Home</a
-            >
-            <span
-                style="
-                    color: #bc8cff;
-                    padding: 4px 10px;
-                    border: 1px solid #bc8cff;
-                    border-radius: 3px;
-                    background: rgba(188, 140, 255, 0.1);
-                "
-                >AGI-2</span
-            >
-            <a
-                href="/arc-agi-3"
-                style="
-                    color: #3fb950;
-                    text-decoration: none;
-                    padding: 4px 10px;
-                    border: 1px solid transparent;
-                    border-radius: 3px;
-                    transition: all 0.15s;
-                "
-                onmouseover="
-                    this.style.borderColor = '#3fb950';
-                    this.style.background = 'rgba(63,185,80,0.1)';
-                "
-                onmouseout="
-                    this.style.borderColor = 'transparent';
-                    this.style.background = 'transparent';
-                "
-                >AGI-3 →</a
-            >
+                left: 0;
+                right: 0;
+                height: 40px;
+                z-index: 100000;
+            }
+            #site_nav a.nav-logo {
+                color: #58a6ff;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 13px;
+                letter-spacing: 0.5px;
+            }
+            #site_nav .nav-sep {
+                width: 1px;
+                height: 18px;
+                background: #30363d;
+            }
+            #site_nav a.nav-link {
+                color: #8b949e;
+                text-decoration: none;
+                padding: 4px 10px;
+                border-radius: 3px;
+                transition: all 0.15s;
+            }
+            #site_nav a.nav-link:hover {
+                color: #f0f6fc;
+                background: #21262d;
+            }
+            #site_nav .nav-active {
+                color: #bc8cff;
+                padding: 4px 10px;
+                border: 1px solid #bc8cff;
+                border-radius: 3px;
+                background: rgba(188, 140, 255, 0.1);
+            }
+            #site_nav a.nav-link-agi3 {
+                color: #3fb950;
+                text-decoration: none;
+                padding: 4px 10px;
+                border: 1px solid transparent;
+                border-radius: 3px;
+                transition: all 0.15s;
+            }
+            #site_nav a.nav-link-agi3:hover {
+                border-color: #3fb950;
+                background: rgba(63, 185, 80, 0.1);
+            }
+            /* Push everything below the fixed nav */
+            body {
+                padding-top: 40px !important;
+            }
+            /* Offset the modal so it starts below nav */
+            #modal_bg {
+                top: 40px !important;
+                height: calc(100vh - 40px) !important;
+            }
+            /* Offset the sticky top_bar so it sticks below nav */
+            #top_bar {
+                top: 40px !important;
+            }
+        </style>
+        <div id="site_nav">
+            <a href="/" class="nav-logo">Ethara AI × ARC</a>
+            <span class="nav-sep"></span>
+            <a href="/" class="nav-link">🏠 Home</a>
+            <span class="nav-active">AGI-2</span>
+            <a href="/arc-agi-3" class="nav-link-agi3">AGI-3 →</a>
         </div>
 
         <!-- ── Modal (ARC-AGI-2 Task Browser) ────────────────────── -->
