@@ -1183,17 +1183,19 @@
                 }
                 .carousel-wrapper {
                     flex: none;
-                    overflow: visible;
+                    overflow: hidden;
+                    min-height: 180px;
                 }
                 .carousel-track {
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    overflow: visible;
                     gap: 28px;
                     padding: 16px 12px;
+                    overflow-x: auto;
+                    justify-content: flex-start;
                 }
                 .carousel-btn {
-                    display: none;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 14px;
                 }
                 #topbar {
                     padding: 0 10px;
