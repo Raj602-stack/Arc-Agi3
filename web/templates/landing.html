@@ -423,19 +423,18 @@
                 background: transparent;
             }
 
-            /* ── Thick visual divider between sections ── */
+            /* ── Subtle divider between sections ── */
             .section-divider {
                 flex-shrink: 0;
-                height: 3px;
+                height: 1px;
                 background: linear-gradient(
                     90deg,
-                    var(--purple) 0%,
-                    var(--accent) 50%,
-                    var(--green) 100%
+                    transparent 0%,
+                    rgba(88, 166, 255, 0.15) 20%,
+                    rgba(188, 140, 255, 0.12) 50%,
+                    rgba(63, 185, 80, 0.15) 80%,
+                    transparent 100%
                 );
-                box-shadow:
-                    0 0 12px rgba(88, 166, 255, 0.3),
-                    0 0 24px rgba(88, 166, 255, 0.1);
                 position: relative;
                 z-index: 2;
             }
@@ -445,47 +444,34 @@
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
-                gap: 12px;
-                padding: 8px 20px 6px;
-                border-bottom: 1px solid rgba(48, 54, 61, 0.6);
-                background: rgba(22, 27, 34, 0.55);
-                backdrop-filter: blur(10px);
+                gap: 14px;
+                padding: 10px 24px 8px;
+                border-bottom: 1px solid rgba(48, 54, 61, 0.3);
+                background: rgba(13, 17, 23, 0.4);
+                backdrop-filter: blur(12px);
             }
 
-            /* ── Large prominent badge ── */
+            /* ── Refined badge ── */
             .section-badge {
-                font-family: var(--pixel);
-                font-size: 13px;
-                letter-spacing: 2px;
-                padding: 8px 18px;
-                border-radius: 6px;
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 1.5px;
+                padding: 5px 12px;
+                border-radius: 4px;
                 white-space: nowrap;
                 flex-shrink: 0;
                 text-transform: uppercase;
+                font-weight: 600;
             }
             .badge-purple {
-                background: linear-gradient(
-                    135deg,
-                    rgba(188, 140, 255, 0.2),
-                    rgba(188, 140, 255, 0.08)
-                );
-                color: var(--purple);
-                border: 2px solid rgba(188, 140, 255, 0.5);
-                box-shadow:
-                    0 0 16px rgba(188, 140, 255, 0.2),
-                    inset 0 0 12px rgba(188, 140, 255, 0.06);
+                background: rgba(188, 140, 255, 0.08);
+                color: rgba(188, 140, 255, 0.85);
+                border: 1px solid rgba(188, 140, 255, 0.25);
             }
             .badge-green {
-                background: linear-gradient(
-                    135deg,
-                    rgba(63, 185, 80, 0.2),
-                    rgba(63, 185, 80, 0.08)
-                );
-                color: var(--green);
-                border: 2px solid rgba(63, 185, 80, 0.5);
-                box-shadow:
-                    0 0 16px rgba(63, 185, 80, 0.2),
-                    inset 0 0 12px rgba(63, 185, 80, 0.06);
+                background: rgba(63, 185, 80, 0.08);
+                color: rgba(63, 185, 80, 0.85);
+                border: 1px solid rgba(63, 185, 80, 0.25);
             }
 
             /* ── Title + count ── */
@@ -496,15 +482,16 @@
                 flex-shrink: 0;
             }
             .section-title {
-                font-family: var(--pixel);
+                font-family: var(--mono);
                 font-size: 14px;
-                color: var(--text-bright);
-                letter-spacing: 0.5px;
+                color: rgba(201, 209, 217, 0.9);
+                letter-spacing: 0.8px;
+                font-weight: 400;
             }
             .section-subtitle {
                 font-family: var(--code);
                 font-size: 11px;
-                color: var(--text-dim);
+                color: rgba(139, 148, 158, 0.7);
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -512,13 +499,12 @@
             .section-count {
                 font-family: var(--code);
                 font-size: 11px;
-                color: var(--text-dim);
-                opacity: 0.8;
+                color: rgba(139, 148, 158, 0.6);
             }
 
             .section-desc {
                 font-size: 11px;
-                color: var(--text-dim);
+                color: rgba(139, 148, 158, 0.6);
                 line-height: 1.5;
                 flex: 1;
                 min-width: 120px;
@@ -527,46 +513,45 @@
             /* ── Category tabs ── */
             .cat-tabs {
                 display: flex;
-                gap: 2px;
+                gap: 1px;
                 flex-shrink: 0;
-                background: rgba(255, 255, 255, 0.03);
-                border-radius: 6px;
-                padding: 3px;
+                background: transparent;
+                border-radius: 4px;
+                padding: 0;
             }
             .cat-tab {
                 font-family: var(--code);
                 font-size: 11px;
-                color: var(--text-dim);
+                color: rgba(139, 148, 158, 0.7);
                 background: none;
                 border: none;
-                border-radius: 4px;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
                 padding: 6px 14px;
                 cursor: pointer;
-                transition: all 0.15s;
+                transition: all 0.2s ease;
                 display: flex;
                 align-items: center;
                 gap: 6px;
                 white-space: nowrap;
             }
             .cat-tab:hover {
-                color: var(--text-bright);
-                background: rgba(255, 255, 255, 0.04);
+                color: rgba(201, 209, 217, 0.9);
             }
             .cat-tab.active {
-                color: var(--purple);
-                background: rgba(188, 140, 255, 0.1);
-                box-shadow: 0 0 0 1px rgba(188, 140, 255, 0.3);
+                color: rgba(188, 140, 255, 0.9);
+                border-bottom-color: rgba(188, 140, 255, 0.5);
             }
             .cat-tab .ct-count {
                 font-size: 9px;
-                background: rgba(255, 255, 255, 0.06);
+                background: rgba(255, 255, 255, 0.04);
                 color: inherit;
                 padding: 1px 6px;
                 border-radius: 8px;
-                opacity: 0.7;
+                opacity: 0.6;
             }
             .cat-tab.active .ct-count {
-                background: rgba(188, 140, 255, 0.2);
+                background: rgba(188, 140, 255, 0.12);
                 opacity: 1;
             }
 
@@ -574,7 +559,7 @@
             .section-controls {
                 display: flex;
                 align-items: center;
-                gap: 10px;
+                gap: 8px;
                 flex-shrink: 0;
                 margin-left: auto;
             }
@@ -603,22 +588,22 @@
             .upload-btn {
                 font-family: var(--code);
                 font-size: 10px;
-                padding: 7px 14px;
+                padding: 5px 12px;
                 background: transparent;
-                border: 1px dashed var(--border);
-                color: var(--text-dim);
-                border-radius: 6px;
+                border: 1px solid rgba(48, 54, 61, 0.4);
+                color: rgba(139, 148, 158, 0.6);
+                border-radius: 4px;
                 cursor: pointer;
-                transition: all 0.15s;
+                transition: all 0.2s ease;
                 white-space: nowrap;
                 display: inline-flex;
                 align-items: center;
                 gap: 5px;
             }
             .upload-btn:hover {
-                border-color: var(--accent);
-                color: var(--text-bright);
-                background: rgba(88, 166, 255, 0.05);
+                border-color: rgba(88, 166, 255, 0.4);
+                color: rgba(201, 209, 217, 0.8);
+                background: rgba(88, 166, 255, 0.04);
             }
             .upload-btn input[type="file"] {
                 display: none;
