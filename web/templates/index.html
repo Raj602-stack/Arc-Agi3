@@ -507,6 +507,11 @@
                 image-rendering: crisp-edges;
                 display: block;
                 background: #0d1117;
+                touch-action: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+                cursor: pointer;
             }
 
             /* Sidebar */
@@ -803,6 +808,46 @@
                 font-size: 10px;
                 letter-spacing: 0.5px;
             }
+            .mobile-btns .dpad-btn.tap-btn {
+                background: rgba(88, 166, 255, 0.15);
+                border-color: rgba(88, 166, 255, 0.5);
+                color: var(--accent);
+                font-size: 9px;
+                font-weight: 600;
+            }
+            .mobile-btns .dpad-btn.tap-btn:active {
+                background: rgba(88, 166, 255, 0.3);
+            }
+            .tap-hint {
+                display: none;
+                position: absolute;
+                bottom: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(88, 166, 255, 0.15);
+                border: 1px solid rgba(88, 166, 255, 0.4);
+                color: var(--accent);
+                font-family: var(--mono);
+                font-size: 10px;
+                padding: 4px 12px;
+                border-radius: 4px;
+                pointer-events: none;
+                z-index: 10;
+                white-space: nowrap;
+                animation: tapPulse 2s ease-in-out infinite;
+            }
+            .tap-hint.show {
+                display: block;
+            }
+            @keyframes tapPulse {
+                0%,
+                100% {
+                    opacity: 0.7;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
 
             /* ═══════════════════════════════════════════════════════
                RESPONSIVE
@@ -908,7 +953,8 @@
                     font-size: 10px;
                 }
                 #game-canvas {
-                    max-height: calc(100vh - 200px);
+                    max-height: calc(100vh - 180px);
+                    min-height: 200px;
                 }
                 #lobby {
                     padding: 24px 16px;
@@ -1033,7 +1079,8 @@
                     padding: 7px 14px;
                 }
                 #game-canvas {
-                    max-height: calc(100vh - 190px);
+                    max-height: calc(100vh - 170px);
+                    min-height: 180px;
                 }
                 .dpad-btn {
                     width: 46px;
@@ -1144,7 +1191,8 @@
                     flex: 1;
                 }
                 #game-canvas {
-                    max-height: calc(100vh - 170px);
+                    max-height: calc(100vh - 150px);
+                    min-height: 160px;
                 }
                 .dpad-btn {
                     width: 42px;
@@ -1630,6 +1678,9 @@
                             width="512"
                             height="512"
                         ></canvas>
+                        <div class="tap-hint" id="tap-hint">
+                            👆 Tap the grid to interact
+                        </div>
                     </div>
                 </div>
                 <div id="sidebar">
@@ -1712,6 +1763,13 @@
             </div>
             <div class="mobile-btns">
                 <button class="dpad-btn" data-action="action5">ACT</button>
+                <button
+                    class="dpad-btn tap-btn"
+                    id="btn-tap-mode"
+                    style="display: none"
+                >
+                    👆 TAP
+                </button>
                 <button class="dpad-btn" data-action="undo">UNDO</button>
             </div>
         </div>
@@ -2031,8 +2089,23 @@
 
                     canvas.addEventListener("click", handleCanvasClick);
                     canvas.addEventListener(
+                        "touchstart",
+                        function (e) {
+                            // Prevent scroll/zoom when touching the canvas
+                            if (
+                                gameState &&
+                                gameState.available_actions &&
+                                gameState.available_actions.indexOf(6) !== -1
+                            ) {
+                                e.preventDefault();
+                            }
+                        },
+                        { passive: false },
+                    );
+                    canvas.addEventListener(
                         "touchend",
                         function (e) {
+                            e.preventDefault();
                             if (
                                 e.changedTouches &&
                                 e.changedTouches.length > 0
@@ -2044,7 +2117,7 @@
                                 });
                             }
                         },
-                        { passive: true },
+                        { passive: false },
                     );
                 }
 
@@ -2257,6 +2330,7 @@
 
                     // Available actions
                     availList.innerHTML = "";
+                    var hasClickAction = false;
                     if (state.available_actions) {
                         [...state.available_actions]
                             .sort((a, b) => a - b)
@@ -2265,7 +2339,18 @@
                                 el.className = "avail-item";
                                 el.textContent = ACTION_NAMES[a] || "ACT" + a;
                                 availList.appendChild(el);
+                                if (a === 6) hasClickAction = true;
                             });
+                    }
+
+                    // Show/hide TAP button and hint on mobile when click action is available
+                    var tapBtn = $("btn-tap-mode");
+                    var tapHint = $("tap-hint");
+                    if (tapBtn)
+                        tapBtn.style.display = hasClickAction ? "" : "none";
+                    if (tapHint) {
+                        if (hasClickAction) tapHint.classList.add("show");
+                        else tapHint.classList.remove("show");
                     }
 
                     if (state.frame) renderFrame(state.frame);
@@ -2568,6 +2653,27 @@
                         passive: false,
                     });
                 });
+
+                // ── TAP mode button — pulse canvas border to signal tap ──
+                var tapModeBtn = $("btn-tap-mode");
+                if (tapModeBtn) {
+                    function flashTapHint() {
+                        canvas.style.boxShadow =
+                            "0 0 0 3px rgba(88,166,255,0.6)";
+                        setTimeout(function () {
+                            canvas.style.boxShadow = "";
+                        }, 600);
+                    }
+                    tapModeBtn.addEventListener("click", flashTapHint);
+                    tapModeBtn.addEventListener(
+                        "touchstart",
+                        function (e) {
+                            e.preventDefault();
+                            flashTapHint();
+                        },
+                        { passive: false },
+                    );
+                }
 
                 // ── File upload drag & drop ──
                 dropZone.addEventListener("click", () => fileInput.click());
