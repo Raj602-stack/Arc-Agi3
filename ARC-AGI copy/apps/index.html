@@ -505,12 +505,13 @@
                 transition:
                     opacity 0.25s ease,
                     transform 0.25s ease;
-                display: flex;
+                display: none;
                 align-items: flex-start;
                 gap: 12px;
             }
 
             #validation_toast.show {
+                display: flex;
                 opacity: 1;
                 pointer-events: auto;
                 transform: translateX(-50%) translateY(0);

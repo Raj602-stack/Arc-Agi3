@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Animation Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            color: #c9d1d9;
+            font-family: monospace;
+        }
+
+        /* Background layer (behind grid) */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background: #0e1117;
+            z-index: -3;
+        }
+
+        /* Animated grid background */
+        .grid-bg {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: auto;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            perspective: 56.25vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .grid-bg-lines {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 200%;
+            background-image:
+                linear-gradient(
+                    to right,
+                    rgba(88, 166, 255, 0.35) 1px,
+                    transparent 0
+                ),
+                linear-gradient(
+                    to bottom,
+                    rgba(88, 166, 255, 0.35) 1px,
+                    transparent 0
+                );
+            background-size: 4vh 3vh;
+            background-repeat: repeat;
+            transform-origin: 100% 0 0;
+            animation: gridPlay 30s linear infinite;
+        }
+
+        @keyframes gridPlay {
+            0% {
+                transform: rotateX(45deg) translateY(-50%);
+            }
+            100% {
+                transform: rotateX(45deg) translateY(0);
+            }
+        }
+
+        /* Mask: fades grid at top and radial vignette */
+        .grid-fade {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+            background-image:
+                linear-gradient(180deg, #0e1117 25%, transparent),
+                radial-gradient(
+                    circle farthest-corner at 50% 0%,
+                    transparent 60%,
+                    #0e1117 95%
+                );
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Horizon glow line */
+        .grid-glow {
+            position: fixed;
+            bottom: 30%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                transparent 5%,
+                rgba(88, 166, 255, 0.18) 30%,
+                rgba(188, 140, 255, 0.22) 50%,
+                rgba(63, 185, 80, 0.18) 70%,
+                transparent 95%
+            );
+            box-shadow:
+                0 0 30px 8px rgba(88, 166, 255, 0.08),
+                0 0 60px 16px rgba(188, 140, 255, 0.04);
+            animation: glowPulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #58a6ff;
+        }
+
+        p {
+            font-size: 18px;
+            color: #8b949e;
+        }
+
+        .info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(22, 27, 34, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(48, 54, 61, 0.6);
+            z-index: 100;
+        }
+
+        .info h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #58a6ff;
+        }
+
+        .info ul {
+            list-style: none;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .info li {
+            color: #8b949e;
+        }
+
+        .info li strong {
+            color: #c9d1d9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background layer -->
+    <div class="bg-layer"></div>
+
+    <!-- Animated grid background -->
+    <div class="grid-bg">
+        <div class="grid-bg-lines"></div>
+    </div>
+    <div class="grid-fade"></div>
+    <div class="grid-glow"></div>
+
+    <!-- Content -->
+    <div class="info">
+        <h2>Grid Test Status</h2>
+        <ul>
+            <li><strong>Background:</strong> z-index: -3 (solid dark)</li>
+            <li><strong>Grid Lines:</strong> z-index: -2 (animated)</li>
+            <li><strong>Grid Mask:</strong> z-index: -1 (fade/vignette)</li>
+            <li><strong>Content:</strong> z-index: 1+ (you see this)</li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1>Grid Animation Test</h1>
+        <p>You should see an animated perspective grid behind this text.</p>
+        <p>The grid should scroll toward you from the bottom of the screen.</p>
+    </div>
+</body>
+</html>

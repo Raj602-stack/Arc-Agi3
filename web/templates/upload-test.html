@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Test - AGI-3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: monospace;
+            background: #0e1117;
+            color: #c9d1d9;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            background: #0e1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #58a6ff;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .file-input-group {
+            margin-bottom: 20px;
+        }
+
+        .file-input-group label {
+            display: block;
+            color: #8b949e;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            color: #c9d1d9;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #2ea043;
+        }
+
+        .file-info {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #8b949e;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #238636;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #2ea043;
+        }
+
+        .btn-secondary {
+            background: #30363d;
+            color: #c9d1d9;
+        }
+
+        .btn-secondary:hover {
+            background: #3d444d;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .log {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 11px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 3px 0;
+        }
+
+        .log-info {
+            color: #58a6ff;
+        }
+
+        .log-success {
+            color: #3fb950;
+        }
+
+        .log-error {
+            color: #f85149;
+        }
+
+        .log-warn {
+            color: #f0883e;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid #3fb950;
+            color: #3fb950;
+        }
+
+        .status.error {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid #f85149;
+            color: #f85149;
+        }
+
+        .status.info {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+        }
+
+        .test-results {
+            margin-top: 20px;
+        }
+
+        .test-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .test-pass {
+            background: rgba(63, 185, 80, 0.1);
+            border-left: 3px solid #3fb950;
+        }
+
+        .test-fail {
+            background: rgba(248, 81, 73, 0.1);
+            border-left: 3px solid #f85149;
+        }
+
+        .code {
+            background: #0d1117;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 AGI-3 Upload Test</h1>
+        <div class="subtitle">Isolated test page for file upload debugging</div>
+
+        <div class="section">
+            <h2>1. Select Files</h2>
+            <div class="file-input-group">
+                <label for="test-py">Python Game File (.py)</label>
+                <input type="file" id="test-py" accept=".py">
+                <div class="file-info" id="py-info">No file selected</div>
+            </div>
+
+            <div class="file-input-group">
+                <label for="test-json">Metadata JSON (.json)</label>
+                <input type="file" id="test-json" accept=".json">
+                <div class="file-info" id="json-info">No file selected</div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="btn-test-files">Test File Selection</button>
+                <button class="btn-primary" id="btn-upload" disabled>Upload to /api/upload</button>
+                <button class="btn-secondary" id="btn-debug" disabled>Debug Upload</button>
+                <button class="btn-secondary" id="btn-clear">Clear</button>
+            </div>
+
+            <div class="status" id="status"></div>
+        </div>
+
+        <div class="section">
+            <h2>2. Test Results</h2>
+            <div class="test-results" id="test-results">
+                <p style="color: #8b949e;">Select files and click "Test File Selection" to begin</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Console Log</h2>
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const pyInput = document.getElementById('test-py');
+        const jsonInput = document.getElementById('test-json');
+        const pyInfo = document.getElementById('py-info');
+        const jsonInfo = document.getElementById('json-info');
+        const btnTestFiles = document.getElementById('btn-test-files');
+        const btnUpload = document.getElementById('btn-upload');
+        const btnDebug = document.getElementById('btn-debug');
+        const btnClear = document.getElementById('btn-clear');
+        const statusEl = document.getElementById('status');
+        const testResults = document.getElementById('test-results');
+        const logEl = document.getElementById('log');
+
+        let pyFile = null;
+        let jsonFile = null;
+
+        // Logging
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(`[${type.toUpperCase()}]`, message);
+        }
+
+        function showStatus(message, type) {
+            statusEl.textContent = message;
+            statusEl.className = `status show ${type}`;
+        }
+
+        function hideStatus() {
+            statusEl.className = 'status';
+        }
+
+        // File input handlers
+        pyInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                pyFile = this.files[0];
+                pyInfo.textContent = `✓ ${pyFile.name} (${(pyFile.size / 1024).toFixed(2)} KB)`;
+                pyInfo.style.color = '#3fb950';
+                log(`Python file selected: ${pyFile.name}`, 'success');
+            } else {
+                pyFile = null;
+                pyInfo.textContent = 'No file selected';
+                pyInfo.style.color = '#8b949e';
+            }
+            updateButtons();
+        });
+
+        jsonInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                jsonFile = this.files[0];
+                jsonInfo.textContent = `✓ ${jsonFile.name} (${(jsonFile.size / 1024).toFixed(2)} KB)`;
+                jsonInfo.style.color = '#3fb950';
+                log(`JSON file selected: ${jsonFile.name}`, 'success');
+            } else {
+                jsonFile = null;
+                jsonInfo.textContent = 'No file selected';
+                jsonInfo.style.color = '#8b949e';
+            }
+            updateButtons();
+        });
+
+        function updateButtons() {
+            const bothSelected = pyFile && jsonFile;
+            btnUpload.disabled = !bothSelected;
+            btnDebug.disabled = !bothSelected;
+        }
+
+        // Test file selection
+        btnTestFiles.addEventListener('click', function() {
+            log('=== FILE SELECTION TEST ===', 'info');
+            testResults.innerHTML = '';
+
+            const tests = [];
+
+            // Test 1: Python file selected
+            if (pyFile) {
+                tests.push({ pass: true, msg: 'Python file selected' });
+                log(`✓ Python file: ${pyFile.name}`, 'success');
+                log(`  Size: ${pyFile.size} bytes`, 'info');
+                log(`  Type: ${pyFile.type}`, 'info');
+            } else {
+                tests.push({ pass: false, msg: 'Python file NOT selected' });
+                log('✗ No Python file selected', 'error');
+            }
+
+            // Test 2: JSON file selected
+            if (jsonFile) {
+                tests.push({ pass: true, msg: 'JSON file selected' });
+                log(`✓ JSON file: ${jsonFile.name}`, 'success');
+                log(`  Size: ${jsonFile.size} bytes`, 'info');
+                log(`  Type: ${jsonFile.type}`, 'info');
+            } else {
+                tests.push({ pass: false, msg: 'JSON file NOT selected' });
+                log('✗ No JSON file selected', 'error');
+            }
+
+            // Test 3: File extensions
+            if (pyFile && pyFile.name.endsWith('.py')) {
+                tests.push({ pass: true, msg: 'Python file has .py extension' });
+            } else if (pyFile) {
+                tests.push({ pass: false, msg: 'Python file does NOT have .py extension' });
+                log(`✗ Python file extension: ${pyFile.name}`, 'error');
+            }
+
+            if (jsonFile && jsonFile.name.endsWith('.json')) {
+                tests.push({ pass: true, msg: 'JSON file has .json extension' });
+            } else if (jsonFile) {
+                tests.push({ pass: false, msg: 'JSON file does NOT have .json extension' });
+                log(`✗ JSON file extension: ${jsonFile.name}`, 'error');
+            }
+
+            // Test 4: File sizes
+            if (pyFile && pyFile.size > 0) {
+                tests.push({ pass: true, msg: 'Python file has content (size > 0)' });
+            } else if (pyFile) {
+                tests.push({ pass: false, msg: 'Python file is empty (size = 0)' });
+                log('✗ Python file is empty', 'error');
+            }
+
+            if (jsonFile && jsonFile.size > 0) {
+                tests.push({ pass: true, msg: 'JSON file has content (size > 0)' });
+            } else if (jsonFile) {
+                tests.push({ pass: false, msg: 'JSON file is empty (size = 0)' });
+                log('✗ JSON file is empty', 'error');
+            }
+
+            // Test 5: FormData creation
+            try {
+                const formData = new FormData();
+                formData.append('game_py', pyFile, pyFile.name);
+                formData.append('metadata', jsonFile, jsonFile.name);
+                tests.push({ pass: true, msg: 'FormData created successfully' });
+                log('✓ FormData created with both files', 'success');
+            } catch (e) {
+                tests.push({ pass: false, msg: `FormData creation failed: ${e.message}` });
+                log(`✗ FormData error: ${e.message}`, 'error');
+            }
+
+            // Render test results
+            tests.forEach(test => {
+                const div = document.createElement('div');
+                div.className = test.pass ? 'test-item test-pass' : 'test-item test-fail';
+                div.textContent = `${test.pass ? '✓' : '✗'} ${test.msg}`;
+                testResults.appendChild(div);
+            });
+
+            const allPassed = tests.every(t => t.pass);
+            if (allPassed) {
+                showStatus('✓ All tests passed! Ready to upload.', 'success');
+            } else {
+                showStatus('✗ Some tests failed. Check the results above.', 'error');
+            }
+        });
+
+        // Debug upload (test endpoint)
+        btnDebug.addEventListener('click', function() {
+            log('=== DEBUG UPLOAD TEST ===', 'info');
+            showStatus('Sending to /api/upload/debug...', 'info');
+
+            const formData = new FormData();
+            formData.append('game_py', pyFile, pyFile.name);
+            formData.append('metadata', jsonFile, jsonFile.name);
+
+            log(`Uploading to: /api/upload/debug`, 'info');
+            log(`  game_py: ${pyFile.name} (${pyFile.size} bytes)`, 'info');
+            log(`  metadata: ${jsonFile.name} (${jsonFile.size} bytes)`, 'info');
+
+            fetch('/api/upload/debug', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                log(`Response status: ${response.status} ${response.statusText}`, 'info');
+                return response.json();
+            })
+            .then(data => {
+                log('Debug response received:', 'success');
+                log(JSON.stringify(data, null, 2), 'info');
+                showStatus('✓ Debug upload successful! Check log for details.', 'success');
+            })
+            .catch(error => {
+                log(`Debug upload error: ${error.message}`, 'error');
+                showStatus(`✗ Debug upload failed: ${error.message}`, 'error');
+            });
+        });
+
+        // Real upload
+        btnUpload.addEventListener('click', function() {
+            log('=== REAL UPLOAD TEST ===', 'info');
+            showStatus('Uploading to /api/upload...', 'info');
+
+            const formData = new FormData();
+            formData.append('game_py', pyFile, pyFile.name);
+            formData.append('metadata', jsonFile, jsonFile.name);
+
+            log(`Uploading to: /api/upload`, 'info');
+            log(`  game_py: ${pyFile.name} (${pyFile.size} bytes)`, 'info');
+            log(`  metadata: ${jsonFile.name} (${jsonFile.size} bytes)`, 'info');
+
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                log(`Response status: ${response.status} ${response.statusText}`, 'info');
+                const contentType = response.headers.get('content-type');
+                log(`Response content-type: ${contentType}`, 'info');
+
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => {
+                        log(`Non-JSON response received: ${text.substring(0, 200)}...`, 'warn');
+                        throw new Error('Server returned non-JSON response');
+                    });
+                }
+            })
+            .then(data => {
+                log('Upload response:', 'success');
+                log(JSON.stringify(data, null, 2), 'info');
+
+                if (data.status === 'ok' || data.game_id) {
+                    showStatus(`✓ Upload successful! Game ID: ${data.game_id}`, 'success');
+                } else if (data.error) {
+                    showStatus(`✗ Upload failed: ${data.error}`, 'error');
+                    log(`Server error: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                log(`Upload error: ${error.message}`, 'error');
+                showStatus(`✗ Upload failed: ${error.message}`, 'error');
+            });
+        });
+
+        // Clear
+        btnClear.addEventListener('click', function() {
+            pyInput.value = '';
+            jsonInput.value = '';
+            pyFile = null;
+            jsonFile = null;
+            pyInfo.textContent = 'No file selected';
+            pyInfo.style.color = '#8b949e';
+            jsonInfo.textContent = 'No file selected';
+            jsonInfo.style.color = '#8b949e';
+            testResults.innerHTML = '<p style="color: #8b949e;">Select files and click "Test File Selection" to begin</p>';
+            logEl.innerHTML = '';
+            hideStatus();
+            updateButtons();
+            log('Test page cleared', 'info');
+        });
+
+        // Initial log entry
+        log('Upload test page loaded', 'info');
+        log('Select your .py and .json files to begin testing', 'info');
+    </script>
+</body>
+</html>

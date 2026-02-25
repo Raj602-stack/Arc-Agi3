@@ -75,6 +75,7 @@ app = Flask(
     static_folder=str(PROJECT_ROOT / "web" / "static"),
 )
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "ethara-arc-dev-key")
+app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50MB max upload
 
 CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
 
@@ -437,6 +438,12 @@ ACTION_MAP = {
 def landing():
     """Landing page — choose between ARC AGI-2 and ARC AGI-3."""
     return render_template("landing.html")
+
+
+@app.route("/upload-test")
+def upload_test():
+    """Upload test page for debugging file uploads."""
+    return render_template("upload-test.html")
 
 
 # ---------------------------------------------------------------------------
@@ -946,6 +953,36 @@ def on_reset_level(data):
 #  UPLOAD ENDPOINT — drop game files at runtime
 # ═══════════════════════════════════════════════════════════════════════════
 
+@app.route("/api/upload/debug", methods=["POST"])
+def upload_debug():
+    """Debug endpoint to see what the server receives."""
+    try:
+        logger.info("=== UPLOAD DEBUG ===")
+        logger.info(f"request.files keys: {list(request.files.keys())}")
+        logger.info(f"request.form keys: {list(request.form.keys())}")
+        logger.info(f"request.content_type: {request.content_type}")
+
+        files_info = {}
+        for key in request.files:
+            file = request.files[key]
+            files_info[key] = {
+                "filename": file.filename,
+                "content_type": file.content_type,
+                "has_content": bool(file.read(10)),  # Check if file has content
+            }
+            file.seek(0)  # Reset file pointer
+
+        return jsonify({
+            "status": "debug_ok",
+            "files": files_info,
+            "form": dict(request.form),
+            "content_type": request.content_type,
+        }), 200
+    except Exception as e:
+        logger.error(f"Debug error: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/upload", methods=["POST"])
 def upload_game():
     """
@@ -957,18 +994,44 @@ def upload_game():
       - game_name:    (optional) folder name, defaults to game_id from metadata
     """
     try:
+        # Log what we received for debugging
+        logger.info(f"Upload request files: {list(request.files.keys())}")
+        logger.info(f"Upload request form: {list(request.form.keys())}")
+
         if "metadata" not in request.files:
+            logger.error("metadata file not in request.files")
             return jsonify({"error": "metadata.json file required"}), 400
         if "game_py" not in request.files:
+            logger.error("game_py file not in request.files")
             return jsonify({"error": "game .py file required"}), 400
 
         meta_file = request.files["metadata"]
         game_file = request.files["game_py"]
 
-        meta = json.loads(meta_file.read().decode("utf-8"))
+        # Check if files have filenames (not empty uploads)
+        if not meta_file.filename:
+            logger.error("metadata file has no filename")
+            return jsonify({"error": "metadata.json file is empty or not selected"}), 400
+        if not game_file.filename:
+            logger.error("game_py file has no filename")
+            return jsonify({"error": "game .py file is empty or not selected"}), 400
+
+        logger.info(f"Uploading: metadata={meta_file.filename}, game={game_file.filename}")
+
+        # Read and parse metadata
+        meta_content = meta_file.read()
+        if not meta_content:
+            return jsonify({"error": "metadata.json file is empty"}), 400
+
+        try:
+            meta = json.loads(meta_content.decode("utf-8"))
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON parse error: {e}")
+            return jsonify({"error": f"Invalid JSON in metadata.json: {str(e)}"}), 400
         game_id = meta.get("game_id", "")
         if not game_id:
-            return jsonify({"error": "metadata.json must contain game_id"}), 400
+            logger.error("metadata.json missing game_id field")
+            return jsonify({"error": "metadata.json must contain a 'game_id' field"}), 400
 
         # Derive folder structure: environment_files/<base_name>/<version>/
         # e.g. game_id "pm07-v1" → folder "pm07" version "v1"
@@ -991,7 +1054,10 @@ def upload_game():
         py_filename = game_file.filename or f"{base_name}.py"
         py_path = version_dir / py_filename
         game_file.seek(0)
-        py_path.write_bytes(game_file.read())
+        game_content = game_file.read()
+        if not game_content:
+            return jsonify({"error": "game .py file is empty"}), 400
+        py_path.write_bytes(game_content)
 
         # Re-discover games
         global DISCOVERED_GAMES, GAME_INDEX

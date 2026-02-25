@@ -38,12 +38,17 @@
             body {
                 height: 100%;
                 overflow: hidden;
-                background: var(--bg);
+                background: transparent;
                 color: var(--text);
                 font-family: var(--mono);
             }
-            body {
-                position: relative;
+
+            /* ═══ BACKGROUND LAYER (behind grid) ═══ */
+            .bg-layer {
+                position: fixed;
+                inset: 0;
+                background: var(--bg);
+                z-index: -3;
             }
 
             /* ═══ TOP BAR ═══ */
@@ -297,7 +302,7 @@
                 flex-direction: column;
                 height: 100vh;
                 position: relative;
-                z-index: 1;
+                z-index: 0;
                 background: transparent;
             }
             #content {
@@ -307,130 +312,94 @@
                 overflow: hidden;
                 min-height: 0;
                 position: relative;
-                z-index: 1;
+                z-index: 0;
                 background: transparent;
             }
 
-            /* ═══ ANIMATED PERSPECTIVE GRID BACKGROUND ═══ */
+            /* ═══ ANIMATED PERSPECTIVE GRID BACKGROUND (arcprize.org style) ═══ */
             .grid-bg {
                 position: fixed;
-                inset: 0;
-                z-index: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: auto;
+                width: 100%;
+                height: 70vh;
                 overflow: hidden;
+                perspective: 56.25vh;
+                z-index: -2;
                 pointer-events: none;
             }
-            .grid-bg::before {
-                content: "";
+            .grid-bg-lines {
                 position: absolute;
-                bottom: -80%;
-                left: -30%;
-                width: 160%;
-                height: 160%;
-                background:
-                    repeating-linear-gradient(
-                        90deg,
-                        rgba(88, 166, 255, 0.12) 0px,
-                        rgba(88, 166, 255, 0.12) 1px,
-                        transparent 1px,
-                        transparent 50px
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 200%;
+                background-image:
+                    linear-gradient(
+                        to right,
+                        rgba(88, 166, 255, 0.35) 1px,
+                        transparent 0
                     ),
-                    repeating-linear-gradient(
-                        0deg,
-                        rgba(88, 166, 255, 0.12) 0px,
-                        rgba(88, 166, 255, 0.12) 1px,
-                        transparent 1px,
-                        transparent 50px
+                    linear-gradient(
+                        to bottom,
+                        rgba(88, 166, 255, 0.35) 1px,
+                        transparent 0
                     );
-                transform-origin: 50% 0%;
-                transform: perspective(350px) rotateX(52deg);
-                animation: gridScroll 10s linear infinite;
+                background-size: 4vh 3vh;
+                background-repeat: repeat;
+                transform-origin: 100% 0 0;
+                animation: gridPlay 30s linear infinite;
             }
-            .grid-bg::after {
-                content: "";
-                position: absolute;
-                bottom: -80%;
-                left: -30%;
-                width: 160%;
-                height: 160%;
-                background:
-                    repeating-linear-gradient(
-                        90deg,
-                        rgba(188, 140, 255, 0.07) 0px,
-                        rgba(188, 140, 255, 0.07) 1px,
-                        transparent 1px,
-                        transparent 80px
-                    ),
-                    repeating-linear-gradient(
-                        0deg,
-                        rgba(63, 185, 80, 0.07) 0px,
-                        rgba(63, 185, 80, 0.07) 1px,
-                        transparent 1px,
-                        transparent 80px
-                    );
-                transform-origin: 50% 0%;
-                transform: perspective(280px) rotateX(58deg);
-                animation: gridScroll2 16s linear infinite;
-            }
-            @keyframes gridScroll {
+            @keyframes gridPlay {
                 0% {
-                    background-position:
-                        0px 0px,
-                        0px 0px;
+                    transform: rotateX(45deg) translateY(-50%);
                 }
                 100% {
-                    background-position:
-                        0px 50px,
-                        0px 50px;
+                    transform: rotateX(45deg) translateY(0);
                 }
             }
-            @keyframes gridScroll2 {
-                0% {
-                    background-position:
-                        0px 0px,
-                        0px 0px;
-                }
-                100% {
-                    background-position:
-                        0px 80px,
-                        0px 80px;
-                }
-            }
-            /* Fade-out at top so grid vanishes smoothly near the top bar */
+            /* Mask: fades grid at top and radial vignette */
             .grid-fade {
                 position: fixed;
-                top: 0;
                 left: 0;
-                width: 100%;
-                height: 15%;
-                z-index: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background-color: transparent;
+                background-image:
+                    linear-gradient(180deg, var(--bg) 25%, transparent),
+                    radial-gradient(
+                        circle farthest-corner at 50% 0%,
+                        transparent 60%,
+                        var(--bg) 95%
+                    );
+                z-index: -1;
                 pointer-events: none;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(14, 17, 23, 0.7) 0%,
-                    rgba(14, 17, 23, 0.3) 50%,
-                    transparent 100%
-                );
             }
             /* Subtle horizon glow line */
             .grid-glow {
                 position: fixed;
-                bottom: 35%;
+                bottom: 30%;
                 left: 0;
                 width: 100%;
                 height: 2px;
-                z-index: 0;
+                z-index: -1;
                 pointer-events: none;
                 background: linear-gradient(
                     90deg,
                     transparent 5%,
-                    rgba(88, 166, 255, 0.15) 30%,
-                    rgba(188, 140, 255, 0.2) 50%,
-                    rgba(63, 185, 80, 0.15) 70%,
+                    rgba(88, 166, 255, 0.18) 30%,
+                    rgba(188, 140, 255, 0.22) 50%,
+                    rgba(63, 185, 80, 0.18) 70%,
                     transparent 95%
                 );
                 box-shadow:
-                    0 0 30px 8px rgba(88, 166, 255, 0.06),
-                    0 0 60px 16px rgba(188, 140, 255, 0.03);
+                    0 0 30px 8px rgba(88, 166, 255, 0.08),
+                    0 0 60px 16px rgba(188, 140, 255, 0.04);
                 animation: glowPulse 4s ease-in-out infinite alternate;
             }
             @keyframes glowPulse {
@@ -450,7 +419,7 @@
                 min-height: 0;
                 overflow: hidden;
                 position: relative;
-                z-index: 1;
+                z-index: 0;
                 background: transparent;
             }
 
@@ -939,7 +908,7 @@
                 background: rgba(22, 27, 34, 0.55);
                 backdrop-filter: blur(12px);
                 position: relative;
-                z-index: 1;
+                z-index: 0;
             }
             #footer a {
                 color: var(--accent);
@@ -1066,6 +1035,12 @@
                 }
                 .section-divider {
                     height: 2px;
+                }
+                .bg-layer,
+                .grid-bg,
+                .grid-fade,
+                .grid-glow {
+                    display: none;
                 }
             }
 
@@ -1320,7 +1295,49 @@
                 background: rgba(63, 185, 80, 0.08);
             }
             .upload-file-pick input[type="file"] {
-                display: none;
+                font-family: var(--code);
+                font-size: 10px;
+                color: var(--text-dim);
+                cursor: pointer;
+                width: 100%;
+            }
+            .upload-file-pick input[type="file"]::file-selector-button {
+                font-family: var(--code);
+                font-size: 10px;
+                padding: 5px 12px;
+                margin-right: 8px;
+                background: var(--green-dim);
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .upload-file-pick input[type="file"]::file-selector-button:hover {
+                background: var(--green);
+            }
+            .upload-drop-zone {
+                border: 2px dashed var(--border);
+                border-radius: 8px;
+                padding: 20px 16px;
+                text-align: center;
+                color: var(--text-dim);
+                font-size: 12px;
+                line-height: 1.6;
+                margin-bottom: 14px;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+            .upload-drop-zone:hover,
+            .upload-drop-zone.dragover {
+                border-color: var(--green);
+                background: rgba(63, 185, 80, 0.04);
+                color: var(--text-bright);
+            }
+            .upload-drop-files {
+                margin-top: 6px;
+                font-size: 11px;
+                color: var(--green);
+                min-height: 16px;
             }
             .upload-file-name {
                 font-family: var(--code);
@@ -1414,8 +1431,13 @@
         </style>
     </head>
     <body>
-        <!-- ═══ ANIMATED GRID BACKGROUND ═══ -->
-        <div class="grid-bg"></div>
+        <!-- ═══ BACKGROUND LAYER ═══ -->
+        <div class="bg-layer"></div>
+
+        <!-- ═══ ANIMATED GRID BACKGROUND (arcprize.org style) ═══ -->
+        <div class="grid-bg">
+            <div class="grid-bg-lines"></div>
+        </div>
         <div class="grid-fade"></div>
         <div class="grid-glow"></div>
 
@@ -1517,19 +1539,29 @@
                 <div class="upload-box">
                     <h2>↑ UPLOAD AGI-3 GAME</h2>
 
+                    <div class="upload-drop-zone" id="upload-drop-zone">
+                        <span
+                            style="
+                                font-size: 28px;
+                                display: block;
+                                margin-bottom: 6px;
+                            "
+                            >📁</span
+                        >
+                        Drag &amp; drop <strong>.py</strong> +
+                        <strong>.json</strong> here
+                        <div class="upload-drop-files" id="upload-drop-status">
+                            or choose files below
+                        </div>
+                    </div>
+
                     <div class="upload-file-row">
                         <div class="upload-file-label">
                             Game Python file
                             <span class="ufl-req">*required</span>
                         </div>
                         <div class="upload-file-pick">
-                            <label for="upload-py" id="upload-py-label"
-                                >Choose .py file</label
-                            >
                             <input type="file" id="upload-py" accept=".py" />
-                            <span class="upload-file-name" id="upload-py-name"
-                                >No file selected</span
-                            >
                         </div>
                     </div>
 
@@ -1538,17 +1570,11 @@
                             Metadata JSON <span class="ufl-req">*required</span>
                         </div>
                         <div class="upload-file-pick">
-                            <label for="upload-json" id="upload-json-label"
-                                >Choose .json file</label
-                            >
                             <input
                                 type="file"
                                 id="upload-json"
                                 accept=".json"
                             />
-                            <span class="upload-file-name" id="upload-json-name"
-                                >No file selected</span
-                            >
                         </div>
                     </div>
 
@@ -1976,37 +2002,77 @@
             var uploadModal = document.getElementById("upload-modal");
             var uploadPyInput = document.getElementById("upload-py");
             var uploadJsonInput = document.getElementById("upload-json");
-            var uploadPyLabel = document.getElementById("upload-py-label");
-            var uploadJsonLabel = document.getElementById("upload-json-label");
-            var uploadPyName = document.getElementById("upload-py-name");
-            var uploadJsonName = document.getElementById("upload-json-name");
             var uploadSubmitBtn = document.getElementById("upload-submit-btn");
             var uploadStatusEl = document.getElementById("upload-status");
+            var uploadDropZone = document.getElementById("upload-drop-zone");
+            var uploadDropStatus =
+                document.getElementById("upload-drop-status");
+            // Store file references in JS — never rely on input.files at submit time
+            var _storedPyFile = null;
+            var _storedJsonFile = null;
+
+            function _updateUploadUI() {
+                uploadSubmitBtn.disabled = !(_storedPyFile && _storedJsonFile);
+                var parts = [];
+                if (_storedPyFile)
+                    parts.push(
+                        "✓ " +
+                            _storedPyFile.name +
+                            " (" +
+                            (_storedPyFile.size / 1024).toFixed(1) +
+                            " KB)",
+                    );
+                if (_storedJsonFile)
+                    parts.push(
+                        "✓ " +
+                            _storedJsonFile.name +
+                            " (" +
+                            (_storedJsonFile.size / 1024).toFixed(1) +
+                            " KB)",
+                    );
+                uploadDropStatus.innerHTML =
+                    parts.length > 0
+                        ? parts.join("<br>")
+                        : "or choose files below";
+            }
+
+            function _handleUploadFile(file) {
+                if (!file) return;
+                if (file.name.endsWith(".py")) {
+                    _storedPyFile = file;
+                    console.log(
+                        "[Upload] Stored .py:",
+                        file.name,
+                        file.size,
+                        "bytes",
+                    );
+                } else if (file.name.endsWith(".json")) {
+                    _storedJsonFile = file;
+                    console.log(
+                        "[Upload] Stored .json:",
+                        file.name,
+                        file.size,
+                        "bytes",
+                    );
+                }
+                _updateUploadUI();
+            }
 
             function openUploadModal() {
+                _storedPyFile = null;
+                _storedJsonFile = null;
                 uploadPyInput.value = "";
                 uploadJsonInput.value = "";
-                uploadPyName.textContent = "No file selected";
-                uploadPyName.classList.remove("selected");
-                uploadJsonName.textContent = "No file selected";
-                uploadJsonName.classList.remove("selected");
-                uploadPyLabel.classList.remove("has-file");
-                uploadJsonLabel.classList.remove("has-file");
                 uploadSubmitBtn.disabled = true;
+                uploadSubmitBtn.textContent = "UPLOAD GAME";
                 uploadStatusEl.textContent = "";
                 uploadStatusEl.className = "upload-status";
+                _updateUploadUI();
                 uploadModal.classList.add("show");
             }
 
             function closeUploadModal() {
                 uploadModal.classList.remove("show");
-            }
-
-            function checkUploadReady() {
-                var ready =
-                    uploadPyInput.files.length > 0 &&
-                    uploadJsonInput.files.length > 0;
-                uploadSubmitBtn.disabled = !ready;
             }
 
             document
@@ -2019,40 +2085,105 @@
                 if (e.target === uploadModal) closeUploadModal();
             });
 
+            // Drag-and-drop support
+            uploadDropZone.addEventListener("dragover", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add("dragover");
+            });
+            uploadDropZone.addEventListener("dragleave", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove("dragover");
+            });
+            uploadDropZone.addEventListener("drop", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove("dragover");
+                for (var i = 0; i < e.dataTransfer.files.length; i++) {
+                    _handleUploadFile(e.dataTransfer.files[i]);
+                }
+            });
+            uploadDropZone.addEventListener("click", function () {
+                var inp = document.createElement("input");
+                inp.type = "file";
+                inp.multiple = true;
+                inp.accept = ".py,.json";
+                inp.onchange = function () {
+                    for (var i = 0; i < inp.files.length; i++) {
+                        _handleUploadFile(inp.files[i]);
+                    }
+                };
+                inp.click();
+            });
+
+            // File inputs — store in variable immediately on selection
             uploadPyInput.addEventListener("change", function () {
-                if (this.files.length > 0) {
-                    uploadPyName.textContent = this.files[0].name;
-                    uploadPyName.classList.add("selected");
-                    uploadPyLabel.classList.add("has-file");
-                    uploadPyLabel.textContent = "✓ .py selected";
-                } else {
-                    uploadPyName.textContent = "No file selected";
-                    uploadPyName.classList.remove("selected");
-                    uploadPyLabel.classList.remove("has-file");
-                    uploadPyLabel.textContent = "Choose .py file";
+                if (this.files && this.files[0]) {
+                    _storedPyFile = this.files[0];
+                    console.log("[Upload] .py via input:", _storedPyFile.name);
                 }
-                checkUploadReady();
+                _updateUploadUI();
             });
-
             uploadJsonInput.addEventListener("change", function () {
-                if (this.files.length > 0) {
-                    uploadJsonName.textContent = this.files[0].name;
-                    uploadJsonName.classList.add("selected");
-                    uploadJsonLabel.classList.add("has-file");
-                    uploadJsonLabel.textContent = "✓ .json selected";
-                } else {
-                    uploadJsonName.textContent = "No file selected";
-                    uploadJsonName.classList.remove("selected");
-                    uploadJsonLabel.classList.remove("has-file");
-                    uploadJsonLabel.textContent = "Choose .json file";
+                if (this.files && this.files[0]) {
+                    _storedJsonFile = this.files[0];
+                    console.log(
+                        "[Upload] .json via input:",
+                        _storedJsonFile.name,
+                    );
                 }
-                checkUploadReady();
+                _updateUploadUI();
             });
 
+            // Upload submit — uses stored file refs + XMLHttpRequest for reliability
             uploadSubmitBtn.addEventListener("click", function () {
-                var pyFile = uploadPyInput.files[0];
-                var jsonFile = uploadJsonInput.files[0];
-                if (!pyFile || !jsonFile) return;
+                // Use stored files; fall back to input.files if somehow stored is null
+                var pyFile = _storedPyFile;
+                var jsonFile = _storedJsonFile;
+                if (!pyFile && uploadPyInput.files && uploadPyInput.files[0]) {
+                    pyFile = uploadPyInput.files[0];
+                }
+                if (
+                    !jsonFile &&
+                    uploadJsonInput.files &&
+                    uploadJsonInput.files[0]
+                ) {
+                    jsonFile = uploadJsonInput.files[0];
+                }
+
+                console.log("[Upload] === SUBMIT ===");
+                console.log(
+                    "[Upload] pyFile:",
+                    pyFile
+                        ? pyFile.name + " (" + pyFile.size + " bytes)"
+                        : "MISSING",
+                );
+                console.log(
+                    "[Upload] jsonFile:",
+                    jsonFile
+                        ? jsonFile.name + " (" + jsonFile.size + " bytes)"
+                        : "MISSING",
+                );
+
+                if (!pyFile || !jsonFile) {
+                    uploadStatusEl.textContent =
+                        "✗ Select both a .py game file and a .json metadata file";
+                    uploadStatusEl.className = "upload-status err";
+                    return;
+                }
+                if (pyFile.size === 0) {
+                    uploadStatusEl.textContent =
+                        "✗ Python file is empty (0 bytes)";
+                    uploadStatusEl.className = "upload-status err";
+                    return;
+                }
+                if (jsonFile.size === 0) {
+                    uploadStatusEl.textContent =
+                        "✗ JSON file is empty (0 bytes)";
+                    uploadStatusEl.className = "upload-status err";
+                    return;
+                }
 
                 uploadSubmitBtn.disabled = true;
                 uploadSubmitBtn.textContent = "UPLOADING…";
@@ -2060,44 +2191,78 @@
                 uploadStatusEl.className = "upload-status info";
 
                 var form = new FormData();
-                form.append("game_py", pyFile);
-                form.append("metadata", jsonFile);
+                form.append("game_py", pyFile, pyFile.name);
+                form.append("metadata", jsonFile, jsonFile.name);
 
-                fetch("/api/upload", { method: "POST", body: form })
-                    .then(function (r) {
-                        return r.json().then(function (d) {
-                            return { ok: r.ok, data: d };
-                        });
-                    })
-                    .then(function (res) {
-                        if (res.ok) {
-                            uploadStatusEl.textContent =
-                                "✓ Game uploaded: " +
-                                (res.data.game_id || "OK");
-                            uploadStatusEl.className = "upload-status ok";
-                            uploadSubmitBtn.textContent = "✓ DONE";
-                            showToast(
-                                "✓ Game uploaded: " +
-                                    (res.data.game_id || "OK"),
-                                "ok",
-                                3000,
-                            );
-                            fetchAgi3Games();
-                            setTimeout(closeUploadModal, 1200);
-                        } else {
-                            uploadStatusEl.textContent =
-                                "✗ " + (res.data.error || "Upload failed");
-                            uploadStatusEl.className = "upload-status err";
-                            uploadSubmitBtn.disabled = false;
-                            uploadSubmitBtn.textContent = "UPLOAD GAME";
-                        }
-                    })
-                    .catch(function (err) {
-                        uploadStatusEl.textContent = "✗ " + err.message;
+                // Debug: log FormData keys
+                var fdKeys = [];
+                form.forEach(function (val, key) {
+                    fdKeys.push(key + "=" + (val.name || val));
+                });
+                console.log("[Upload] FormData keys:", fdKeys.join(", "));
+
+                // Use XMLHttpRequest — more reliable than fetch for multipart uploads
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/api/upload", true);
+
+                xhr.onload = function () {
+                    console.log(
+                        "[Upload] Response:",
+                        xhr.status,
+                        xhr.responseText.substring(0, 500),
+                    );
+                    var data;
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        console.error(
+                            "[Upload] Failed to parse response as JSON",
+                        );
+                        uploadStatusEl.textContent =
+                            "✗ Invalid server response";
                         uploadStatusEl.className = "upload-status err";
                         uploadSubmitBtn.disabled = false;
                         uploadSubmitBtn.textContent = "UPLOAD GAME";
-                    });
+                        return;
+                    }
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        uploadStatusEl.textContent =
+                            "✓ Uploaded: " + (data.game_id || "OK");
+                        uploadStatusEl.className = "upload-status ok";
+                        uploadSubmitBtn.textContent = "✓ DONE";
+                        showToast(
+                            "✓ Game uploaded: " + (data.game_id || "OK"),
+                            "ok",
+                            3000,
+                        );
+                        fetchAgi3Games();
+                        setTimeout(closeUploadModal, 1200);
+                    } else {
+                        var errMsg =
+                            data.error ||
+                            "Upload failed (HTTP " + xhr.status + ")";
+                        console.error("[Upload] Server error:", errMsg);
+                        uploadStatusEl.textContent = "✗ " + errMsg;
+                        uploadStatusEl.className = "upload-status err";
+                        uploadSubmitBtn.disabled = false;
+                        uploadSubmitBtn.textContent = "UPLOAD GAME";
+                        showToast("✗ " + errMsg, "err", 4000);
+                    }
+                };
+
+                xhr.onerror = function () {
+                    console.error("[Upload] XHR network error");
+                    uploadStatusEl.textContent =
+                        "✗ Network error — is the server running?";
+                    uploadStatusEl.className = "upload-status err";
+                    uploadSubmitBtn.disabled = false;
+                    uploadSubmitBtn.textContent = "UPLOAD GAME";
+                    showToast("✗ Network error during upload", "err", 4000);
+                };
+
+                console.log("[Upload] Sending XHR POST to /api/upload ...");
+                xhr.send(form);
             });
 
             // ══════════════════════════════════════════════════════════════
