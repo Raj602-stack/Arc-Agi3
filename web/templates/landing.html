@@ -2349,12 +2349,6 @@
                             </button>
                         </div>
                         <div class="section-controls">
-                            <input
-                                type="text"
-                                class="search-box"
-                                id="agi2-search"
-                                placeholder="Search task ID…"
-                            />
                             <button
                                 class="random-btn"
                                 id="agi2-random"
@@ -2430,12 +2424,6 @@
                             feedback.
                         </div>
                         <div class="section-controls">
-                            <input
-                                type="text"
-                                class="search-box"
-                                id="agi3-search"
-                                placeholder="Search game ID…"
-                            />
                             <button
                                 class="random-btn"
                                 id="agi3-random"
@@ -2709,12 +2697,13 @@
             }
 
             // ── AGI-3 Search ──
-            document
-                .getElementById("agi3-search")
-                .addEventListener("input", function () {
+            var _agi3Search = document.getElementById("agi3-search");
+            if (_agi3Search) {
+                _agi3Search.addEventListener("input", function () {
                     agi3Search = this.value.trim();
                     renderAgi3();
                 });
+            }
 
             // ── AGI-3 Upload Modal ──
             var uploadModal = document.getElementById("upload-modal");
@@ -3202,9 +3191,9 @@
             // ── AGI-2 Search (debounced) ──
             (function () {
                 var timer = null;
-                document
-                    .getElementById("agi2-search")
-                    .addEventListener("input", function () {
+                var _agi2Search = document.getElementById("agi2-search");
+                if (_agi2Search) {
+                    _agi2Search.addEventListener("input", function () {
                         var val = this.value.trim();
                         clearTimeout(timer);
                         timer = setTimeout(function () {
@@ -3213,6 +3202,7 @@
                             renderAgi2();
                         }, 200);
                     });
+                }
             })();
 
             // ── AGI-2 Pagination ──
@@ -3653,7 +3643,8 @@
                 // / — focus search (AGI-2 by default)
                 if (e.key === "/") {
                     e.preventDefault();
-                    document.getElementById("agi2-search").focus();
+                    var _s = document.getElementById("agi2-search");
+                    if (_s) _s.focus();
                     return;
                 }
 
