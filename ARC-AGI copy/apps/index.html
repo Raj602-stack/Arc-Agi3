@@ -2224,6 +2224,49 @@
                     }
                 }
             })();
+
+            // ── Auto-load uploaded task from sessionStorage ───────
+            // Landing page stores JSON in sessionStorage and navigates
+            // to /arc-agi-2/?uploaded=1
+            (function () {
+                var params = new URLSearchParams(window.location.search);
+                if (params.get("uploaded") !== "1") return;
+
+                try {
+                    var taskJson = sessionStorage.getItem("agi2_upload_task");
+                    var taskName =
+                        sessionStorage.getItem("agi2_upload_name") ||
+                        "uploaded_task.json";
+
+                    if (!taskJson) {
+                        errorMsg(
+                            "No uploaded task data found. Please try uploading again.",
+                        );
+                        return;
+                    }
+
+                    var data = JSON.parse(taskJson);
+                    if (!data.train || !data.test) {
+                        errorMsg(
+                            "Invalid task file: missing train/test arrays.",
+                        );
+                        return;
+                    }
+
+                    // Hide browser modal so it doesn't flash
+                    $("#modal_bg").hide();
+
+                    // Load the task into the testing interface
+                    loadJSONTask(data.train, data.test);
+                    display_task_name(taskName, null, null);
+
+                    // Clean up sessionStorage
+                    sessionStorage.removeItem("agi2_upload_task");
+                    sessionStorage.removeItem("agi2_upload_name");
+                } catch (e) {
+                    errorMsg("Failed to load uploaded task: " + e.message);
+                }
+            })();
         </script>
     </body>
 </html>
