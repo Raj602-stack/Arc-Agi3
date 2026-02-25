@@ -445,8 +445,8 @@
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
-                gap: 20px;
-                padding: 14px 28px 12px;
+                gap: 12px;
+                padding: 8px 20px 6px;
                 border-bottom: 1px solid rgba(48, 54, 61, 0.6);
                 background: rgba(22, 27, 34, 0.55);
                 backdrop-filter: blur(10px);
@@ -700,11 +700,11 @@
             .carousel-track {
                 flex: 1;
                 display: flex;
-                gap: 14px;
+                gap: 10px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 scroll-behavior: smooth;
-                padding: 16px 14px;
+                padding: 10px 8px;
                 min-height: 0;
                 align-items: center;
                 justify-content: center;
@@ -722,8 +722,8 @@
             /* ═══ GAME / TASK CARD ═══ */
             .g-card {
                 flex-shrink: 0;
-                width: 180px;
-                height: 240px;
+                width: 155px;
+                height: 205px;
                 background: rgba(22, 27, 34, 0.9);
                 border: 1px solid rgba(255, 255, 255, 0.07);
                 cursor: pointer;
@@ -800,13 +800,13 @@
                 opacity: 1;
             }
             .play-circle {
-                width: 40px;
-                height: 40px;
+                width: 34px;
+                height: 34px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 16px;
+                font-size: 14px;
                 color: #fff;
                 transition: transform 0.2s ease;
             }
@@ -826,13 +826,13 @@
 
             /* ── Card Info ── */
             .g-card-info {
-                padding: 8px 10px;
+                padding: 6px 8px;
                 display: flex;
                 flex-direction: column;
-                gap: 4px;
+                gap: 3px;
                 background: rgba(22, 27, 34, 0.7);
                 flex-shrink: 0;
-                min-height: 56px;
+                min-height: 46px;
             }
             .g-card-id {
                 font-family: var(--pixel);
@@ -926,151 +926,138 @@
             /* ── Large desktop tweaks (>1400) — make cards wider ── */
             @media (min-width: 1400px) {
                 .g-card {
-                    width: 210px;
-                    height: 275px;
+                    width: 180px;
+                    height: 238px;
                 }
                 .carousel-track {
-                    gap: 18px;
-                    padding: 18px 16px;
+                    gap: 14px;
+                    padding: 12px 12px;
                 }
             }
 
             /* ── Laptops / small desktops (≤1399) ── */
             @media (max-width: 1399px) {
                 .section-header {
-                    padding: 12px 22px 10px;
-                    gap: 10px 16px;
-                    flex-wrap: wrap;
+                    padding: 6px 16px 5px;
+                    gap: 10px;
                 }
                 .section-desc {
                     display: none;
                 }
-                .section-controls {
-                    width: 100%;
-                    order: 10;
-                    margin-left: 0;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                }
-                .search-box {
-                    flex: 1;
-                    min-width: 140px;
-                    width: auto;
-                }
-                .g-card {
-                    width: 180px;
-                    height: 240px;
-                }
-                .carousel-track {
-                    gap: 14px;
-                    padding: 16px 14px;
-                }
-                .section-badge {
-                    font-size: 12px;
-                    padding: 7px 14px;
-                }
-                .cat-tabs {
-                    flex-wrap: wrap;
-                }
-            }
-
-            /* ── Smaller desktops / large laptops (≤1199) ── */
-            @media (max-width: 1199px) {
-                .section-header {
-                    gap: 8px 14px;
-                    padding: 10px 18px 8px;
-                }
                 .section-badge {
                     font-size: 11px;
-                    padding: 6px 12px;
+                    padding: 5px 10px;
                 }
                 .section-title {
                     font-size: 13px;
                 }
                 .cat-tab {
                     font-size: 10px;
-                    padding: 5px 10px;
-                }
-                .search-box {
-                    min-width: 120px;
+                    padding: 4px 9px;
                 }
                 .g-card {
-                    width: 170px;
-                    height: 225px;
+                    width: 150px;
+                    height: 198px;
                 }
                 .carousel-track {
-                    gap: 12px;
-                    padding: 14px 12px;
+                    gap: 10px;
+                    padding: 10px 8px;
                 }
-                .g-card-info {
-                    padding: 7px 9px;
-                    gap: 4px;
-                    min-height: 52px;
+            }
+
+            /* ── Smaller desktops / large laptops (≤1199) ── */
+            @media (max-width: 1199px) {
+                .section-header {
+                    gap: 8px;
+                    padding: 5px 14px 4px;
                 }
-                .g-card-id {
-                    font-size: 9px;
+                .section-badge {
+                    font-size: 10px;
+                    padding: 4px 9px;
+                }
+                .section-title {
+                    font-size: 12px;
+                }
+                .cat-tab {
+                    font-size: 10px;
+                    padding: 4px 8px;
+                }
+                .g-card {
+                    width: 140px;
+                    height: 185px;
+                }
+                .carousel-track {
+                    gap: 8px;
+                    padding: 8px 6px;
                 }
                 .play-circle {
-                    width: 38px;
-                    height: 38px;
-                    font-size: 15px;
+                    width: 32px;
+                    height: 32px;
+                    font-size: 13px;
                 }
                 .carousel-btn {
-                    width: 36px;
-                    height: 36px;
-                    font-size: 18px;
+                    width: 32px;
+                    height: 32px;
+                    font-size: 16px;
                 }
             }
 
             /* ── Tablets landscape / small laptops (≤1099) ── */
             @media (max-width: 1099px) {
                 .section-header {
-                    gap: 8px 10px;
-                    padding: 8px 14px 6px;
+                    gap: 6px 8px;
+                    padding: 5px 12px 4px;
+                    flex-wrap: wrap;
+                }
+                .section-controls {
+                    width: 100%;
+                    order: 10;
+                    margin-left: 0;
+                    gap: 6px;
                 }
                 .section-badge {
                     font-size: 10px;
-                    padding: 5px 10px;
+                    padding: 4px 8px;
                 }
                 .section-title {
-                    font-size: 12px;
+                    font-size: 11px;
                 }
                 .section-subtitle {
                     font-size: 9px;
                 }
-                .cat-tab {
-                    font-size: 10px;
-                    padding: 4px 8px;
+                .cat-tabs {
+                    flex-wrap: wrap;
                 }
-                .search-box {
-                    min-width: 100px;
+                .cat-tab {
+                    font-size: 9px;
+                    padding: 3px 7px;
                 }
                 .upload-btn {
                     font-size: 9px;
-                    padding: 5px 9px;
+                    padding: 4px 8px;
                 }
                 .g-card {
-                    width: 160px;
-                    height: 212px;
+                    width: 130px;
+                    height: 172px;
                 }
                 .carousel-track {
-                    gap: 10px;
-                    padding: 12px 10px;
+                    gap: 8px;
+                    padding: 8px 6px;
                 }
                 .g-card-info {
-                    padding: 6px 8px;
-                    gap: 4px;
-                    min-height: 48px;
+                    padding: 5px 6px;
+                    gap: 3px;
+                    min-height: 42px;
                 }
                 .play-circle {
-                    width: 36px;
-                    height: 36px;
-                    font-size: 14px;
+                    width: 30px;
+                    height: 30px;
+                    font-size: 12px;
                 }
                 .carousel-btn {
-                    width: 34px;
-                    height: 34px;
-                    font-size: 17px;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 14px;
                 }
             }
 
@@ -1114,12 +1101,12 @@
                     padding: 4px 10px;
                 }
                 .g-card {
-                    width: 150px;
-                    height: 200px;
+                    width: 120px;
+                    height: 160px;
                 }
                 .carousel-track {
-                    gap: 10px;
-                    padding: 10px 8px;
+                    gap: 8px;
+                    padding: 6px 4px;
                 }
                 .carousel-btn {
                     width: 32px;
@@ -1127,17 +1114,17 @@
                     font-size: 16px;
                 }
                 .g-card-info {
-                    padding: 6px 7px;
-                    gap: 4px;
-                    min-height: 46px;
+                    padding: 4px 5px;
+                    gap: 3px;
+                    min-height: 38px;
                 }
                 .g-card-id {
                     font-size: 9px;
                 }
                 .play-circle {
-                    width: 34px;
-                    height: 34px;
-                    font-size: 14px;
+                    width: 28px;
+                    height: 28px;
+                    font-size: 12px;
                 }
                 .random-btn {
                     width: 32px;
@@ -1254,8 +1241,8 @@
                     padding: 5px 8px;
                 }
                 .g-card {
-                    width: 140px;
-                    height: 188px;
+                    width: 115px;
+                    height: 154px;
                     border-radius: 5px;
                 }
                 .g-card-preview .loading-text {
@@ -1263,9 +1250,9 @@
                     letter-spacing: 2px;
                 }
                 .g-card-info {
-                    padding: 5px 6px;
-                    gap: 3px;
-                    min-height: 42px;
+                    padding: 4px 5px;
+                    gap: 2px;
+                    min-height: 36px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1275,9 +1262,9 @@
                     padding: 2px 5px;
                 }
                 .play-circle {
-                    width: 30px;
-                    height: 30px;
-                    font-size: 12px;
+                    width: 26px;
+                    height: 26px;
+                    font-size: 11px;
                 }
                 .carousel-track {
                     gap: 10px;
@@ -1424,14 +1411,14 @@
                     padding: 4px 7px;
                 }
                 .g-card {
-                    width: 125px;
-                    height: 170px;
+                    width: 105px;
+                    height: 142px;
                     border-radius: 4px;
                 }
                 .g-card-info {
-                    padding: 5px 6px;
-                    gap: 3px;
-                    min-height: 40px;
+                    padding: 3px 4px;
+                    gap: 2px;
+                    min-height: 34px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1441,9 +1428,9 @@
                     padding: 2px 4px;
                 }
                 .play-circle {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 11px;
+                    width: 24px;
+                    height: 24px;
+                    font-size: 10px;
                 }
                 .carousel-track {
                     gap: 8px;
@@ -1531,14 +1518,14 @@
                     font-size: 9px;
                 }
                 .g-card {
-                    width: 110px;
-                    height: 150px;
+                    width: 95px;
+                    height: 128px;
                     border-radius: 4px;
                 }
                 .g-card-info {
-                    padding: 4px 5px;
+                    padding: 3px 4px;
                     gap: 2px;
-                    min-height: 36px;
+                    min-height: 30px;
                 }
                 .g-card-id {
                     font-size: 9px;
@@ -1552,9 +1539,9 @@
                     border-radius: 2px;
                 }
                 .play-circle {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 10px;
+                    width: 22px;
+                    height: 22px;
+                    font-size: 9px;
                 }
                 .carousel-btn {
                     width: 22px;
@@ -1679,13 +1666,13 @@
                     padding: 2px 4px;
                 }
                 .g-card {
-                    width: 100px;
-                    height: 138px;
+                    width: 85px;
+                    height: 115px;
                     border-radius: 3px;
                 }
                 .g-card-info {
-                    padding: 3px 4px;
-                    min-height: 32px;
+                    padding: 2px 3px;
+                    min-height: 26px;
                     gap: 2px;
                 }
                 .g-card-id {
@@ -1699,8 +1686,8 @@
                     display: none;
                 }
                 .play-circle {
-                    width: 22px;
-                    height: 22px;
+                    width: 20px;
+                    height: 20px;
                     font-size: 9px;
                 }
                 .carousel-btn {
@@ -1748,8 +1735,8 @@
                 }
                 .g-card {
                     height: auto;
-                    min-height: 140px;
-                    width: 140px;
+                    min-height: 120px;
+                    width: 120px;
                 }
                 .g-card-info {
                     min-height: auto;
