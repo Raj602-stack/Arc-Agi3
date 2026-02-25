@@ -24,7 +24,6 @@ body {
 }
 
 #modal {
-    max-width: 90vw;
     box-sizing: border-box;
 }
 
@@ -400,27 +399,6 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 600px) {
-    /* Modal */
-    #modal {
-        padding: 28px 20px 24px;
-        border-radius: 12px;
-        max-width: 95vw;
-    }
-    .modal_title {
-        font-size: 18px;
-    }
-    .modal_subtitle {
-        font-size: 12px;
-        margin-bottom: 20px;
-    }
-    .modal_dropzone {
-        padding: 20px 16px 18px;
-    }
-    .modal_browse_btn {
-        padding: 8px 22px;
-        font-size: 12px;
-    }
-
     /* Top bar */
     #top_bar {
         padding: 6px 10px;
@@ -509,44 +487,6 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 480px) {
-    /* Modal */
-    #modal {
-        padding: 24px 16px 20px;
-        width: 95vw;
-        max-width: 95vw;
-        border-radius: 10px;
-    }
-    .modal_icon svg {
-        width: 40px;
-        height: 40px;
-    }
-    .modal_title {
-        font-size: 17px;
-    }
-    .modal_subtitle {
-        font-size: 12px;
-        margin-bottom: 16px;
-    }
-    .modal_dropzone {
-        padding: 18px 12px 16px;
-        border-radius: 8px;
-    }
-    .modal_dropzone_icon svg {
-        width: 28px;
-        height: 28px;
-    }
-    .modal_dropzone_text {
-        font-size: 12px;
-    }
-    .modal_browse_btn {
-        padding: 8px 20px;
-        font-size: 12px;
-        border-radius: 6px;
-    }
-    .modal_footer {
-        font-size: 10px;
-    }
-
     /* Top bar */
     #top_bar {
         padding: 6px 8px;
@@ -805,36 +745,6 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 380px) {
-    #modal_bg {
-        padding: 8px;
-    }
-    #modal {
-        padding: 20px 12px 16px;
-        border-radius: 8px;
-        max-width: 98vw;
-    }
-    .modal_icon svg {
-        width: 36px;
-        height: 36px;
-    }
-    .modal_title {
-        font-size: 16px;
-    }
-    .modal_subtitle {
-        font-size: 11px;
-        margin-bottom: 14px;
-    }
-    .modal_dropzone {
-        padding: 14px 10px 12px;
-    }
-    .modal_dropzone_text {
-        font-size: 11px;
-    }
-    .modal_browse_btn {
-        padding: 7px 18px;
-        font-size: 11px;
-    }
-
     #top_bar {
         padding: 5px 6px;
     }
@@ -914,31 +824,6 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-height: 500px) and (orientation: landscape) {
-    #modal {
-        padding: 16px 20px 12px;
-        max-height: 90vh;
-        max-height: 90dvh;
-        overflow-y: auto;
-    }
-    .modal_icon {
-        margin-bottom: 8px;
-    }
-    .modal_icon svg {
-        width: 32px;
-        height: 32px;
-    }
-    .modal_title {
-        font-size: 16px;
-        margin-bottom: 4px;
-    }
-    .modal_subtitle {
-        font-size: 11px;
-        margin-bottom: 12px;
-    }
-    .modal_dropzone {
-        padding: 12px 14px 10px;
-    }
-
     /* Force side-by-side in landscape even on small screens */
     #workspace {
         flex-direction: row;
@@ -1004,8 +889,5 @@ body {
     .symbol_preview {
         min-width: 28px;
         min-height: 28px;
-    }
-    .modal_browse_btn {
-        min-height: 42px;
     }
 }

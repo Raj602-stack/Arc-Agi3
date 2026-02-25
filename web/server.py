@@ -463,9 +463,9 @@ def game_direct_legacy(game_id):
 
 
 # ---------------------------------------------------------------------------
-# ARC AGI-2 (static HTML/CSS/JS from ARC-AGI-main/apps)
+# ARC AGI-2 (static HTML/CSS/JS from ARC-AGI copy/apps)
 # ---------------------------------------------------------------------------
-ARC_AGI_2_DIR = str(PROJECT_ROOT / "ARC-AGI-main" / "apps")
+ARC_AGI_2_DIR = str(PROJECT_ROOT / "ARC-AGI copy" / "apps")
 
 
 @app.route("/arc-agi-2")

@@ -6,6 +6,10 @@ var TRAIN_PAIRS = new Array();
 var CURRENT_TEST_PAIR_INDEX = 0;
 var COPY_PASTE_DATA = new Array();
 
+// Task browser state.
+var TASK_INDEX = {}; // { my_tasks: [...], evaluation: [...], training: [...] }
+var TASK_INDEX_LOADED = false;
+
 // Cosmetic.
 var EDITION_GRID_HEIGHT = 350;
 var EDITION_GRID_WIDTH = 350;
@@ -19,6 +23,88 @@ var TEST_OUTPUT_MAX = 280;
 // Fixed square size for test grids (both input and output fill this area).
 // This will be dynamically updated by syncTestGridHeight().
 var TEST_GRID_FIXED_SIZE = 300;
+
+// ─── Task Browser Functions ──────────────────────────────────
+
+function loadTaskIndex() {
+  if (TASK_INDEX_LOADED) {
+    renderFileList();
+    return;
+  }
+  // Use the inline data from js/task_index_data.js (works with file:// protocol)
+  if (typeof TASK_INDEX_DATA !== "undefined") {
+    TASK_INDEX = TASK_INDEX_DATA;
+    TASK_INDEX_LOADED = true;
+    renderFileList();
+  } else {
+    // Fallback: try fetching the JSON file (requires a server)
+    $.getJSON("task_index.json", function (data) {
+      TASK_INDEX = data;
+      TASK_INDEX_LOADED = true;
+      renderFileList();
+    }).fail(function () {
+      errorMsg(
+        "Could not load task index. Make sure task_index_data.js is included.",
+      );
+    });
+  }
+}
+
+function openTaskBrowser() {
+  $("#modal_bg").show();
+  loadTaskIndex();
+}
+
+function renderFileList() {
+  // No-op: task card browser handles rendering via inline script
+}
+
+function handleTaskJSON(json, folder, filename) {
+  try {
+    var train = json["train"];
+    var test = json["test"];
+    if (!train || !test) {
+      errorMsg("Bad file format: missing train/test");
+      return;
+    }
+    loadJSONTask(train, test);
+    var allFiles = TASK_INDEX[folder] || [];
+    var idx = allFiles.indexOf(filename);
+    display_task_name(filename, idx >= 0 ? idx : null, allFiles.length);
+  } catch (e) {
+    errorMsg("Bad file format");
+  }
+}
+
+function loadTaskByPath(folder, filename) {
+  var url = "../data/" + folder + "/" + filename;
+
+  // Try $.getJSON first (works on local servers)
+  $.getJSON(url, function (json) {
+    handleTaskJSON(json, folder, filename);
+  }).fail(function () {
+    // Fallback: try fetch() API
+    if (typeof fetch === "function") {
+      fetch(url)
+        .then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.json();
+        })
+        .then(function (json) {
+          handleTaskJSON(json, folder, filename);
+        })
+        .catch(function () {
+          errorMsg(
+            "Cannot load task files. Please serve via a local server: python3 -m http.server",
+          );
+        });
+    } else {
+      errorMsg(
+        "Cannot load task files. Please serve via a local server: python3 -m http.server",
+      );
+    }
+  });
+}
 
 function resetTask() {
   CURRENT_INPUT_GRID = new Grid(3, 3);
@@ -510,38 +596,25 @@ function loadTaskFromFile(e) {
       return;
     }
     loadJSONTask(train, test);
-
-    $("#load_task_file_input")[0].value = "";
     display_task_name(file.name, null, null);
   };
   reader.readAsText(file);
 }
 
 function randomTask() {
-  var subset = "training";
-  $.getJSON(
-    "https://api.github.com/repos/fchollet/ARC/contents/data/" + subset,
-    function (tasks) {
-      var task_index = Math.floor(Math.random() * tasks.length);
-      var task = tasks[task_index];
-      $.getJSON(task["download_url"], function (json) {
-        try {
-          train = json["train"];
-          test = json["test"];
-        } catch (e) {
-          errorMsg("Bad file format");
-          return;
-        }
-        loadJSONTask(train, test);
-        infoMsg("Loaded task " + subset + "/" + task["name"]);
-        display_task_name(task["name"], task_index, tasks.length);
-      }).error(function () {
-        errorMsg("Error loading task");
-      });
-    },
-  ).error(function () {
-    errorMsg("Error loading task list");
-  });
+  // Pick a random task from my_tasks
+  if (!TASK_INDEX_LOADED) {
+    errorMsg("Task index not loaded yet");
+    return;
+  }
+  var files = TASK_INDEX["my_tasks"] || [];
+  if (files.length === 0) {
+    errorMsg("No tasks in my_tasks");
+    return;
+  }
+  var idx = Math.floor(Math.random() * files.length);
+  var filename = files[idx];
+  loadTaskByPath("my_tasks", filename);
 }
 
 function prevTestInput() {
@@ -700,7 +773,7 @@ $(document).ready(function () {
     setUpEditionGridListeners($(jqGrid));
   });
 
-  // Load task from file (all .load_task inputs)
+  // Load task from file (all .load_task inputs — kept as fallback)
   $(document).on("change", ".load_task", function (event) {
     loadTaskFromFile(event);
   });
@@ -708,6 +781,9 @@ $(document).ready(function () {
   $(document).on("click", ".load_task", function (event) {
     event.target.value = "";
   });
+
+  // ── Load the task index on page ready ────────────────────
+  loadTaskIndex();
 
   // Tool switching
   $("input[type=radio][name=tool_switching]").change(function () {
@@ -804,54 +880,6 @@ $(document).ready(function () {
 
   // Initialize active tool style on load
   updateActiveToolStyle();
-
-  // ── Modal drag-and-drop ────────────────────────────────────
-  var dropzone = document.getElementById("modal_dropzone");
-  if (dropzone) {
-    dropzone.addEventListener("dragover", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.add("drag-over");
-    });
-
-    dropzone.addEventListener("dragleave", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.remove("drag-over");
-    });
-
-    dropzone.addEventListener("drop", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.remove("drag-over");
-
-      var files = e.dataTransfer.files;
-      if (files.length === 0) return;
-      var file = files[0];
-
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        try {
-          var contents = JSON.parse(ev.target.result);
-          var train = contents["train"];
-          var test = contents["test"];
-          loadJSONTask(train, test);
-          display_task_name(file.name, null, null);
-        } catch (err) {
-          errorMsg("Bad file format");
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    // Clicking anywhere in the dropzone (outside the browse button)
-    // also opens the file picker
-    dropzone.addEventListener("click", function (e) {
-      if (e.target.tagName !== "LABEL" && e.target.tagName !== "INPUT") {
-        document.getElementById("modal_file_input").click();
-      }
-    });
-  }
 
   // Re-fit example grids and sync test grid height on window resize
   var resizeTimer;
