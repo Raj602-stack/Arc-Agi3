@@ -69,13 +69,20 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Flask + SocketIO
 # ---------------------------------------------------------------------------
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 app = Flask(
     __name__,
     template_folder=str(PROJECT_ROOT / "web" / "templates"),
     static_folder=str(PROJECT_ROOT / "web" / "static"),
 )
+# Trust X-Forwarded-* headers from reverse proxy (AWS ALB/Nginx/Docker)
+# This fixes WebSocket upgrades, HTTPS detection, and correct client IPs
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "ethara-arc-dev-key")
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50MB max upload
+app.config["PREFERRED_URL_SCHEME"] = "https"
 
 CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
 

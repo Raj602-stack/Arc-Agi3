@@ -19,6 +19,7 @@ exec gunicorn \
     --bind "${HOST}:${PORT}" \
     --timeout 120 \
     --keep-alive 65 \
+    --forwarded-allow-ips="*" \
     --access-logfile - \
     --error-logfile - \
     --log-level info \
