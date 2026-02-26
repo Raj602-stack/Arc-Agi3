@@ -49,20 +49,19 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Railway injects PORT at runtime (usually 8080)
+# Default port (override at runtime via -e PORT=XXXX)
 ENV PORT=8080
 ENV HOST=0.0.0.0
 
 # Ensure environment_files directory exists (games live here)
 RUN mkdir -p /app/environment_files
 
-# Expose the port
-EXPOSE ${PORT}
+# Expose the port (Docker doesn't expand ENV vars in EXPOSE, must be literal)
+EXPOSE 8080
 
-# Copy start script and make executable
-COPY start.sh ./
+# start.sh is already copied via COPY . . above; ensure it's executable
 RUN chmod +x start.sh
 
 # Production server: gunicorn + eventlet via start.sh
-# Reads Railway's dynamic $PORT at runtime
+# Reads $PORT at runtime (AWS, Railway, or default 8080)
 CMD ["./start.sh"]
