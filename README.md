@@ -20,41 +20,6 @@ The web interface provides a landing page with both sections, card-based browsin
 
 ## Project Structure
 
-```
-ARC 3-Game/
-├── web/
-│   ├── server.py                  # Flask + SocketIO web server
-│   ├── templates/
-│   │   ├── landing.html           # Home page — AGI-2 + AGI-3 side by side
-│   │   ├── index.html             # AGI-3 game player (WebSocket-based)
-│   │   ├── grid-test.html         # AGI-3 grid testing page
-│   │   └── upload-test.html       # Upload testing page
-│   └── static/                    # Static assets
-├── ARC-AGI copy/
-│   ├── apps/
-│   │   ├── index.html             # AGI-2 puzzle player
-│   │   ├── js/
-│   │   │   └── task_index_data.js # AGI-2 task index (JS)
-│   │   └── css/
-│   │       └── responsive.css     # AGI-2 responsive styles
-│   ├── data/
-│   │   ├── training/              # 400 training puzzles
-│   │   ├── evaluation/            # 400 evaluation puzzles
-│   │   └── my_tasks/              # Custom uploaded tasks
-│   └── task_index.json            # AGI-2 task registry
-├── environment_files/             # AGI-3 game environments (auto-discovered)
-│   ├── ga85/v1/                   # Game: ga85-v1
-│   └── pm07/v1/                   # Game: pm07-v1
-├── Dockerfile                     # Multi-stage Docker build
-├── start.sh                       # Production entrypoint (gunicorn + eventlet)
-├── railway.json                   # Railway deployment config
-├── railway.toml                   # Railway build config
-├── pyproject.toml                 # Python project & dependencies
-├── requirements.txt               # Pip fallback dependencies
-├── play.py                        # CLI game runner
-├── play_gui.py                    # Retro arcade GUI (pygame)
-└── README.md                      # This file
-```
 
 ---
 
